@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6] - 2017-09-15
+- Added support for SHA384 & SHA512 hash algoriths
+- Added ability to compare files against expected hash sums
+- Now you can choose which hashes you want to calculate
+- Added option to close it to tray icon
+- Added option to enable process high priority
+
 ## [1.5] - 2017-04-03
 - Minor bug fixes
 
