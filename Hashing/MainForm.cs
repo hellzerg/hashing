@@ -14,14 +14,29 @@ namespace Hashing
 {
     public partial class MainForm : Form
     {
-        List<string> FileList;
+        List<string> _fileList;
+
+        bool _allowExit;
 
         public MainForm(string[] files)
         {
             InitializeComponent();
+
             Options.ApplyTheme(this);
             CheckForIllegalCrossThreadCalls = false;
+            _allowExit = !Options.CurrentOptions.TrayIcon;
+
             helperMenu.Renderer = new ToolStripRendererMaterial();
+            trayMenu.Renderer = new ToolStripRendererMaterial();
+
+            if (Options.CurrentOptions.HighPriority)
+            {
+                Utilities.EnableHighPriority();
+            }
+            else
+            {
+                Utilities.DisableHighPriority();
+            }
 
             if (files.Count() > 0)
             {
@@ -90,16 +105,94 @@ namespace Hashing
             this.AllowDrop = true;
         }
 
-        private List<SumResult> CompareSums()
+        private List<SumResult> FindIdenticalsByMD5()
         {
-            // get identical files
-
             IEnumerable<string> similars = from p in SumResult.Sums group p by p.MD5 into g where g.Count() > 1 select g.Key;
             List<SumResult> duplicates = new List<SumResult>();
 
             foreach (string s in similars)
             {
-                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.MD5 == s && x.File != s))
+                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.MD5 == s && x.File != s && !string.IsNullOrEmpty(x.MD5) && !string.IsNullOrEmpty(s)))
+                {
+                    duplicates.Add(sr);
+                }
+            }
+
+            return duplicates;
+        }
+
+        private List<SumResult> FindIdenticalsBySHA1()
+        {
+            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA1 into g where g.Count() > 1 select g.Key;
+            List<SumResult> duplicates = new List<SumResult>();
+
+            foreach (string s in similars)
+            {
+                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA1 == s && x.File != s && !string.IsNullOrEmpty(x.SHA1) && !string.IsNullOrEmpty(s)))
+                {
+                    duplicates.Add(sr);
+                }
+            }
+
+            return duplicates;
+        }
+
+        private List<SumResult> FindIdenticalsBySHA256()
+        {
+            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA256 into g where g.Count() > 1 select g.Key;
+            List<SumResult> duplicates = new List<SumResult>();
+
+            foreach (string s in similars)
+            {
+                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA256 == s && x.File != s && !string.IsNullOrEmpty(x.SHA256) && !string.IsNullOrEmpty(s)))
+                {
+                    duplicates.Add(sr);
+                }
+            }
+
+            return duplicates;
+        }
+
+        private List<SumResult> FindIdenticalsBySHA384()
+        {
+            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA384 into g where g.Count() > 1 select g.Key;
+            List<SumResult> duplicates = new List<SumResult>();
+
+            foreach (string s in similars)
+            {
+                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA384 == s && x.File != s && !string.IsNullOrEmpty(x.SHA384) && !string.IsNullOrEmpty(s)))
+                {
+                    duplicates.Add(sr);
+                }
+            }
+
+            return duplicates;
+        }
+
+        private List<SumResult> FindIdenticalsBySHA512()
+        {
+            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA512 into g where g.Count() > 1 select g.Key;
+            List<SumResult> duplicates = new List<SumResult>();
+
+            foreach (string s in similars)
+            {
+                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA512 == s && x.File != s && !string.IsNullOrEmpty(x.SHA512) && !string.IsNullOrEmpty(s)))
+                {
+                    duplicates.Add(sr);
+                }
+            }
+
+            return duplicates;
+        }
+
+        private List<SumResult> FindIdenticalsByRIPEMD160()
+        {
+            IEnumerable<string> similars = from p in SumResult.Sums group p by p.RIPEMD160 into g where g.Count() > 1 select g.Key;
+            List<SumResult> duplicates = new List<SumResult>();
+
+            foreach (string s in similars)
+            {
+                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.RIPEMD160 == s && x.File != s && !string.IsNullOrEmpty(x.RIPEMD160) && !string.IsNullOrEmpty(s)))
                 {
                     duplicates.Add(sr);
                 }
@@ -111,7 +204,7 @@ namespace Hashing
         private void CalculateSums(string[] files)
         {
             this.AllowDrop = false;
-            FileList = new List<string>();
+            _fileList = new List<string>();
 
             foreach (string f in files)
             {
@@ -119,14 +212,15 @@ namespace Hashing
                 {
                     foreach (string x in Directory.GetFiles(f, "*", SearchOption.AllDirectories))
                     {
-                        FileList.Add(x);
+                        _fileList.Add(x);
                     }
                 }
                 if (File.Exists(f))
                 {
-                    FileList.Add(f);
+                    _fileList.Add(f);
                 }
             }
+
             // calculate all sums for all files
             Task.Factory.StartNew(() =>
             {
@@ -140,7 +234,7 @@ namespace Hashing
                 }
                 );
 
-                foreach (string f in FileList)
+                foreach (string f in _fileList)
                 {
                     if (File.Exists(f))
                     {
@@ -162,10 +256,13 @@ namespace Hashing
 
                         node.ForeColor = Options.ForegroundColor;
                         node.Tag = Options.ThemeFlag;
-                        node.Nodes.Add("MD5: " + sr.MD5);
-                        node.Nodes.Add("SHA1: " + sr.SHA1);
-                        node.Nodes.Add("SHA256: " + sr.SHA256);
-                        node.Nodes.Add("RIPEMD160: " + sr.RIPEMD160);
+
+                        if (Options.CurrentOptions.HashOptions.MD5) node.Nodes.Add("MD5: " + sr.MD5);
+                        if (Options.CurrentOptions.HashOptions.SHA1) node.Nodes.Add("SHA1: " + sr.SHA1);
+                        if (Options.CurrentOptions.HashOptions.SHA256) node.Nodes.Add("SHA256: " + sr.SHA256);
+                        if (Options.CurrentOptions.HashOptions.SHA384) node.Nodes.Add("SHA384: " + sr.SHA384);
+                        if (Options.CurrentOptions.HashOptions.SHA512) node.Nodes.Add("SHA512: " + sr.SHA512);
+                        if (Options.CurrentOptions.HashOptions.RIPEMD160) node.Nodes.Add("RIPEMD160: " + sr.RIPEMD160);
 
                         SumView.Invoke((MethodInvoker)delegate
                         {
@@ -208,6 +305,7 @@ namespace Hashing
         private void MainForm_Load(object sender, EventArgs e)
         {
             lblversion.Text = "Version: " + Program.GetCurrentVersionToString();
+            trayIcon.Visible = false;
         }
 
         private void MainForm_DragEnter(object sender, DragEventArgs e)
@@ -279,10 +377,18 @@ namespace Hashing
 
         private void button2_Click(object sender, EventArgs e)
         {
-            List<SumResult> list = CompareSums();
+            List<SumResult> list = new List<SumResult>();
+
+            if (Options.CurrentOptions.HashOptions.MD5) list = FindIdenticalsByMD5();
+            if (Options.CurrentOptions.HashOptions.SHA1) list = FindIdenticalsBySHA1();
+            if (Options.CurrentOptions.HashOptions.SHA256) list = FindIdenticalsBySHA256();
+            if (Options.CurrentOptions.HashOptions.SHA384) list = FindIdenticalsBySHA384();
+            if (Options.CurrentOptions.HashOptions.SHA512) list = FindIdenticalsBySHA512();
+            if (Options.CurrentOptions.HashOptions.RIPEMD160) list = FindIdenticalsByRIPEMD160();
+
             if (SumView.Nodes.Count > 0 && list.Count > 0)
             {
-                CompareForm f = new CompareForm(list);
+                IdenticalsForm f = new IdenticalsForm(list);
                 f.ShowDialog();
             }
             else if (SumView.Nodes.Count > 0 && list.Count == 0)
@@ -293,12 +399,57 @@ namespace Hashing
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Options.SaveSettings();
+            if (_allowExit)
+            {
+                Options.SaveSettings();
+            }
+            else
+            {
+                e.Cancel = true;
+                trayIcon.Visible = true;
+                this.Hide();
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             OptionsForm f = new OptionsForm(this);
+            f.ShowDialog();
+
+            _allowExit = !Options.CurrentOptions.TrayIcon;
+        }
+
+        private void trayIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (!this.Visible)
+            {
+                this.Show();
+                this.Activate();
+                this.Focus();
+                trayIcon.Visible = false;
+            }
+        }
+
+        private void restoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!this.Visible)
+            {
+                this.Show();
+                this.Activate();
+                this.Focus();
+                trayIcon.Visible = false;
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _allowExit = true;
+            Application.Exit();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            CompareForm f = new CompareForm();
             f.ShowDialog();
         }
     }

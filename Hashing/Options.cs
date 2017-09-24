@@ -10,9 +10,18 @@ using Newtonsoft.Json;
 
 namespace Hashing
 {
+    [Serializable]
     public class SettingsJson
     {
         public Theme Color { get; set; }
+        public HashOptions HashOptions { get; set; }
+        public bool TrayIcon { get; set; }
+        public bool HighPriority { get; set; }
+
+        public SettingsJson()
+        {
+            HashOptions = new HashOptions();
+        }
     }
 
     public class Options
@@ -26,9 +35,6 @@ namespace Hashing
         readonly static string SettingsFile = Application.StartupPath + "\\Hashing.json";
 
         internal static SettingsJson CurrentOptions = new SettingsJson();
-
-        // use this to determine if changes have been made
-        private static SettingsJson Flag = new SettingsJson();
 
         internal static IEnumerable<Control> GetSelfAndChildrenRecursive(Control parent)
         {
@@ -107,23 +113,16 @@ namespace Hashing
         {
             if (File.Exists(SettingsFile))
             {
-                if (Flag.Color != CurrentOptions.Color)
-                {
-                    File.Delete(SettingsFile);
+                File.Delete(SettingsFile);
 
-                    using (FileStream fs = File.Open(SettingsFile, FileMode.OpenOrCreate))
-                    using (StreamWriter sw = new StreamWriter(fs))
-                    using (JsonWriter jw = new JsonTextWriter(sw))
-                    {
-                        jw.Formatting = Formatting.Indented;
-
-                        JsonSerializer serializer = new JsonSerializer();
-                        serializer.Serialize(jw, CurrentOptions);
-                    }
-                }
-                else
+                using (FileStream fs = File.Open(SettingsFile, FileMode.OpenOrCreate))
+                using (StreamWriter sw = new StreamWriter(fs))
+                using (JsonWriter jw = new JsonTextWriter(sw))
                 {
-                    // no changes have been made, no need to save
+                    jw.Formatting = Formatting.Indented;
+
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(jw, CurrentOptions);
                 }
             }
         }
@@ -133,6 +132,14 @@ namespace Hashing
             if (!File.Exists(SettingsFile))
             {
                 CurrentOptions.Color = Theme.Zerg;
+                CurrentOptions.TrayIcon = false;
+                CurrentOptions.HighPriority = false;
+                CurrentOptions.HashOptions.MD5 = true;
+                CurrentOptions.HashOptions.SHA1 = false;
+                CurrentOptions.HashOptions.SHA256 = false;
+                CurrentOptions.HashOptions.SHA384 = false;
+                CurrentOptions.HashOptions.SHA512 = false;
+                CurrentOptions.HashOptions.RIPEMD160 = false;
 
                 using (FileStream fs = File.Open(SettingsFile, FileMode.CreateNew))
                 using (StreamWriter sw = new StreamWriter(fs))
@@ -147,9 +154,6 @@ namespace Hashing
             else
             {
                 CurrentOptions = JsonConvert.DeserializeObject<SettingsJson>(File.ReadAllText(SettingsFile));
-
-                // initialize flag
-                Flag.Color = CurrentOptions.Color;
             }
         }
     }

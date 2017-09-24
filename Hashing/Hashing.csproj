@@ -67,8 +67,15 @@
     <Compile Include="CompareForm.Designer.cs">
       <DependentUpon>CompareForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="IdenticalsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IdenticalsForm.Designer.cs">
+      <DependentUpon>IdenticalsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EmbeddedAssembly.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="HashOptions.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +99,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CompareForm.resx">
       <DependentUpon>CompareForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IdenticalsForm.resx">
+      <DependentUpon>IdenticalsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

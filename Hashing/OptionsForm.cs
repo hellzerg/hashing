@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -46,6 +47,15 @@ namespace Hashing
                     zergtheme.Checked = true;
                     break;
             }
+
+            chkMD5.Checked = Options.CurrentOptions.HashOptions.MD5;
+            chkRIPEMD160.Checked = Options.CurrentOptions.HashOptions.RIPEMD160;
+            chkSHA1.Checked = Options.CurrentOptions.HashOptions.SHA1;
+            chkSHA256.Checked = Options.CurrentOptions.HashOptions.SHA256;
+            chkSHA512.Checked = Options.CurrentOptions.HashOptions.SHA512;
+
+            chkTray.Checked = Options.CurrentOptions.TrayIcon;
+            chkHigh.Checked = Options.CurrentOptions.HighPriority;
         }
 
         private void OptionsForm_Load(object sender, EventArgs e)
@@ -104,6 +114,53 @@ namespace Hashing
             Options.ApplyTheme(this);
             Options.ApplyTheme(_main);
             _main.FixColor();
+        }
+
+        private void chkMD5_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.HashOptions.MD5 = chkMD5.Checked;
+        }
+
+        private void chkSHA1_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.HashOptions.SHA1 = chkSHA1.Checked;
+        }
+
+        private void chkSHA256_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.HashOptions.SHA256 = chkSHA256.Checked;
+        }
+
+        private void chkRIPEMD160_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.HashOptions.RIPEMD160 = chkRIPEMD160.Checked;
+        }
+
+        private void chkSHA512_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.HashOptions.SHA512 = chkSHA512.Checked;
+        }
+
+        private void chkTray_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.TrayIcon = chkTray.Checked;
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.HighPriority = chkHigh.Checked;
+        }
+
+        private void OptionsForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Options.CurrentOptions.HighPriority)
+            {
+                Utilities.EnableHighPriority();
+            }
+            else
+            {
+                Utilities.DisableHighPriority();
+            }
         }
     }
 }
