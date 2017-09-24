@@ -4,10 +4,14 @@ Simple utility to calculate and compare hashes of multiple files
 
 ## Features: ##
 
-* MD5, SHA1, SHA256 and RIPEMD160 algorithms supported
+* MD5, SHA1, SHA256, SHA384, SHA512 and RIPEMD160 algorithms supported
+* Choose which hashes you want to calculate
 * Compare and group identical files together
+* Compare multiple files against hash sums
 * Drag n' drop any number of files and folder
 * Option to save hashes in JSON files
+* Process high priority support
+* Tray icon support
 
 ## Downloads: ##
 https://github.com/hellzerg/hashing/releases
@@ -22,6 +26,6 @@ Does not work with Windows XP or Vista
 
 ## Details: ##
 
-Latest version: 1.5
+Latest version: 1.6
 
-Released: April 3, 2017
+Released: September 25, 2017
