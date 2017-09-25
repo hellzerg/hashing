@@ -92,6 +92,7 @@ namespace Hashing
                     text = text.Replace("MD5:", string.Empty);
                     text = text.Replace("SHA1:", string.Empty);
                     text = text.Replace("SHA256:", string.Empty);
+                    text = text.Replace("SHA384", string.Empty);
                     text = text.Replace("SHA512", string.Empty);
                     text = text.Replace("RIPEMD160:", string.Empty);
                 }

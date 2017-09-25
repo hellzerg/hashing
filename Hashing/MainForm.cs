@@ -229,6 +229,7 @@ namespace Hashing
                     button1.Enabled = false;
                     button7.Enabled = false;
                     button2.Enabled = false;
+                    button3.Enabled = false;
                     lblCalculating.Text = "Calculating...";
                     lblCalculating.Visible = true;
                 }
@@ -278,6 +279,7 @@ namespace Hashing
                         button1.Enabled = true;
                         button7.Enabled = true;
                         button2.Enabled = true;
+                        button3.Enabled = true;
                     }
                     );
                 }
