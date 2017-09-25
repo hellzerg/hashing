@@ -146,6 +146,7 @@
             // 
             this.txtExpected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.txtExpected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtExpected.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtExpected.ForeColor = System.Drawing.Color.White;
             this.txtExpected.Location = new System.Drawing.Point(12, 78);
             this.txtExpected.Name = "txtExpected";
