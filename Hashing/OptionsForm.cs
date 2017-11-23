@@ -15,6 +15,9 @@ namespace Hashing
     {
         MainForm _main;
 
+        internal static bool HashesChanged;
+        internal static bool CasingChanged;
+
         public OptionsForm(MainForm main)
         {
             InitializeComponent();
@@ -22,6 +25,9 @@ namespace Hashing
 
             LoadSettings();
             Options.ApplyTheme(this);
+
+            HashesChanged = false;
+            CasingChanged = false;
         }
 
         private void LoadSettings()
@@ -49,11 +55,14 @@ namespace Hashing
             }
 
             chkMD5.Checked = Options.CurrentOptions.HashOptions.MD5;
+            chkCRC32.Checked = Options.CurrentOptions.HashOptions.CRC32;
             chkRIPEMD160.Checked = Options.CurrentOptions.HashOptions.RIPEMD160;
             chkSHA1.Checked = Options.CurrentOptions.HashOptions.SHA1;
             chkSHA256.Checked = Options.CurrentOptions.HashOptions.SHA256;
+            chkSHA384.Checked = Options.CurrentOptions.HashOptions.SHA384;
             chkSHA512.Checked = Options.CurrentOptions.HashOptions.SHA512;
 
+            chkLower.Checked = Options.CurrentOptions.LowerCasing;
             chkTray.Checked = Options.CurrentOptions.TrayIcon;
             chkHigh.Checked = Options.CurrentOptions.HighPriority;
         }
@@ -119,26 +128,31 @@ namespace Hashing
         private void chkMD5_CheckedChanged(object sender, EventArgs e)
         {
             Options.CurrentOptions.HashOptions.MD5 = chkMD5.Checked;
+            HashesChanged = true;
         }
 
         private void chkSHA1_CheckedChanged(object sender, EventArgs e)
         {
             Options.CurrentOptions.HashOptions.SHA1 = chkSHA1.Checked;
+            HashesChanged = true;
         }
 
         private void chkSHA256_CheckedChanged(object sender, EventArgs e)
         {
             Options.CurrentOptions.HashOptions.SHA256 = chkSHA256.Checked;
+            HashesChanged = true;
         }
 
         private void chkRIPEMD160_CheckedChanged(object sender, EventArgs e)
         {
             Options.CurrentOptions.HashOptions.RIPEMD160 = chkRIPEMD160.Checked;
+            HashesChanged = true;
         }
 
         private void chkSHA512_CheckedChanged(object sender, EventArgs e)
         {
             Options.CurrentOptions.HashOptions.SHA512 = chkSHA512.Checked;
+            HashesChanged = true;
         }
 
         private void chkTray_CheckedChanged(object sender, EventArgs e)
@@ -161,6 +175,24 @@ namespace Hashing
             {
                 Utilities.DisableHighPriority();
             }
+        }
+
+        private void chkSHA384_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.HashOptions.SHA384 = chkSHA384.Checked;
+            HashesChanged = true;
+        }
+
+        private void chkCRC32_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.HashOptions.CRC32 = chkCRC32.Checked;
+            HashesChanged = true;
+        }
+
+        private void chkLower_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.LowerCasing = chkLower.Checked;
+            CasingChanged = true;
         }
     }
 }

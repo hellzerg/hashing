@@ -36,6 +36,7 @@
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topPanel = new System.Windows.Forms.Panel();
+            this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -49,7 +50,6 @@
             this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button3 = new System.Windows.Forms.Button();
             this.helperMenu.SuspendLayout();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -68,7 +68,7 @@
             this.SumView.Location = new System.Drawing.Point(0, 0);
             this.SumView.Margin = new System.Windows.Forms.Padding(2);
             this.SumView.Name = "SumView";
-            this.SumView.Size = new System.Drawing.Size(892, 537);
+            this.SumView.Size = new System.Drawing.Size(713, 429);
             this.SumView.TabIndex = 0;
             this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.sumView_NodeMouseClick);
             // 
@@ -85,14 +85,14 @@
             this.helperMenu.Name = "helperMenu";
             this.helperMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.helperMenu.ShowImageMargin = false;
-            this.helperMenu.Size = new System.Drawing.Size(130, 100);
+            this.helperMenu.Size = new System.Drawing.Size(113, 82);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.copyToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(129, 32);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(112, 26);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
@@ -101,7 +101,7 @@
             this.removeToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.removeToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(129, 32);
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(112, 26);
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
@@ -110,7 +110,7 @@
             this.clearToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clearToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(129, 32);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(112, 26);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
@@ -129,8 +129,28 @@
             this.topPanel.Location = new System.Drawing.Point(0, 0);
             this.topPanel.Margin = new System.Windows.Forms.Padding(2);
             this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(894, 77);
+            this.topPanel.Size = new System.Drawing.Size(715, 62);
             this.topPanel.TabIndex = 7;
+            // 
+            // button3
+            // 
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3.BackColor = System.Drawing.Color.DodgerBlue;
+            this.button3.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.ForeColor = System.Drawing.Color.White;
+            this.button3.Location = new System.Drawing.Point(308, 7);
+            this.button3.Margin = new System.Windows.Forms.Padding(2);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(97, 31);
+            this.button3.TabIndex = 77;
+            this.button3.Tag = "themeable";
+            this.button3.Text = "Compare";
+            this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
@@ -142,10 +162,10 @@
             this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button4.ForeColor = System.Drawing.Color.White;
-            this.button4.Location = new System.Drawing.Point(761, 10);
+            this.button4.Location = new System.Drawing.Point(611, 7);
             this.button4.Margin = new System.Windows.Forms.Padding(2);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(121, 39);
+            this.button4.Size = new System.Drawing.Size(97, 31);
             this.button4.TabIndex = 76;
             this.button4.Tag = "themeable";
             this.button4.Text = "Options";
@@ -162,10 +182,10 @@
             this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(261, 9);
+            this.button2.Location = new System.Drawing.Point(207, 7);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(121, 39);
+            this.button2.Size = new System.Drawing.Size(97, 31);
             this.button2.TabIndex = 74;
             this.button2.Tag = "themeable";
             this.button2.Text = "Find Identicals";
@@ -182,10 +202,10 @@
             this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(636, 10);
+            this.button1.Location = new System.Drawing.Point(510, 7);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(121, 39);
+            this.button1.Size = new System.Drawing.Size(97, 31);
             this.button1.TabIndex = 73;
             this.button1.Tag = "themeable";
             this.button1.Text = "Clear";
@@ -202,10 +222,10 @@
             this.button7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.ForeColor = System.Drawing.Color.White;
-            this.button7.Location = new System.Drawing.Point(511, 10);
+            this.button7.Location = new System.Drawing.Point(409, 7);
             this.button7.Margin = new System.Windows.Forms.Padding(2);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(121, 39);
+            this.button7.Size = new System.Drawing.Size(97, 31);
             this.button7.TabIndex = 71;
             this.button7.Tag = "themeable";
             this.button7.Text = "Save as JSON";
@@ -216,10 +236,10 @@
             // 
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(10, 10);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(55, 54);
+            this.pictureBox1.Size = new System.Drawing.Size(44, 43);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
@@ -229,10 +249,10 @@
             // 
             this.lblversion.AutoSize = true;
             this.lblversion.ForeColor = System.Drawing.Color.Silver;
-            this.lblversion.Location = new System.Drawing.Point(90, 46);
+            this.lblversion.Location = new System.Drawing.Point(72, 37);
             this.lblversion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblversion.Name = "lblversion";
-            this.lblversion.Size = new System.Drawing.Size(64, 20);
+            this.lblversion.Size = new System.Drawing.Size(49, 15);
             this.lblversion.TabIndex = 4;
             this.lblversion.Text = "Version:";
             // 
@@ -241,10 +261,10 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(88, 9);
+            this.label2.Location = new System.Drawing.Point(70, 7);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(104, 32);
+            this.label2.Size = new System.Drawing.Size(82, 25);
             this.label2.TabIndex = 3;
             this.label2.Text = "Hashing";
             // 
@@ -254,10 +274,10 @@
             this.botPanel.Controls.Add(this.lblCalculating);
             this.botPanel.Controls.Add(this.SumView);
             this.botPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.botPanel.Location = new System.Drawing.Point(0, 77);
+            this.botPanel.Location = new System.Drawing.Point(0, 62);
             this.botPanel.Margin = new System.Windows.Forms.Padding(2);
             this.botPanel.Name = "botPanel";
-            this.botPanel.Size = new System.Drawing.Size(894, 539);
+            this.botPanel.Size = new System.Drawing.Size(715, 431);
             this.botPanel.TabIndex = 8;
             // 
             // lblCalculating
@@ -268,7 +288,7 @@
             this.lblCalculating.Location = new System.Drawing.Point(0, 0);
             this.lblCalculating.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCalculating.Name = "lblCalculating";
-            this.lblCalculating.Size = new System.Drawing.Size(892, 537);
+            this.lblCalculating.Size = new System.Drawing.Size(713, 429);
             this.lblCalculating.TabIndex = 1;
             this.lblCalculating.Tag = "themeable";
             this.lblCalculating.Text = "Drag and drop files here...";
@@ -292,13 +312,13 @@
             this.trayMenu.Name = "trayMenu";
             this.trayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.trayMenu.ShowImageMargin = false;
-            this.trayMenu.Size = new System.Drawing.Size(125, 68);
+            this.trayMenu.Size = new System.Drawing.Size(109, 56);
             // 
             // restoreToolStripMenuItem
             // 
             this.restoreToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.restoreToolStripMenuItem.Name = "restoreToolStripMenuItem";
-            this.restoreToolStripMenuItem.Size = new System.Drawing.Size(124, 32);
+            this.restoreToolStripMenuItem.Size = new System.Drawing.Size(108, 26);
             this.restoreToolStripMenuItem.Text = "Restore";
             this.restoreToolStripMenuItem.Click += new System.EventHandler(this.restoreToolStripMenuItem_Click);
             // 
@@ -306,37 +326,17 @@
             // 
             this.exitToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(124, 32);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(108, 26);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // button3
-            // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.BackColor = System.Drawing.Color.DodgerBlue;
-            this.button3.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(386, 9);
-            this.button3.Margin = new System.Windows.Forms.Padding(2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(121, 39);
-            this.button3.TabIndex = 77;
-            this.button3.Tag = "themeable";
-            this.button3.Text = "Compare";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // MainForm
             // 
             this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.ClientSize = new System.Drawing.Size(894, 616);
+            this.ClientSize = new System.Drawing.Size(715, 493);
             this.Controls.Add(this.botPanel);
             this.Controls.Add(this.topPanel);
             this.DoubleBuffered = true;

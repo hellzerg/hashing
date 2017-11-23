@@ -24,7 +24,9 @@ namespace Hashing
 
             Options.ApplyTheme(this);
             CheckForIllegalCrossThreadCalls = false;
+
             _allowExit = !Options.CurrentOptions.TrayIcon;
+            _fileList = new List<string>();
 
             helperMenu.Renderer = new ToolStripRendererMaterial();
             trayMenu.Renderer = new ToolStripRendererMaterial();
@@ -97,12 +99,87 @@ namespace Hashing
         private void Clear()
         {
             this.AllowDrop = false;
+
             SumView.Nodes.Clear();
             SumResult.Sums.Clear();
 
             lblCalculating.Text = "Drag and drop files here...";
             lblCalculating.Visible = true;
+
             this.AllowDrop = true;
+        }
+
+        private void RefreshSumList()
+        {
+            if ((SumResult.Sums != null) && (SumResult.Sums.Count > 0))
+            {
+                SumView.Nodes.Clear();
+
+                foreach (SumResult sr in SumResult.Sums)
+                {
+                    TreeNode rootNode = new TreeNode(sr.File);
+
+                    rootNode.ForeColor = Options.ForegroundColor;
+                    rootNode.Tag = Options.ThemeFlag;
+
+                    if (Options.CurrentOptions.HashOptions.MD5) rootNode.Nodes.Add("MD5: " + sr.MD5);
+                    if (Options.CurrentOptions.HashOptions.SHA1) rootNode.Nodes.Add("SHA1: " + sr.SHA1);
+                    if (Options.CurrentOptions.HashOptions.SHA256) rootNode.Nodes.Add("SHA256: " + sr.SHA256);
+                    if (Options.CurrentOptions.HashOptions.SHA384) rootNode.Nodes.Add("SHA384: " + sr.SHA384);
+                    if (Options.CurrentOptions.HashOptions.SHA512) rootNode.Nodes.Add("SHA512: " + sr.SHA512);
+                    if (Options.CurrentOptions.HashOptions.CRC32) rootNode.Nodes.Add("CRC32: " + sr.CRC32);
+                    if (Options.CurrentOptions.HashOptions.RIPEMD160) rootNode.Nodes.Add("RIPEMD160: " + sr.RIPEMD160);
+
+                    SumView.Nodes.Add(rootNode);
+                    SumView.ExpandAll();
+                }
+            }
+            }
+
+        private void SaveAsJSON()
+        {
+            if (SumView.Nodes.Count > 0)
+            {
+                SaveFileDialog dialog = new SaveFileDialog();
+                dialog.Filter = "JSON file|*.json";
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(SumResult.Sums, Formatting.Indented));
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+        }
+
+        private void FindIdenticals()
+        {
+            if (SumView.Nodes.Count == 0) return;
+
+            List<SumResult> list = new List<SumResult>();
+
+            if (Options.CurrentOptions.HashOptions.MD5) list = FindIdenticalsByMD5();
+            if (Options.CurrentOptions.HashOptions.SHA1) list = FindIdenticalsBySHA1();
+            if (Options.CurrentOptions.HashOptions.SHA256) list = FindIdenticalsBySHA256();
+            if (Options.CurrentOptions.HashOptions.SHA384) list = FindIdenticalsBySHA384();
+            if (Options.CurrentOptions.HashOptions.SHA512) list = FindIdenticalsBySHA512();
+            if (Options.CurrentOptions.HashOptions.CRC32) list = FindIdenticalsByCRC32();
+            if (Options.CurrentOptions.HashOptions.RIPEMD160) list = FindIdenticalsByRIPEMD160();
+
+            if (SumView.Nodes.Count > 0 && list.Count > 0)
+            {
+                IdenticalsForm f = new IdenticalsForm(list);
+                f.ShowDialog();
+            }
+            else if (SumView.Nodes.Count > 0 && list.Count == 0)
+            {
+                MessageBox.Show("No identical files have been found!", "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private List<SumResult> FindIdenticalsByMD5()
@@ -185,6 +262,22 @@ namespace Hashing
             return duplicates;
         }
 
+        private List<SumResult> FindIdenticalsByCRC32()
+        {
+            IEnumerable<string> similars = from p in SumResult.Sums group p by p.CRC32 into g where g.Count() > 1 select g.Key;
+            List<SumResult> duplicates = new List<SumResult>();
+
+            foreach (string s in similars)
+            {
+                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.CRC32 == s && x.File != s && !string.IsNullOrEmpty(x.CRC32) && !string.IsNullOrEmpty(s)))
+                {
+                    duplicates.Add(sr);
+                }
+            }
+
+            return duplicates;
+        }
+
         private List<SumResult> FindIdenticalsByRIPEMD160()
         {
             IEnumerable<string> similars = from p in SumResult.Sums group p by p.RIPEMD160 into g where g.Count() > 1 select g.Key;
@@ -200,11 +293,31 @@ namespace Hashing
 
             return duplicates;
         }
+    
+        private void ReCalculateSums()
+        {
+            if (!Options.CurrentOptions.HashOptions.MD5 && !Options.CurrentOptions.HashOptions.SHA1 && !Options.CurrentOptions.HashOptions.SHA256 && !Options.CurrentOptions.HashOptions.SHA384 && !Options.CurrentOptions.HashOptions.SHA512 && !Options.CurrentOptions.HashOptions.RIPEMD160 && !Options.CurrentOptions.HashOptions.CRC32)
+            {
+                Clear();
+                return;
+            }
+
+            if (_fileList != null)
+            {
+                if (_fileList.Count > 0)
+                {
+                    string[] currentList = SumResult.Sums.Select(x => x.File).ToArray();
+
+                    CalculateSums(currentList);
+                }
+            }
+        }
 
         private void CalculateSums(string[] files)
         {
             this.AllowDrop = false;
-            _fileList = new List<string>();
+
+            _fileList.Clear();
 
             foreach (string f in files)
             {
@@ -221,12 +334,12 @@ namespace Hashing
                 }
             }
 
-            // calculate all sums for all files
             Task.Factory.StartNew(() =>
             {
                 lblCalculating.Invoke((MethodInvoker)delegate
                 {
                     button1.Enabled = false;
+                    button4.Enabled = false;
                     button7.Enabled = false;
                     button2.Enabled = false;
                     button3.Enabled = false;
@@ -244,7 +357,6 @@ namespace Hashing
                 }
             }
             )
-            // add nodes and expand them
             .ContinueWith((prevTask) =>
             {
                 if ((SumResult.Sums != null) && (SumResult.Sums.Count > 0))
@@ -253,21 +365,22 @@ namespace Hashing
 
                     foreach (SumResult sr in SumResult.Sums)
                     {
-                        TreeNode node = new TreeNode(sr.File);
+                        TreeNode rootNode = new TreeNode(sr.File);
 
-                        node.ForeColor = Options.ForegroundColor;
-                        node.Tag = Options.ThemeFlag;
+                        rootNode.ForeColor = Options.ForegroundColor;
+                        rootNode.Tag = Options.ThemeFlag;
 
-                        if (Options.CurrentOptions.HashOptions.MD5) node.Nodes.Add("MD5: " + sr.MD5);
-                        if (Options.CurrentOptions.HashOptions.SHA1) node.Nodes.Add("SHA1: " + sr.SHA1);
-                        if (Options.CurrentOptions.HashOptions.SHA256) node.Nodes.Add("SHA256: " + sr.SHA256);
-                        if (Options.CurrentOptions.HashOptions.SHA384) node.Nodes.Add("SHA384: " + sr.SHA384);
-                        if (Options.CurrentOptions.HashOptions.SHA512) node.Nodes.Add("SHA512: " + sr.SHA512);
-                        if (Options.CurrentOptions.HashOptions.RIPEMD160) node.Nodes.Add("RIPEMD160: " + sr.RIPEMD160);
+                        if (Options.CurrentOptions.HashOptions.MD5) rootNode.Nodes.Add("MD5: " + sr.MD5);
+                        if (Options.CurrentOptions.HashOptions.SHA1) rootNode.Nodes.Add("SHA1: " + sr.SHA1);
+                        if (Options.CurrentOptions.HashOptions.SHA256) rootNode.Nodes.Add("SHA256: " + sr.SHA256);
+                        if (Options.CurrentOptions.HashOptions.SHA384) rootNode.Nodes.Add("SHA384: " + sr.SHA384);
+                        if (Options.CurrentOptions.HashOptions.SHA512) rootNode.Nodes.Add("SHA512: " + sr.SHA512);
+                        if (Options.CurrentOptions.HashOptions.CRC32) rootNode.Nodes.Add("CRC32: " + sr.CRC32);
+                        if (Options.CurrentOptions.HashOptions.RIPEMD160) rootNode.Nodes.Add("RIPEMD160: " + sr.RIPEMD160);
 
                         SumView.Invoke((MethodInvoker)delegate
                         {
-                            SumView.Nodes.Add(node);
+                            SumView.Nodes.Add(rootNode);
                             SumView.ExpandAll();
                         });
                     }
@@ -277,6 +390,7 @@ namespace Hashing
                         lblCalculating.Text = "Calculating...";
                         lblCalculating.Visible = false;
                         button1.Enabled = true;
+                        button4.Enabled = true;
                         button7.Enabled = true;
                         button2.Enabled = true;
                         button3.Enabled = true;
@@ -285,6 +399,7 @@ namespace Hashing
                 }
             }
             );
+
             this.AllowDrop = true;
         }
 
@@ -301,7 +416,14 @@ namespace Hashing
 
         private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
-            CalculateSums((string[])e.Data.GetData(DataFormats.FileDrop, false));
+            if (!Options.CurrentOptions.HashOptions.MD5 && !Options.CurrentOptions.HashOptions.SHA1 && !Options.CurrentOptions.HashOptions.SHA256 && !Options.CurrentOptions.HashOptions.SHA384 && !Options.CurrentOptions.HashOptions.SHA512 && !Options.CurrentOptions.HashOptions.RIPEMD160 && !Options.CurrentOptions.HashOptions.CRC32)
+            {
+                MessageBox.Show("No active hashes! Please select at least one hash from options!", "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                CalculateSums((string[])e.Data.GetData(DataFormats.FileDrop, false));
+            }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -324,23 +446,7 @@ namespace Hashing
 
         private void button7_Click(object sender, EventArgs e)
         {
-            if (SumView.Nodes.Count > 0)
-            {
-                SaveFileDialog dialog = new SaveFileDialog();
-                dialog.Filter = "JSON file|*.json";
-
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(SumResult.Sums, Formatting.Indented));
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-            }
+            SaveAsJSON();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -379,24 +485,7 @@ namespace Hashing
 
         private void button2_Click(object sender, EventArgs e)
         {
-            List<SumResult> list = new List<SumResult>();
-
-            if (Options.CurrentOptions.HashOptions.MD5) list = FindIdenticalsByMD5();
-            if (Options.CurrentOptions.HashOptions.SHA1) list = FindIdenticalsBySHA1();
-            if (Options.CurrentOptions.HashOptions.SHA256) list = FindIdenticalsBySHA256();
-            if (Options.CurrentOptions.HashOptions.SHA384) list = FindIdenticalsBySHA384();
-            if (Options.CurrentOptions.HashOptions.SHA512) list = FindIdenticalsBySHA512();
-            if (Options.CurrentOptions.HashOptions.RIPEMD160) list = FindIdenticalsByRIPEMD160();
-
-            if (SumView.Nodes.Count > 0 && list.Count > 0)
-            {
-                IdenticalsForm f = new IdenticalsForm(list);
-                f.ShowDialog();
-            }
-            else if (SumView.Nodes.Count > 0 && list.Count == 0)
-            {
-                MessageBox.Show("No identical files have been found!", "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            FindIdenticals();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -419,6 +508,31 @@ namespace Hashing
             f.ShowDialog();
 
             _allowExit = !Options.CurrentOptions.TrayIcon;
+
+            if (!OptionsForm.HashesChanged && OptionsForm.CasingChanged)
+            {
+                if (Options.CurrentOptions.LowerCasing)
+                {
+                    foreach (SumResult x in SumResult.Sums)
+                    {
+                        x.ConvertToLowerCasing();
+                    }
+                }
+                else
+                {
+                    foreach (SumResult x in SumResult.Sums)
+                    {
+                        x.ConvertToUpperCasing();
+                    }
+                }
+
+                RefreshSumList();
+            }
+
+            if (OptionsForm.HashesChanged)
+            {
+                ReCalculateSums();
+            }
         }
 
         private void trayIcon_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -451,8 +565,11 @@ namespace Hashing
 
         private void button3_Click(object sender, EventArgs e)
         {
-            CompareForm f = new CompareForm();
-            f.ShowDialog();
+            if (SumView.Nodes.Count > 0)
+            {
+                CompareForm f = new CompareForm();
+                f.ShowDialog();
+            }
         }
     }
 }

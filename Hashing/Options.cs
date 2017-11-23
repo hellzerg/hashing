@@ -15,6 +15,7 @@ namespace Hashing
     {
         public Theme Color { get; set; }
         public HashOptions HashOptions { get; set; }
+        public bool LowerCasing { get; set; }
         public bool TrayIcon { get; set; }
         public bool HighPriority { get; set; }
 
@@ -132,13 +133,15 @@ namespace Hashing
             if (!File.Exists(SettingsFile))
             {
                 CurrentOptions.Color = Theme.Zerg;
+                CurrentOptions.LowerCasing = false;
                 CurrentOptions.TrayIcon = false;
                 CurrentOptions.HighPriority = false;
                 CurrentOptions.HashOptions.MD5 = true;
-                CurrentOptions.HashOptions.SHA1 = false;
+                CurrentOptions.HashOptions.SHA1 = true;
                 CurrentOptions.HashOptions.SHA256 = false;
                 CurrentOptions.HashOptions.SHA384 = false;
                 CurrentOptions.HashOptions.SHA512 = false;
+                CurrentOptions.HashOptions.CRC32 = false;
                 CurrentOptions.HashOptions.RIPEMD160 = false;
 
                 using (FileStream fs = File.Open(SettingsFile, FileMode.CreateNew))

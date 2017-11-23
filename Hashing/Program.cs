@@ -15,7 +15,7 @@ namespace Hashing
 
         // Enter current version here
         internal readonly static float Major = 1;
-        internal readonly static float Minor = 6;
+        internal readonly static float Minor = 7;
 
         /* END OF VERSION PROPERTIES */
 
@@ -36,7 +36,11 @@ namespace Hashing
             Application.SetCompatibleTextRenderingDefault(false);
 
             string resource = "Hashing.Newtonsoft.Json.dll";
+            string resource2 = "Hashing.Crc32.NET.dll";
+
             EmbeddedAssembly.Load(resource, "Newtonsoft.Json.dll");
+            EmbeddedAssembly.Load(resource2, "Crc32.NET.dll");
+
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             
             Options.LoadSettings();

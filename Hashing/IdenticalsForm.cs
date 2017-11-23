@@ -14,38 +14,66 @@ namespace Hashing
 {
     public partial class IdenticalsForm : Form
     {
-        List<SumResult> Identicals;
-        List<string> MD5s = new List<string>();
+        List<SumResult> _identicals;
+        List<string> _md5s = new List<string>();
+
+        string _helper = string.Empty;
 
         public IdenticalsForm(List<SumResult> list)
         {
             InitializeComponent();
             Options.ApplyTheme(this);
-            radioButton1.Checked = true;
-            Identicals = list;
-            ListIdenticals();
             helperMenu.Renderer = new ToolStripRendererMaterial();
+
+            _identicals = list;
+            ListIdenticals();
+
+            ConfigureGUI();
+        }
+
+        private void ConfigureGUI()
+        {
+            radioRIPEMD160.Enabled = Options.CurrentOptions.HashOptions.RIPEMD160;
+            radioRIPEMD160.Checked = Options.CurrentOptions.HashOptions.RIPEMD160;
+
+            radioCRC32.Enabled = Options.CurrentOptions.HashOptions.CRC32;
+            radioCRC32.Checked = Options.CurrentOptions.HashOptions.CRC32;
+
+            radioSHA512.Enabled = Options.CurrentOptions.HashOptions.SHA512;
+            radioSHA512.Checked = Options.CurrentOptions.HashOptions.SHA512;
+
+            radioSHA384.Enabled = Options.CurrentOptions.HashOptions.SHA384;
+            radioSHA384.Checked = Options.CurrentOptions.HashOptions.SHA384;
+
+            radioSHA256.Enabled = Options.CurrentOptions.HashOptions.SHA256;
+            radioSHA256.Checked = Options.CurrentOptions.HashOptions.SHA256;
+
+            radioSHA1.Enabled = Options.CurrentOptions.HashOptions.SHA1;
+            radioSHA1.Checked = Options.CurrentOptions.HashOptions.SHA1;
+
+            radioMD5.Enabled = Options.CurrentOptions.HashOptions.MD5;
+            radioMD5.Checked = Options.CurrentOptions.HashOptions.MD5;
         }
 
         private void Copy()
         {
-            string s = string.Empty;
+            string total = string.Empty;
 
             if (SumView.SelectedNode.Nodes.Count > 0)
             {
-                s = SumView.SelectedNode.Text + Environment.NewLine + Environment.NewLine;
+                total = _helper + SumView.SelectedNode.Text + Environment.NewLine + Environment.NewLine;
 
                 foreach (TreeNode node in SumView.SelectedNode.Nodes)
                 {
-                    s += node.Text + Environment.NewLine;
+                    total += node.Text + Environment.NewLine;
                 }
             }
             else
             {
-                s = SumView.SelectedNode.Text;
+                total = SumView.SelectedNode.Text;
             }
 
-            Utilities.CopyToClipboard(s);
+            Utilities.CopyToClipboard(total, true);
         }
 
         private void SaveJson()
@@ -59,7 +87,7 @@ namespace Hashing
                 {
                     try
                     {
-                        File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(Identicals, Formatting.Indented));
+                        File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(_identicals, Formatting.Indented));
                     }
                     catch (Exception ex)
                     {
@@ -71,25 +99,25 @@ namespace Hashing
 
         private void ListIdenticals()
         {
-            foreach (SumResult sr in Identicals)
+            foreach (SumResult sr in _identicals)
             {
-                if (!MD5s.Contains(sr.MD5)) MD5s.Add(sr.MD5);
+                if (!_md5s.Contains(sr.MD5)) _md5s.Add(sr.MD5);
             }
 
-            foreach (string x in MD5s)
+            foreach (string x in _md5s)
             {
-                TreeNode node = new TreeNode(x);
-                node.ForeColor = Options.ForegroundColor;
+                TreeNode rootNode = new TreeNode(x);
+                rootNode.ForeColor = Options.ForegroundColor;
 
-                foreach (SumResult y in Identicals)
+                foreach (SumResult y in _identicals)
                 {
                     if (y.MD5 == x)
                     {
-                        node.Nodes.Add(y.File);
+                        rootNode.Nodes.Add(y.File);
                     }
                 }
 
-                SumView.Nodes.Add(node);
+                SumView.Nodes.Add(rootNode);
             }
 
             SumView.ExpandAll();
@@ -118,16 +146,18 @@ namespace Hashing
             SaveJson();
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        private void radioMD5_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton1.Checked)
+            if (radioMD5.Checked)
             {
+                _helper = "MD5: ";
+
                 SumResult tmp;
                 foreach (TreeNode node in SumView.Nodes)
                 {
                     foreach (TreeNode child in node.Nodes)
                     {
-                        tmp = Identicals.Find(x => x.File == child.Text);
+                        tmp = _identicals.Find(x => x.File == child.Text);
                         node.Text = tmp.MD5;
                         break; 
                     }
@@ -135,16 +165,18 @@ namespace Hashing
             }
         }
 
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        private void radioSHA1_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton2.Checked)
+            if (radioSHA1.Checked)
             {
+                _helper = "SHA1: ";
+
                 SumResult tmp;
                 foreach (TreeNode node in SumView.Nodes)
                 {
                     foreach (TreeNode child in node.Nodes)
                     {
-                        tmp = Identicals.Find(x => x.File == child.Text);
+                        tmp = _identicals.Find(x => x.File == child.Text);
                         node.Text = tmp.SHA1;
                         break;
                     }
@@ -152,16 +184,18 @@ namespace Hashing
             }
         }
 
-        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        private void radioSHA256_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton3.Checked)
+            if (radioSHA256.Checked)
             {
+                _helper = "SHA256: ";
+
                 SumResult tmp;
                 foreach (TreeNode node in SumView.Nodes)
                 {
                     foreach (TreeNode child in node.Nodes)
                     {
-                        tmp = Identicals.Find(x => x.File == child.Text);
+                        tmp = _identicals.Find(x => x.File == child.Text);
                         node.Text = tmp.SHA256;
                         break;
                     }
@@ -169,16 +203,18 @@ namespace Hashing
             }
         }
 
-        private void radioButton4_CheckedChanged(object sender, EventArgs e)
+        private void radioRIPEMD160_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton4.Checked)
+            if (radioRIPEMD160.Checked)
             {
+                _helper = "RIPEMD160: ";
+
                 SumResult tmp;
                 foreach (TreeNode node in SumView.Nodes)
                 {
                     foreach (TreeNode child in node.Nodes)
                     {
-                        tmp = Identicals.Find(x => x.File == child.Text);
+                        tmp = _identicals.Find(x => x.File == child.Text);
                         node.Text = tmp.RIPEMD160;
                         break;
                     }
@@ -186,16 +222,18 @@ namespace Hashing
             }
         }
 
-        private void radioButton5_CheckedChanged(object sender, EventArgs e)
+        private void radioSHA384_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton5.Checked)
+            if (radioSHA384.Checked)
             {
+                _helper = "SHA384: ";
+
                 SumResult tmp;
                 foreach (TreeNode node in SumView.Nodes)
                 {
                     foreach (TreeNode child in node.Nodes)
                     {
-                        tmp = Identicals.Find(x => x.File == child.Text);
+                        tmp = _identicals.Find(x => x.File == child.Text);
                         node.Text = tmp.SHA384;
                         break;
                     }
@@ -203,19 +241,37 @@ namespace Hashing
             }
         }
 
-        private void radioButton6_CheckedChanged(object sender, EventArgs e)
+        private void radioSHA512_CheckedChanged(object sender, EventArgs e)
         {
-            if (radioButton6.Checked)
+            if (radioSHA512.Checked)
             {
+                _helper = "SHA512: ";
+
                 SumResult tmp;
                 foreach (TreeNode node in SumView.Nodes)
                 {
                     foreach (TreeNode child in node.Nodes)
                     {
-                        tmp = Identicals.Find(x => x.File == child.Text);
+                        tmp = _identicals.Find(x => x.File == child.Text);
                         node.Text = tmp.SHA512;
                         break;
                     }
+                }
+            }
+        }
+
+        private void radioCRC32_CheckedChanged(object sender, EventArgs e)
+        {
+            _helper = "CRC32: ";
+
+            SumResult tmp;
+            foreach (TreeNode node in SumView.Nodes)
+            {
+                foreach (TreeNode child in node.Nodes)
+                {
+                    tmp = _identicals.Find(x => x.File == child.Text);
+                    node.Text = tmp.CRC32;
+                    break;
                 }
             }
         }

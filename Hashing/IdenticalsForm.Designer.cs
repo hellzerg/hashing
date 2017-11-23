@@ -34,13 +34,14 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
-            this.radioButton6 = new System.Windows.Forms.RadioButton();
+            this.radioMD5 = new System.Windows.Forms.RadioButton();
+            this.radioSHA1 = new System.Windows.Forms.RadioButton();
+            this.radioSHA256 = new System.Windows.Forms.RadioButton();
+            this.radioRIPEMD160 = new System.Windows.Forms.RadioButton();
+            this.radioSHA384 = new System.Windows.Forms.RadioButton();
+            this.radioSHA512 = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.radioCRC32 = new System.Windows.Forms.RadioButton();
             this.helperMenu.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -57,7 +58,7 @@
             this.SumView.Location = new System.Drawing.Point(0, 0);
             this.SumView.Margin = new System.Windows.Forms.Padding(2);
             this.SumView.Name = "SumView";
-            this.SumView.Size = new System.Drawing.Size(704, 448);
+            this.SumView.Size = new System.Drawing.Size(713, 459);
             this.SumView.TabIndex = 1;
             this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SumView_NodeMouseClick);
             // 
@@ -73,13 +74,13 @@
             this.helperMenu.Name = "helperMenu";
             this.helperMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.helperMenu.ShowImageMargin = false;
-            this.helperMenu.Size = new System.Drawing.Size(177, 68);
+            this.helperMenu.Size = new System.Drawing.Size(151, 56);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(176, 32);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
@@ -87,7 +88,7 @@
             // 
             this.saveAsJSONToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.saveAsJSONToolStripMenuItem.Name = "saveAsJSONToolStripMenuItem";
-            this.saveAsJSONToolStripMenuItem.Size = new System.Drawing.Size(176, 32);
+            this.saveAsJSONToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
             this.saveAsJSONToolStripMenuItem.Text = "Save as JSON";
             this.saveAsJSONToolStripMenuItem.Click += new System.EventHandler(this.saveAsJSONToolStripMenuItem_Click);
             // 
@@ -96,112 +97,126 @@
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.SumView);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 40);
+            this.panel2.Location = new System.Drawing.Point(0, 32);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(706, 450);
+            this.panel2.Size = new System.Drawing.Size(715, 461);
             this.panel2.TabIndex = 4;
             // 
-            // radioButton1
+            // radioMD5
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(11, 9);
-            this.radioButton1.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(63, 24);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "MD5";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.radioMD5.AutoSize = true;
+            this.radioMD5.Location = new System.Drawing.Point(9, 7);
+            this.radioMD5.Margin = new System.Windows.Forms.Padding(2);
+            this.radioMD5.Name = "radioMD5";
+            this.radioMD5.Size = new System.Drawing.Size(52, 19);
+            this.radioMD5.TabIndex = 0;
+            this.radioMD5.TabStop = true;
+            this.radioMD5.Text = "MD5";
+            this.radioMD5.UseVisualStyleBackColor = true;
+            this.radioMD5.CheckedChanged += new System.EventHandler(this.radioMD5_CheckedChanged);
             // 
-            // radioButton2
+            // radioSHA1
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(80, 9);
-            this.radioButton2.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(65, 24);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "SHA1";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            this.radioSHA1.AutoSize = true;
+            this.radioSHA1.Location = new System.Drawing.Point(64, 7);
+            this.radioSHA1.Margin = new System.Windows.Forms.Padding(2);
+            this.radioSHA1.Name = "radioSHA1";
+            this.radioSHA1.Size = new System.Drawing.Size(54, 19);
+            this.radioSHA1.TabIndex = 1;
+            this.radioSHA1.TabStop = true;
+            this.radioSHA1.Text = "SHA1";
+            this.radioSHA1.UseVisualStyleBackColor = true;
+            this.radioSHA1.CheckedChanged += new System.EventHandler(this.radioSHA1_CheckedChanged);
             // 
-            // radioButton3
+            // radioSHA256
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(151, 9);
-            this.radioButton3.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(83, 24);
-            this.radioButton3.TabIndex = 2;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "SHA256";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
+            this.radioSHA256.AutoSize = true;
+            this.radioSHA256.Location = new System.Drawing.Point(121, 7);
+            this.radioSHA256.Margin = new System.Windows.Forms.Padding(2);
+            this.radioSHA256.Name = "radioSHA256";
+            this.radioSHA256.Size = new System.Drawing.Size(70, 19);
+            this.radioSHA256.TabIndex = 2;
+            this.radioSHA256.TabStop = true;
+            this.radioSHA256.Text = "SHA256";
+            this.radioSHA256.UseVisualStyleBackColor = true;
+            this.radioSHA256.CheckedChanged += new System.EventHandler(this.radioSHA256_CheckedChanged);
             // 
-            // radioButton4
+            // radioRIPEMD160
             // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(411, 9);
-            this.radioButton4.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(107, 24);
-            this.radioButton4.TabIndex = 3;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "RIPEMD160";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            this.radioButton4.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged);
+            this.radioRIPEMD160.AutoSize = true;
+            this.radioRIPEMD160.Location = new System.Drawing.Point(397, 7);
+            this.radioRIPEMD160.Margin = new System.Windows.Forms.Padding(2);
+            this.radioRIPEMD160.Name = "radioRIPEMD160";
+            this.radioRIPEMD160.Size = new System.Drawing.Size(88, 19);
+            this.radioRIPEMD160.TabIndex = 3;
+            this.radioRIPEMD160.TabStop = true;
+            this.radioRIPEMD160.Text = "RIPEMD160";
+            this.radioRIPEMD160.UseVisualStyleBackColor = true;
+            this.radioRIPEMD160.CheckedChanged += new System.EventHandler(this.radioRIPEMD160_CheckedChanged);
             // 
-            // radioButton5
+            // radioSHA384
             // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(238, 9);
-            this.radioButton5.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(84, 24);
-            this.radioButton5.TabIndex = 4;
-            this.radioButton5.TabStop = true;
-            this.radioButton5.Text = "SHA384";
-            this.radioButton5.UseVisualStyleBackColor = true;
-            this.radioButton5.CheckedChanged += new System.EventHandler(this.radioButton5_CheckedChanged);
+            this.radioSHA384.AutoSize = true;
+            this.radioSHA384.Location = new System.Drawing.Point(190, 7);
+            this.radioSHA384.Margin = new System.Windows.Forms.Padding(2);
+            this.radioSHA384.Name = "radioSHA384";
+            this.radioSHA384.Size = new System.Drawing.Size(70, 19);
+            this.radioSHA384.TabIndex = 4;
+            this.radioSHA384.TabStop = true;
+            this.radioSHA384.Text = "SHA384";
+            this.radioSHA384.UseVisualStyleBackColor = true;
+            this.radioSHA384.CheckedChanged += new System.EventHandler(this.radioSHA384_CheckedChanged);
             // 
-            // radioButton6
+            // radioSHA512
             // 
-            this.radioButton6.AutoSize = true;
-            this.radioButton6.Location = new System.Drawing.Point(326, 9);
-            this.radioButton6.Margin = new System.Windows.Forms.Padding(2);
-            this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(81, 24);
-            this.radioButton6.TabIndex = 5;
-            this.radioButton6.TabStop = true;
-            this.radioButton6.Text = "SHA512";
-            this.radioButton6.UseVisualStyleBackColor = true;
-            this.radioButton6.CheckedChanged += new System.EventHandler(this.radioButton6_CheckedChanged);
+            this.radioSHA512.AutoSize = true;
+            this.radioSHA512.Location = new System.Drawing.Point(261, 7);
+            this.radioSHA512.Margin = new System.Windows.Forms.Padding(2);
+            this.radioSHA512.Name = "radioSHA512";
+            this.radioSHA512.Size = new System.Drawing.Size(68, 19);
+            this.radioSHA512.TabIndex = 5;
+            this.radioSHA512.TabStop = true;
+            this.radioSHA512.Text = "SHA512";
+            this.radioSHA512.UseVisualStyleBackColor = true;
+            this.radioSHA512.CheckedChanged += new System.EventHandler(this.radioSHA512_CheckedChanged);
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.radioButton6);
-            this.panel1.Controls.Add(this.radioButton5);
-            this.panel1.Controls.Add(this.radioButton4);
-            this.panel1.Controls.Add(this.radioButton3);
-            this.panel1.Controls.Add(this.radioButton2);
-            this.panel1.Controls.Add(this.radioButton1);
+            this.panel1.Controls.Add(this.radioCRC32);
+            this.panel1.Controls.Add(this.radioSHA512);
+            this.panel1.Controls.Add(this.radioSHA384);
+            this.panel1.Controls.Add(this.radioRIPEMD160);
+            this.panel1.Controls.Add(this.radioSHA256);
+            this.panel1.Controls.Add(this.radioSHA1);
+            this.panel1.Controls.Add(this.radioMD5);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(706, 40);
+            this.panel1.Size = new System.Drawing.Size(715, 32);
             this.panel1.TabIndex = 3;
+            // 
+            // radioCRC32
+            // 
+            this.radioCRC32.AutoSize = true;
+            this.radioCRC32.Location = new System.Drawing.Point(333, 7);
+            this.radioCRC32.Margin = new System.Windows.Forms.Padding(2);
+            this.radioCRC32.Name = "radioCRC32";
+            this.radioCRC32.Size = new System.Drawing.Size(60, 19);
+            this.radioCRC32.TabIndex = 6;
+            this.radioCRC32.TabStop = true;
+            this.radioCRC32.Text = "CRC32";
+            this.radioCRC32.UseVisualStyleBackColor = true;
+            this.radioCRC32.CheckedChanged += new System.EventHandler(this.radioCRC32_CheckedChanged);
             // 
             // IdenticalsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.ClientSize = new System.Drawing.Size(706, 490);
+            this.ClientSize = new System.Drawing.Size(715, 493);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -229,12 +244,13 @@
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsJSONToolStripMenuItem;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private System.Windows.Forms.RadioButton radioButton5;
-        private System.Windows.Forms.RadioButton radioButton6;
+        private System.Windows.Forms.RadioButton radioMD5;
+        private System.Windows.Forms.RadioButton radioSHA1;
+        private System.Windows.Forms.RadioButton radioSHA256;
+        private System.Windows.Forms.RadioButton radioRIPEMD160;
+        private System.Windows.Forms.RadioButton radioSHA384;
+        private System.Windows.Forms.RadioButton radioSHA512;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RadioButton radioCRC32;
     }
 }

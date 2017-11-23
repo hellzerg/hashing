@@ -17,17 +17,29 @@ namespace Hashing
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
             Options.ApplyTheme(this);
+
+            KeyPreview = true;
+
+            if (Options.CurrentOptions.LowerCasing)
+            {
+                txtExpected.CharacterCasing = CharacterCasing.Lower;
+            }
+            else
+            {
+                txtExpected.CharacterCasing = CharacterCasing.Upper;
+            }
         }
 
         private void CompareForm_Load(object sender, EventArgs e)
         {
-
+            txtExpected.Select();
         }
 
         private void Compare()
         {
             if (!string.IsNullOrEmpty(txtExpected.Text))
             {
+                txtExpected.Text.Trim();
                 resultBox.Items.Clear();
 
                 foreach (SumResult x in SumResult.Sums)
@@ -57,10 +69,24 @@ namespace Hashing
                         if (x.SHA512 == txtExpected.Text) resultBox.Items.Add(x.File);
                     }
 
+                    if (chkCRC32.Checked)
+                    {
+                        if (x.CRC32 == txtExpected.Text) resultBox.Items.Add(x.File);
+                    }
+
                     if (chkRIPEMD160.Checked)
                     {
                         if (x.RIPEMD160 == txtExpected.Text) resultBox.Items.Add(x.File);
                     }
+                }
+
+                if (resultBox.Items.Count > 0)
+                {
+                    lblNoMatch.Visible = false;
+                }
+                else
+                {
+                    lblNoMatch.Visible = true;
                 }
             }
         }
@@ -75,6 +101,23 @@ namespace Hashing
             if (chkRemove.Checked)
             {
                 txtExpected.Text = txtExpected.Text.Replace("-", string.Empty).Trim();
+            }
+        }
+
+        private void btnPaste_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Clipboard.GetText()))
+                {
+                    txtExpected.Text = Clipboard.GetText().Trim();
+                }
+            }
+            catch { }
+            finally
+            {
+                txtExpected.SelectionStart = txtExpected.Text.Length;
+                txtExpected.Select();
             }
         }
     }

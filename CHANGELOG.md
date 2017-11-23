@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7] - 2017-11-23
+- Added support for CRC32 hash algorith
+- Added option for lower character casing
+- Performance improvements
+- Tons of major bug fixes
+- Several visual changes & bug fixes
+
 ## [1.6] - 2017-09-15
 - Added support for SHA384 & SHA512 hash algoriths
 - Added ability to compare files against expected hash sums

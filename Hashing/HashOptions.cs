@@ -14,6 +14,7 @@ namespace Hashing
         public bool SHA256 { get; set; }
         public bool SHA384 { get; set; }
         public bool SHA512 { get; set; }
+        public bool CRC32 { get; set; }
         public bool RIPEMD160 { get; set; }
     }
 }

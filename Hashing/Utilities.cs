@@ -7,6 +7,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Force.Crc32;
 
 namespace Hashing
 {
@@ -21,54 +22,80 @@ namespace Hashing
                 if (File.Exists(file))
                 {
                     result.File = file;
-                    
-                    using (Stream input = File.OpenRead(file))
+
+                    if (Options.CurrentOptions.HashOptions.MD5)
                     {
-                        if (Options.CurrentOptions.HashOptions.MD5)
+                        using (FileStream fs = File.OpenRead(file))
                         {
-                            using (var md5 = MD5.Create())
+                            using (var md5 = new MD5CryptoServiceProvider())
                             {
-                                result.MD5 = BitConverter.ToString(md5.ComputeHash(input)).Replace("-", string.Empty);
+                                result.MD5 = BitConverter.ToString(md5.ComputeHash(fs)).Replace("-", string.Empty);
                             }
                         }
-
-                        if (Options.CurrentOptions.HashOptions.SHA1)
+                    }
+                    
+                    if (Options.CurrentOptions.HashOptions.SHA1)
+                    {
+                        using (FileStream fs = File.OpenRead(file))
                         {
-                            using (var sha1 = SHA1.Create())
+                            using (var sha1 = new SHA1CryptoServiceProvider())
                             {
-                                result.SHA1 = BitConverter.ToString(sha1.ComputeHash(input)).Replace("-", string.Empty);
+                                result.SHA1 = BitConverter.ToString(sha1.ComputeHash(fs)).Replace("-", string.Empty);
                             }
                         }
+                    }
 
-                        if (Options.CurrentOptions.HashOptions.SHA256)
+                    if (Options.CurrentOptions.HashOptions.SHA256)
+                    {
+                        using (FileStream fs = File.OpenRead(file))
                         {
-                            using (var sha256 = SHA256.Create())
+                            using (var sha256 = new SHA256CryptoServiceProvider())
                             {
-                                result.SHA256 = BitConverter.ToString(sha256.ComputeHash(input)).Replace("-", string.Empty);
+                                result.SHA256 = BitConverter.ToString(sha256.ComputeHash(fs)).Replace("-", string.Empty);
                             }
                         }
+                    }
 
-                        if (Options.CurrentOptions.HashOptions.SHA384)
+                    if (Options.CurrentOptions.HashOptions.SHA384)
+                    {
+                        using (FileStream fs = File.OpenRead(file))
                         {
-                            using (var sha384 = SHA384.Create())
+                            using (var sha384 = new SHA384CryptoServiceProvider())
                             {
-                                result.SHA384 = BitConverter.ToString(sha384.ComputeHash(input)).Replace("-", string.Empty);
+                                result.SHA384 = BitConverter.ToString(sha384.ComputeHash(fs)).Replace("-", string.Empty);
                             }
                         }
+                    }
 
-                        if (Options.CurrentOptions.HashOptions.SHA512)
+                    if (Options.CurrentOptions.HashOptions.SHA512)
+                    {
+                        using (FileStream fs = File.OpenRead(file))
                         {
-                            using (var sha512 = SHA512.Create())
+                            using (var sha512 = new SHA512CryptoServiceProvider())
                             {
-                                result.SHA512 = BitConverter.ToString(sha512.ComputeHash(input)).Replace("-", string.Empty);
+                                result.SHA512 = BitConverter.ToString(sha512.ComputeHash(fs)).Replace("-", string.Empty);
                             }
                         }
+                    }
 
-                        if (Options.CurrentOptions.HashOptions.RIPEMD160)
+                    if (Options.CurrentOptions.HashOptions.CRC32)
+                    {
+                        using (FileStream fs = File.OpenRead(file))
+                        {
+                            using (var crc32 = new Crc32Algorithm())
+                            {
+                                result.CRC32 = BitConverter.ToString(crc32.ComputeHash(fs)).Replace("-", string.Empty);
+                            }
+                        }
+                    }
+
+                    if (Options.CurrentOptions.HashOptions.RIPEMD160)
+                    {
+                        using (FileStream fs = File.OpenRead(file))
                         {
                             using (var ripemd160 = RIPEMD160.Create())
                             {
-                                result.RIPEMD160 = BitConverter.ToString(ripemd160.ComputeHash(input)).Replace("-", string.Empty);
+                                result.RIPEMD160 = BitConverter.ToString(ripemd160.ComputeHash(fs)).Replace ("-", string.Empty);
                             }
                         }
                     }
@@ -78,6 +105,15 @@ namespace Hashing
             {
                 result = null;
                 MessageBox.Show(ex.Message, "Hash Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            if (Options.CurrentOptions.LowerCasing)
+            {
+                result.ConvertToLowerCasing();
+            }
+            else
+            {
+                result.ConvertToUpperCasing(); 
             }
 
             return result;
@@ -92,8 +128,9 @@ namespace Hashing
                     text = text.Replace("MD5:", string.Empty);
                     text = text.Replace("SHA1:", string.Empty);
                     text = text.Replace("SHA256:", string.Empty);
-                    text = text.Replace("SHA384", string.Empty);
-                    text = text.Replace("SHA512", string.Empty);
+                    text = text.Replace("SHA384:", string.Empty);
+                    text = text.Replace("SHA512:", string.Empty);
+                    text = text.Replace("CRC32:", string.Empty);
                     text = text.Replace("RIPEMD160:", string.Empty);
                 }
 
