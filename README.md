@@ -27,6 +27,6 @@ Does not work with Windows XP or Vista
 
 ## Details: ##
 
-Latest version: 1.6
+Latest version: 1.7
 
-Released: September 25, 2017
+Released: November 23, 2017
