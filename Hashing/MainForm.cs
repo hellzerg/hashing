@@ -307,6 +307,7 @@ namespace Hashing
                 if (_fileList.Count > 0)
                 {
                     string[] currentList = SumResult.Sums.Select(x => x.File).ToArray();
+                    SumResult.Sums.Clear();
 
                     CalculateSums(currentList);
                 }

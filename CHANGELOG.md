@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.8] - 2017-11-29
+- Minor bug fix when re-calculating sums
+
 ## [1.7] - 2017-11-23
 - Added support for CRC32 hash algorith
 - Added option for lower character casing
