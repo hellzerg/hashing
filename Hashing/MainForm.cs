@@ -530,7 +530,7 @@ namespace Hashing
                 RefreshSumList();
             }
 
-            if (OptionsForm.HashesChanged)
+            if (OptionsForm.HashesChanged && SumResult.Sums.Count > 0)
             {
                 ReCalculateSums();
             }

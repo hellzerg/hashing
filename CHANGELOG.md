@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9] - 2017-12-12
+- Another minor bug fix
+
 ## [1.8] - 2017-11-29
 - Minor bug fix when re-calculating sums
 
