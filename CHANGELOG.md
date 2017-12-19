@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0] - 2017-12-19
+- Added option to convert CRC32 to decimal
+- Open in VirusTotal support added
+- Keep active hash in Compare window
+
 ## [1.9] - 2017-12-12
 - Another minor bug fix
 

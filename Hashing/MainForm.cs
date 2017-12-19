@@ -109,6 +109,46 @@ namespace Hashing
             this.AllowDrop = true;
         }
 
+        private void SearchVirusTotal()
+        {
+            if (SumView.Nodes.Count > 0)
+            {
+                int index = -1;
+
+                if (SumView.SelectedNode.Nodes.Count > 0)
+                {
+                    index = SumResult.Sums.FindIndex(x => x.File.Equals(SumView.SelectedNode.Text));
+                }
+                else
+                {
+                    index = SumResult.Sums.FindIndex(x => x.File.Equals(SumView.SelectedNode.Parent.Text));
+                }
+
+                if (index > -1)
+                {
+                    if (!string.IsNullOrEmpty(SumResult.Sums[index].MD5))
+                    {
+                        Utilities.SearchVirusTotal(SumResult.Sums[index].MD5);
+                        return;
+                    }
+
+                    if (!string.IsNullOrEmpty(SumResult.Sums[index].SHA1))
+                    {
+                        Utilities.SearchVirusTotal(SumResult.Sums[index].SHA1);
+                        return;
+                    }
+
+                    if (!string.IsNullOrEmpty(SumResult.Sums[index].SHA256))
+                    {
+                        Utilities.SearchVirusTotal(SumResult.Sums[index].SHA256);
+                        return;
+                    }
+
+                    MessageBox.Show("VirusTotal recognizes files only by their MD5, SHA1 or SHA256 hash!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
         private void RefreshSumList()
         {
             if ((SumResult.Sums != null) && (SumResult.Sums.Count > 0))
@@ -510,6 +550,28 @@ namespace Hashing
 
             _allowExit = !Options.CurrentOptions.TrayIcon;
 
+            // change only CRC32 format
+            if (!OptionsForm.HashesChanged && OptionsForm.CRC32FormatChanged && Options.CurrentOptions.HashOptions.CRC32)
+            {
+                if (Options.CurrentOptions.CRC32Decimal)
+                {
+                    foreach (SumResult x in SumResult.Sums)
+                    {
+                        x.ConvertCRC32ToDecimal();
+                    }
+                }
+                else
+                {
+                    foreach (SumResult x in SumResult.Sums)
+                    {
+                        x.ConvertCRC32ToHexadecimal();
+                    }
+                }
+
+                RefreshSumList();
+            }
+
+            // change only character casing
             if (!OptionsForm.HashesChanged && OptionsForm.CasingChanged)
             {
                 if (Options.CurrentOptions.LowerCasing)
@@ -530,6 +592,7 @@ namespace Hashing
                 RefreshSumList();
             }
 
+            // re-calculate everything
             if (OptionsForm.HashesChanged && SumResult.Sums.Count > 0)
             {
                 ReCalculateSums();
@@ -571,6 +634,11 @@ namespace Hashing
                 CompareForm f = new CompareForm();
                 f.ShowDialog();
             }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SearchVirusTotal();
         }
     }
 }

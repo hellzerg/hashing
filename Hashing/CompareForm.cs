@@ -18,6 +18,8 @@ namespace Hashing
             CheckForIllegalCrossThreadCalls = false;
             Options.ApplyTheme(this);
 
+            LoadActiveHash();
+
             KeyPreview = true;
 
             if (Options.CurrentOptions.LowerCasing)
@@ -33,6 +35,34 @@ namespace Hashing
         private void CompareForm_Load(object sender, EventArgs e)
         {
             txtExpected.Select();
+        }
+
+        private void LoadActiveHash()
+        {
+            switch (Options.CurrentOptions.ActiveHash)
+            {
+                case 1:
+                    chkMD5.Checked = true;
+                    break;
+                case 2:
+                    chkSHA1.Checked = true;
+                    break;
+                case 3:
+                    chkSHA256.Checked = true;
+                    break;
+                case 4:
+                    chkSHA384.Checked = true;
+                    break;
+                case 5:
+                    chkSHA512.Checked = true;
+                    break;
+                case 6:
+                    chkCRC32.Checked = true;
+                    break;
+                case 7:
+                    chkRIPEMD160.Checked = true;
+                    break;
+            }
         }
 
         private void Compare()
@@ -119,6 +149,46 @@ namespace Hashing
                 txtExpected.SelectionStart = txtExpected.Text.Length;
                 txtExpected.Select();
             }
+        }
+
+        private void CompareForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+        }
+
+        private void chkMD5_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkMD5.Checked) Options.CurrentOptions.ActiveHash = 1;
+        }
+
+        private void chkSHA1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkSHA1.Checked) Options.CurrentOptions.ActiveHash = 2;
+        }
+
+        private void chkSHA256_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkSHA256.Checked) Options.CurrentOptions.ActiveHash = 3;
+        }
+
+        private void chkSHA384_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkSHA384.Checked) Options.CurrentOptions.ActiveHash = 4;
+        }
+
+        private void chkSHA512_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkSHA512.Checked) Options.CurrentOptions.ActiveHash = 5;
+        }
+
+        private void chkCRC32_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkCRC32.Checked) Options.CurrentOptions.ActiveHash = 6;
+        }
+
+        private void chkRIPEMD160_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkRIPEMD160.Checked) Options.CurrentOptions.ActiveHash = 7;
         }
     }
 }

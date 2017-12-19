@@ -18,6 +18,8 @@ namespace Hashing
         public bool LowerCasing { get; set; }
         public bool TrayIcon { get; set; }
         public bool HighPriority { get; set; }
+        public bool CRC32Decimal { get; set; }
+        public short ActiveHash { get; set; }
 
         public SettingsJson()
         {
@@ -136,6 +138,8 @@ namespace Hashing
                 CurrentOptions.LowerCasing = false;
                 CurrentOptions.TrayIcon = false;
                 CurrentOptions.HighPriority = false;
+                CurrentOptions.CRC32Decimal = false;
+                CurrentOptions.ActiveHash = 1;
                 CurrentOptions.HashOptions.MD5 = true;
                 CurrentOptions.HashOptions.SHA1 = true;
                 CurrentOptions.HashOptions.SHA256 = false;

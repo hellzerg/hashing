@@ -11,9 +11,9 @@ using Force.Crc32;
 
 namespace Hashing
 {
-    public static class Utilities
+    internal static class Utilities
     {
-        public static SumResult CalculateSums(string file)
+        internal static SumResult CalculateSums(string file)
         {
             SumResult result = new SumResult();
             
@@ -85,6 +85,11 @@ namespace Hashing
                             using (var crc32 = new Crc32Algorithm())
                             {
                                 result.CRC32 = BitConverter.ToString(crc32.ComputeHash(fs)).Replace("-", string.Empty);
+                                
+                                if (Options.CurrentOptions.CRC32Decimal)
+                                {
+                                    result.CRC32 = Convert.ToInt64(result.CRC32, 16).ToString();
+                                }
                             }
                         }
                     }
@@ -119,7 +124,7 @@ namespace Hashing
             return result;
         }
 
-        public static void CopyToClipboard(string text, bool all = false)
+        internal static void CopyToClipboard(string text, bool all = false)
         {
             try
             {
@@ -139,16 +144,25 @@ namespace Hashing
             catch { }
         }
 
-        public static void EnableHighPriority()
+        internal static void EnableHighPriority()
         {
             Process p = Process.GetCurrentProcess();
             p.PriorityClass = ProcessPriorityClass.High;
         }
 
-        public static void DisableHighPriority()
+        internal static void DisableHighPriority()
         {
             Process p = Process.GetCurrentProcess();
             p.PriorityClass = ProcessPriorityClass.Normal;
+        }
+
+        internal static void SearchVirusTotal(string hash)
+        {
+            try
+            {
+                Process.Start(string.Format("https://www.virustotal.com/#/file/{0}/detection", hash.ToLowerInvariant()));
+            }
+            catch { }
         }
     }
 }

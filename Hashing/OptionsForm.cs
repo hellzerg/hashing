@@ -17,6 +17,7 @@ namespace Hashing
 
         internal static bool HashesChanged;
         internal static bool CasingChanged;
+        internal static bool CRC32FormatChanged;
 
         public OptionsForm(MainForm main)
         {
@@ -28,6 +29,7 @@ namespace Hashing
 
             HashesChanged = false;
             CasingChanged = false;
+            CRC32FormatChanged = false;
         }
 
         private void LoadSettings()
@@ -65,6 +67,7 @@ namespace Hashing
             chkLower.Checked = Options.CurrentOptions.LowerCasing;
             chkTray.Checked = Options.CurrentOptions.TrayIcon;
             chkHigh.Checked = Options.CurrentOptions.HighPriority;
+            chkCRCFormat.Checked = Options.CurrentOptions.CRC32Decimal;
         }
 
         private void OptionsForm_Load(object sender, EventArgs e)
@@ -193,6 +196,12 @@ namespace Hashing
         {
             Options.CurrentOptions.LowerCasing = chkLower.Checked;
             CasingChanged = true;
+        }
+
+        private void chkCRCFormat_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.CRC32Decimal = chkCRCFormat.Checked;
+            CRC32FormatChanged = true;
         }
     }
 }

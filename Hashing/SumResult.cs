@@ -52,5 +52,15 @@ namespace Hashing
             CRC32 = CRC32.ToUpper();
             RIPEMD160 = RIPEMD160.ToUpper();
         }
+
+        public void ConvertCRC32ToDecimal()
+        {
+            if (!string.IsNullOrEmpty(CRC32)) CRC32 = Convert.ToInt64(CRC32, 16).ToString();
+        }
+
+        public void ConvertCRC32ToHexadecimal()
+        {
+            if (!string.IsNullOrEmpty(CRC32)) CRC32 = string.Format("{0:x}", CRC32);
+        }
     }
 }

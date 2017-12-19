@@ -8,9 +8,11 @@ Simple utility to calculate and compare hashes of multiple files
 * Choose which hashes you want to calculate
 * Compare and group identical files together
 * Compare multiple files against hash sums
+* Open in VirusTotal (works only with MD5, SHA1 & SHA256)
 * Drag n' drop any number of files and folder
 * Option to save hashes in JSON files
 * Option for lower character casing
+* Option for decimal CRC32
 * Process high priority support
 * Tray icon support
 
@@ -27,6 +29,6 @@ Does not work with Windows XP or Vista
 
 ## Details: ##
 
-Latest version: 1.9
+Latest version: 2.0
 
-Released: December 12, 2017
+Released: December 19, 2017
