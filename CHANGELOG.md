@@ -9,14 +9,14 @@ All notable changes to this project will be documented in this file.
 - Minor bug fix when re-calculating sums
 
 ## [1.7] - 2017-11-23
-- Added support for CRC32 hash algorith
+- Added support for CRC32 hash algorithm
 - Added option for lower character casing
 - Performance improvements
 - Tons of major bug fixes
 - Several visual changes & bug fixes
 
 ## [1.6] - 2017-09-15
-- Added support for SHA384 & SHA512 hash algoriths
+- Added support for SHA384 & SHA512 hash algorithms
 - Added ability to compare files against expected hash sums
 - Now you can choose which hashes you want to calculate
 - Added option to close it to tray icon
