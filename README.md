@@ -19,6 +19,9 @@ Simple utility to calculate and compare hashes of multiple files
 ## Downloads: ##
 https://github.com/hellzerg/hashing/releases
 
+## Screenshots: ##
+https://github.com/hellzerg/hashing/blob/master/IMAGES.md
+
 ## Compatibility: ##
 
 .NET Framework 4.5.2
