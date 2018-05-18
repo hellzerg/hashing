@@ -20,6 +20,8 @@ namespace Hashing
         public bool HighPriority { get; set; }
         public bool CRC32Decimal { get; set; }
         public short ActiveHash { get; set; }
+        public bool StayOnTop { get; set; }
+        public bool SingleInstance { get; set; }
 
         public SettingsJson()
         {
@@ -140,14 +142,17 @@ namespace Hashing
                 CurrentOptions.HighPriority = false;
                 CurrentOptions.CRC32Decimal = false;
                 CurrentOptions.ActiveHash = 1;
-                CurrentOptions.HashOptions.MD5 = true;
+                CurrentOptions.StayOnTop = false;
+                CurrentOptions.SingleInstance = false;
+
+                CurrentOptions.HashOptions.MD5 = false;
                 CurrentOptions.HashOptions.SHA1 = true;
-                CurrentOptions.HashOptions.SHA256 = false;
+                CurrentOptions.HashOptions.SHA256 = true;
                 CurrentOptions.HashOptions.SHA384 = false;
                 CurrentOptions.HashOptions.SHA512 = false;
                 CurrentOptions.HashOptions.CRC32 = false;
                 CurrentOptions.HashOptions.RIPEMD160 = false;
-
+                
                 using (FileStream fs = File.Open(SettingsFile, FileMode.CreateNew))
                 using (StreamWriter sw = new StreamWriter(fs))
                 using (JsonWriter jw = new JsonTextWriter(sw))

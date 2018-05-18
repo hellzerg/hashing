@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1] - 2018-05-18
+- Added option for single-instance
+- Added option for staying always on top
+- Added file browser for adding files/folders
+- Added functionality to analyze JSON files
+- Prompt to enable SHA256 when clicking on VirusTotal, if disabled
+- For security reasons VirusTotal will now works only with SHA256
+- Added: Check for new versions
+
 ## [2.0] - 2017-12-19
 - Added option to convert CRC32 to decimal
 - Open in VirusTotal support added

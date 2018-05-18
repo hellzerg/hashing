@@ -64,12 +64,19 @@
     <Compile Include="AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnalyzedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AnalyzedForm.Designer.cs">
+      <DependentUpon>AnalyzedForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CompareForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CompareForm.Designer.cs">
       <DependentUpon>CompareForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileSummary.cs" />
     <Compile Include="IdenticalsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,9 +103,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SumResult.cs" />
     <Compile Include="ToolStripRendererMaterial.cs" />
+    <Compile Include="TopMostMessageBox.cs" />
     <Compile Include="Utilities.cs" />
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AnalyzedForm.resx">
+      <DependentUpon>AnalyzedForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CompareForm.resx">
       <DependentUpon>CompareForm.cs</DependentUpon>

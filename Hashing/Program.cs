@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,7 +16,7 @@ namespace Hashing
 
         // Enter current version here
         internal readonly static float Major = 2;
-        internal readonly static float Minor = 0;
+        internal readonly static float Minor = 1;
 
         /* END OF VERSION PROPERTIES */
 
@@ -28,6 +29,9 @@ namespace Hashing
         {
             return float.Parse(GetCurrentVersionToString());
         }
+
+        const string _mutexGuid = @"{DEADMOON-0EFC7B9A-D7FC-437F-B4B3-0118C643FE19-HASHING}";
+        static bool _notRunning;
 
         [STAThread]
         static void Main(string[] args)
@@ -44,7 +48,26 @@ namespace Hashing
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
             
             Options.LoadSettings();
-            Application.Run(new MainForm(args));
+
+            if (Options.CurrentOptions.SingleInstance)
+            {
+                using (Mutex m = new Mutex(true, _mutexGuid, out _notRunning))
+                {
+                    if (_notRunning)
+                    {
+                        Application.Run(new MainForm(args));
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hashing is already running in the background!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Application.Exit();
+                    }
+                }
+            }
+            else
+            {
+                Application.Run(new MainForm(args));
+            }
         }
 
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

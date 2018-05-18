@@ -22,6 +22,8 @@ namespace Hashing
         public OptionsForm(MainForm main)
         {
             InitializeComponent();
+            CheckForIllegalCrossThreadCalls = false;
+
             _main = main;
 
             LoadSettings();
@@ -68,11 +70,20 @@ namespace Hashing
             chkTray.Checked = Options.CurrentOptions.TrayIcon;
             chkHigh.Checked = Options.CurrentOptions.HighPriority;
             chkCRCFormat.Checked = Options.CurrentOptions.CRC32Decimal;
+            chkStayOnTop.Checked = Options.CurrentOptions.StayOnTop;
+            chkSingleInstance.Checked = Options.CurrentOptions.SingleInstance;
         }
 
         private void OptionsForm_Load(object sender, EventArgs e)
         {
-            CheckForIllegalCrossThreadCalls = false;
+            if (Options.CurrentOptions.StayOnTop)
+            {
+                this.TopMost = true;
+            }
+            else
+            {
+                this.TopMost = false;
+            }
         }
 
         private void okbtn_Click(object sender, EventArgs e)
@@ -202,6 +213,17 @@ namespace Hashing
         {
             Options.CurrentOptions.CRC32Decimal = chkCRCFormat.Checked;
             CRC32FormatChanged = true;
+        }
+
+        private void chkSingleInstance_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.SingleInstance = chkSingleInstance.Checked;
+            Options.SaveSettings();
+        }
+
+        private void chkStayOnTop_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.StayOnTop = chkStayOnTop.Checked;
         }
     }
 }

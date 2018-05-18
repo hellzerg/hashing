@@ -34,13 +34,17 @@
             this.helperMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topPanel = new System.Windows.Forms.Panel();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
+            this.btnCalculate = new System.Windows.Forms.Button();
+            this.btnBrowse = new System.Windows.Forms.Button();
+            this.txtPath = new System.Windows.Forms.TextBox();
+            this.btnCompare = new System.Windows.Forms.Button();
+            this.btnOptions = new System.Windows.Forms.Button();
+            this.btnFindIdenticals = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnSaveJson = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblversion = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -50,7 +54,7 @@
             this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnUpdate = new System.Windows.Forms.Button();
             this.helperMenu.SuspendLayout();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -69,7 +73,7 @@
             this.SumView.Location = new System.Drawing.Point(0, 0);
             this.SumView.Margin = new System.Windows.Forms.Padding(2);
             this.SumView.Name = "SumView";
-            this.SumView.Size = new System.Drawing.Size(892, 537);
+            this.SumView.Size = new System.Drawing.Size(983, 551);
             this.SumView.TabIndex = 0;
             this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.sumView_NodeMouseClick);
             // 
@@ -87,14 +91,14 @@
             this.helperMenu.Name = "helperMenu";
             this.helperMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.helperMenu.ShowImageMargin = false;
-            this.helperMenu.Size = new System.Drawing.Size(151, 160);
+            this.helperMenu.Size = new System.Drawing.Size(145, 132);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.copyToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(150, 32);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(144, 32);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
@@ -103,27 +107,40 @@
             this.removeToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.removeToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(150, 32);
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(144, 32);
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripMenuItem1.ForeColor = System.Drawing.Color.White;
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(144, 32);
+            this.toolStripMenuItem1.Text = "VirusTotal";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // clearToolStripMenuItem
             // 
             this.clearToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clearToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(150, 32);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(144, 32);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
             // topPanel
             // 
             this.topPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.topPanel.Controls.Add(this.button3);
-            this.topPanel.Controls.Add(this.button4);
-            this.topPanel.Controls.Add(this.button2);
-            this.topPanel.Controls.Add(this.button1);
-            this.topPanel.Controls.Add(this.button7);
+            this.topPanel.Controls.Add(this.btnUpdate);
+            this.topPanel.Controls.Add(this.btnCalculate);
+            this.topPanel.Controls.Add(this.btnBrowse);
+            this.topPanel.Controls.Add(this.txtPath);
+            this.topPanel.Controls.Add(this.btnCompare);
+            this.topPanel.Controls.Add(this.btnOptions);
+            this.topPanel.Controls.Add(this.btnFindIdenticals);
+            this.topPanel.Controls.Add(this.btnClear);
+            this.topPanel.Controls.Add(this.btnSaveJson);
             this.topPanel.Controls.Add(this.pictureBox1);
             this.topPanel.Controls.Add(this.lblversion);
             this.topPanel.Controls.Add(this.label2);
@@ -131,114 +148,166 @@
             this.topPanel.Location = new System.Drawing.Point(0, 0);
             this.topPanel.Margin = new System.Windows.Forms.Padding(2);
             this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(894, 77);
+            this.topPanel.Size = new System.Drawing.Size(985, 89);
             this.topPanel.TabIndex = 7;
             // 
-            // button3
+            // btnCalculate
             // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.BackColor = System.Drawing.Color.DodgerBlue;
-            this.button3.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(386, 9);
-            this.button3.Margin = new System.Windows.Forms.Padding(2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(121, 39);
-            this.button3.TabIndex = 77;
-            this.button3.Tag = "themeable";
-            this.button3.Text = "Compare";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.btnCalculate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCalculate.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnCalculate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCalculate.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnCalculate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnCalculate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnCalculate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCalculate.ForeColor = System.Drawing.Color.White;
+            this.btnCalculate.Location = new System.Drawing.Point(852, 46);
+            this.btnCalculate.Margin = new System.Windows.Forms.Padding(2);
+            this.btnCalculate.Name = "btnCalculate";
+            this.btnCalculate.Size = new System.Drawing.Size(121, 34);
+            this.btnCalculate.TabIndex = 80;
+            this.btnCalculate.Tag = "themeable";
+            this.btnCalculate.Text = "Calculate";
+            this.btnCalculate.UseVisualStyleBackColor = false;
+            this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
             // 
-            // button4
+            // btnBrowse
             // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.BackColor = System.Drawing.Color.DodgerBlue;
-            this.button4.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button4.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button4.ForeColor = System.Drawing.Color.White;
-            this.button4.Location = new System.Drawing.Point(765, 9);
-            this.button4.Margin = new System.Windows.Forms.Padding(2);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(121, 39);
-            this.button4.TabIndex = 76;
-            this.button4.Tag = "themeable";
-            this.button4.Text = "Options";
-            this.button4.UseVisualStyleBackColor = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBrowse.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnBrowse.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnBrowse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnBrowse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnBrowse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBrowse.ForeColor = System.Drawing.Color.White;
+            this.btnBrowse.Location = new System.Drawing.Point(801, 46);
+            this.btnBrowse.Margin = new System.Windows.Forms.Padding(2);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(47, 34);
+            this.btnBrowse.TabIndex = 79;
+            this.btnBrowse.Tag = "themeable";
+            this.btnBrowse.Text = "...";
+            this.btnBrowse.UseVisualStyleBackColor = false;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
-            // button2
+            // txtPath
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.BackColor = System.Drawing.Color.DodgerBlue;
-            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(260, 9);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(121, 39);
-            this.button2.TabIndex = 74;
-            this.button2.Tag = "themeable";
-            this.button2.Text = "Find Identicals";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.txtPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.txtPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtPath.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPath.ForeColor = System.Drawing.Color.Silver;
+            this.txtPath.Location = new System.Drawing.Point(227, 46);
+            this.txtPath.Name = "txtPath";
+            this.txtPath.Size = new System.Drawing.Size(569, 34);
+            this.txtPath.TabIndex = 78;
             // 
-            // button1
+            // btnCompare
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.BackColor = System.Drawing.Color.DodgerBlue;
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(639, 9);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(121, 39);
-            this.button1.TabIndex = 73;
-            this.button1.Tag = "themeable";
-            this.button1.Text = "Clear";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnCompare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCompare.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnCompare.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCompare.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnCompare.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnCompare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnCompare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCompare.ForeColor = System.Drawing.Color.White;
+            this.btnCompare.Location = new System.Drawing.Point(352, 7);
+            this.btnCompare.Margin = new System.Windows.Forms.Padding(2);
+            this.btnCompare.Name = "btnCompare";
+            this.btnCompare.Size = new System.Drawing.Size(121, 34);
+            this.btnCompare.TabIndex = 77;
+            this.btnCompare.Tag = "themeable";
+            this.btnCompare.Text = "Compare";
+            this.btnCompare.UseVisualStyleBackColor = false;
+            this.btnCompare.Click += new System.EventHandler(this.btnCompare_Click);
             // 
-            // button7
+            // btnOptions
             // 
-            this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button7.BackColor = System.Drawing.Color.DodgerBlue;
-            this.button7.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button7.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.button7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.button7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button7.ForeColor = System.Drawing.Color.White;
-            this.button7.Location = new System.Drawing.Point(512, 9);
-            this.button7.Margin = new System.Windows.Forms.Padding(2);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(121, 39);
-            this.button7.TabIndex = 71;
-            this.button7.Tag = "themeable";
-            this.button7.Text = "Save as JSON";
-            this.button7.UseVisualStyleBackColor = false;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.btnOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOptions.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnOptions.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnOptions.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnOptions.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnOptions.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnOptions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnOptions.ForeColor = System.Drawing.Color.White;
+            this.btnOptions.Location = new System.Drawing.Point(727, 7);
+            this.btnOptions.Margin = new System.Windows.Forms.Padding(2);
+            this.btnOptions.Name = "btnOptions";
+            this.btnOptions.Size = new System.Drawing.Size(121, 34);
+            this.btnOptions.TabIndex = 76;
+            this.btnOptions.Tag = "themeable";
+            this.btnOptions.Text = "Options";
+            this.btnOptions.UseVisualStyleBackColor = false;
+            this.btnOptions.Click += new System.EventHandler(this.btnOptions_Click);
+            // 
+            // btnFindIdenticals
+            // 
+            this.btnFindIdenticals.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFindIdenticals.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnFindIdenticals.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnFindIdenticals.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnFindIdenticals.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnFindIdenticals.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnFindIdenticals.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnFindIdenticals.ForeColor = System.Drawing.Color.White;
+            this.btnFindIdenticals.Location = new System.Drawing.Point(227, 7);
+            this.btnFindIdenticals.Margin = new System.Windows.Forms.Padding(2);
+            this.btnFindIdenticals.Name = "btnFindIdenticals";
+            this.btnFindIdenticals.Size = new System.Drawing.Size(121, 34);
+            this.btnFindIdenticals.TabIndex = 74;
+            this.btnFindIdenticals.Tag = "themeable";
+            this.btnFindIdenticals.Text = "Find Identicals";
+            this.btnFindIdenticals.UseVisualStyleBackColor = false;
+            this.btnFindIdenticals.Click += new System.EventHandler(this.btnFindIdenticals_Click);
+            // 
+            // btnClear
+            // 
+            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClear.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnClear.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnClear.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnClear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnClear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClear.ForeColor = System.Drawing.Color.White;
+            this.btnClear.Location = new System.Drawing.Point(602, 7);
+            this.btnClear.Margin = new System.Windows.Forms.Padding(2);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(121, 34);
+            this.btnClear.TabIndex = 73;
+            this.btnClear.Tag = "themeable";
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = false;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // btnSaveJson
+            // 
+            this.btnSaveJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveJson.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnSaveJson.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnSaveJson.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnSaveJson.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnSaveJson.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnSaveJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveJson.ForeColor = System.Drawing.Color.White;
+            this.btnSaveJson.Location = new System.Drawing.Point(477, 7);
+            this.btnSaveJson.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSaveJson.Name = "btnSaveJson";
+            this.btnSaveJson.Size = new System.Drawing.Size(121, 34);
+            this.btnSaveJson.TabIndex = 71;
+            this.btnSaveJson.Tag = "themeable";
+            this.btnSaveJson.Text = "Save as JSON";
+            this.btnSaveJson.UseVisualStyleBackColor = false;
+            this.btnSaveJson.Click += new System.EventHandler(this.btnSaveJson_Click);
             // 
             // pictureBox1
             // 
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(10, 10);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(55, 54);
@@ -276,10 +345,10 @@
             this.botPanel.Controls.Add(this.lblCalculating);
             this.botPanel.Controls.Add(this.SumView);
             this.botPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.botPanel.Location = new System.Drawing.Point(0, 77);
+            this.botPanel.Location = new System.Drawing.Point(0, 89);
             this.botPanel.Margin = new System.Windows.Forms.Padding(2);
             this.botPanel.Name = "botPanel";
-            this.botPanel.Size = new System.Drawing.Size(894, 539);
+            this.botPanel.Size = new System.Drawing.Size(985, 553);
             this.botPanel.TabIndex = 8;
             // 
             // lblCalculating
@@ -290,7 +359,7 @@
             this.lblCalculating.Location = new System.Drawing.Point(0, 0);
             this.lblCalculating.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCalculating.Name = "lblCalculating";
-            this.lblCalculating.Size = new System.Drawing.Size(892, 537);
+            this.lblCalculating.Size = new System.Drawing.Size(983, 551);
             this.lblCalculating.TabIndex = 1;
             this.lblCalculating.Tag = "themeable";
             this.lblCalculating.Text = "Drag and drop files here...";
@@ -332,14 +401,25 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem1
+            // btnUpdate
             // 
-            this.toolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripMenuItem1.ForeColor = System.Drawing.Color.White;
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(150, 32);
-            this.toolStripMenuItem1.Text = "VirusTotal";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUpdate.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnUpdate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnUpdate.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnUpdate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnUpdate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUpdate.ForeColor = System.Drawing.Color.White;
+            this.btnUpdate.Location = new System.Drawing.Point(852, 7);
+            this.btnUpdate.Margin = new System.Windows.Forms.Padding(2);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(121, 34);
+            this.btnUpdate.TabIndex = 81;
+            this.btnUpdate.Tag = "themeable";
+            this.btnUpdate.Text = "Update";
+            this.btnUpdate.UseVisualStyleBackColor = false;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // MainForm
             // 
@@ -347,7 +427,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.ClientSize = new System.Drawing.Size(894, 616);
+            this.ClientSize = new System.Drawing.Size(985, 642);
             this.Controls.Add(this.botPanel);
             this.Controls.Add(this.topPanel);
             this.DoubleBuffered = true;
@@ -377,24 +457,28 @@
         private System.Windows.Forms.TreeView SumView;
         private System.Windows.Forms.Panel topPanel;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label lblversion;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel botPanel;
         private System.Windows.Forms.Label lblCalculating;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnSaveJson;
+        private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.ContextMenuStrip helperMenu;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button btnFindIdenticals;
+        private System.Windows.Forms.Button btnOptions;
         private System.Windows.Forms.NotifyIcon trayIcon;
         private System.Windows.Forms.ContextMenuStrip trayMenu;
         private System.Windows.Forms.ToolStripMenuItem restoreToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button btnCompare;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.Button btnCalculate;
+        private System.Windows.Forms.Button btnBrowse;
+        private System.Windows.Forms.TextBox txtPath;
+        private System.Windows.Forms.Label lblversion;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnUpdate;
     }
 }
 

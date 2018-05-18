@@ -125,7 +125,14 @@ namespace Hashing
 
         private void CompareForm_Load(object sender, EventArgs e)
         {
-            
+            if (Options.CurrentOptions.StayOnTop)
+            {
+                this.TopMost = true;
+            }
+            else
+            {
+                this.TopMost = false;
+            }
         }
 
         private void SumView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)

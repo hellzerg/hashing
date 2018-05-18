@@ -27,6 +27,15 @@ namespace Hashing
 
         private void About_Load(object sender, EventArgs e)
         {
+            if (Options.CurrentOptions.StayOnTop)
+            {
+                this.TopMost = true;
+            }
+            else
+            {
+                this.TopMost = false;
+            }
+
             t1.Interval = 50;
             t2.Interval = 50;
 
@@ -48,7 +57,7 @@ namespace Hashing
             string s10 = "deadmoon © 2";
             string s11 = "deadmoon © 20";
             string s12 = "deadmoon © 201";
-            string s13 = "deadmoon © 2017";
+            string s13 = "deadmoon © 2018";
 
             switch (l2.Text)
             {
@@ -93,7 +102,7 @@ namespace Hashing
                     t2.Stop();
                     //t1.Start();
                     break;
-                case "deadmoon © 2017":
+                case "deadmoon © 2018":
                     l2.Text = s0;
                     break;
             }
@@ -101,7 +110,7 @@ namespace Hashing
 
         private void l2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("http://5.249.159.211/deadmoon");
+            Process.Start("https://elgaming.eu/deadmoon");
         }
 
         private void t1_Tick(object sender, EventArgs e)

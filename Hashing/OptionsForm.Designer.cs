@@ -48,6 +48,8 @@
             this.chkCRC32 = new System.Windows.Forms.CheckBox();
             this.chkLower = new System.Windows.Forms.CheckBox();
             this.chkCRCFormat = new System.Windows.Forms.CheckBox();
+            this.chkSingleInstance = new System.Windows.Forms.CheckBox();
+            this.chkStayOnTop = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // okbtn
@@ -61,7 +63,7 @@
             this.okbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.okbtn.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.okbtn.ForeColor = System.Drawing.Color.White;
-            this.okbtn.Location = new System.Drawing.Point(298, 569);
+            this.okbtn.Location = new System.Drawing.Point(290, 630);
             this.okbtn.Margin = new System.Windows.Forms.Padding(2);
             this.okbtn.Name = "okbtn";
             this.okbtn.Size = new System.Drawing.Size(89, 39);
@@ -273,7 +275,7 @@
             this.chkTray.AutoSize = true;
             this.chkTray.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkTray.ForeColor = System.Drawing.Color.White;
-            this.chkTray.Location = new System.Drawing.Point(19, 477);
+            this.chkTray.Location = new System.Drawing.Point(19, 549);
             this.chkTray.Margin = new System.Windows.Forms.Padding(2);
             this.chkTray.Name = "chkTray";
             this.chkTray.Size = new System.Drawing.Size(192, 32);
@@ -287,7 +289,7 @@
             this.chkHigh.AutoSize = true;
             this.chkHigh.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkHigh.ForeColor = System.Drawing.Color.White;
-            this.chkHigh.Location = new System.Drawing.Point(19, 513);
+            this.chkHigh.Location = new System.Drawing.Point(19, 585);
             this.chkHigh.Margin = new System.Windows.Forms.Padding(2);
             this.chkHigh.Name = "chkHigh";
             this.chkHigh.Size = new System.Drawing.Size(212, 32);
@@ -338,6 +340,34 @@
             this.chkCRCFormat.UseVisualStyleBackColor = true;
             this.chkCRCFormat.CheckedChanged += new System.EventHandler(this.chkCRCFormat_CheckedChanged);
             // 
+            // chkSingleInstance
+            // 
+            this.chkSingleInstance.AutoSize = true;
+            this.chkSingleInstance.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkSingleInstance.ForeColor = System.Drawing.Color.White;
+            this.chkSingleInstance.Location = new System.Drawing.Point(19, 477);
+            this.chkSingleInstance.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSingleInstance.Name = "chkSingleInstance";
+            this.chkSingleInstance.Size = new System.Drawing.Size(235, 32);
+            this.chkSingleInstance.TabIndex = 83;
+            this.chkSingleInstance.Text = "Enable single instance";
+            this.chkSingleInstance.UseVisualStyleBackColor = true;
+            this.chkSingleInstance.CheckedChanged += new System.EventHandler(this.chkSingleInstance_CheckedChanged);
+            // 
+            // chkStayOnTop
+            // 
+            this.chkStayOnTop.AutoSize = true;
+            this.chkStayOnTop.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkStayOnTop.ForeColor = System.Drawing.Color.White;
+            this.chkStayOnTop.Location = new System.Drawing.Point(19, 513);
+            this.chkStayOnTop.Margin = new System.Windows.Forms.Padding(2);
+            this.chkStayOnTop.Name = "chkStayOnTop";
+            this.chkStayOnTop.Size = new System.Drawing.Size(138, 32);
+            this.chkStayOnTop.TabIndex = 84;
+            this.chkStayOnTop.Text = "Stay on top";
+            this.chkStayOnTop.UseVisualStyleBackColor = true;
+            this.chkStayOnTop.CheckedChanged += new System.EventHandler(this.chkStayOnTop_CheckedChanged);
+            // 
             // OptionsForm
             // 
             this.AcceptButton = this.okbtn;
@@ -345,7 +375,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.CancelButton = this.okbtn;
-            this.ClientSize = new System.Drawing.Size(398, 619);
+            this.ClientSize = new System.Drawing.Size(390, 680);
+            this.Controls.Add(this.chkStayOnTop);
+            this.Controls.Add(this.chkSingleInstance);
             this.Controls.Add(this.chkCRCFormat);
             this.Controls.Add(this.chkLower);
             this.Controls.Add(this.chkCRC32);
@@ -405,5 +437,7 @@
         private System.Windows.Forms.CheckBox chkCRC32;
         private System.Windows.Forms.CheckBox chkLower;
         private System.Windows.Forms.CheckBox chkCRCFormat;
+        private System.Windows.Forms.CheckBox chkSingleInstance;
+        private System.Windows.Forms.CheckBox chkStayOnTop;
     }
 }

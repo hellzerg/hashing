@@ -8,15 +8,48 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Runtime.InteropServices;
 using Newtonsoft.Json;
+using System.Net;
+using System.Diagnostics;
 
 namespace Hashing
 {
     public partial class MainForm : Form
     {
+        // Always on top syscall... used TopMost property instead
+
+        //static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        //const UInt32 SWP_NOSIZE = 0x0001;
+        //const UInt32 SWP_NOMOVE = 0x0002;
+        //const UInt32 TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
+
+        //[DllImport("user32.dll")]
+        //[return: MarshalAs(UnmanagedType.Bool)]
+        //public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
+
         List<string> _fileList;
+        List<FileSummary> _fileSummaries;
+        List<string> _analyzedFiles;
 
         bool _allowExit;
+        
+        // used when auto-enabling SHA256, for VirusTotal
+        int _tempIndex = -1;
+
+        // used for checking if all files are JSON files
+        bool _allFilesAreJson = false;
+
+        readonly string _latestVersionLink = "https://raw.githubusercontent.com/hellzerg/hashing/master/version.txt";
+        readonly string _releasesLink = "https://github.com/hellzerg/hashing/releases";
+
+        readonly string _noNewVersionMessage = "You already have the latest version!";
+        readonly string _betaVersionMessage = "You are using an experimental version!";
+
+        private string NewVersionMessage(string latest)
+        {
+            return string.Format("There is a new version available!\n\nLatest version: {0}\nCurrent version: {1}\n\nDo you want to download it now?", latest, Program.GetCurrentVersionToString());
+        }
 
         public MainForm(string[] files)
         {
@@ -42,7 +75,58 @@ namespace Hashing
 
             if (files.Count() > 0)
             {
-                CalculateSums(files);
+                DetectFiles(files);
+            }
+        }
+
+        private void EnableSHA256()
+        {
+            Options.CurrentOptions.HashOptions.SHA256 = true;
+            Options.SaveSettings();
+
+            OptionsForm.HashesChanged = true;
+
+            ReCalculateSums();
+        }
+
+        private void CheckForUpdate()
+        {
+            WebClient client = new WebClient
+            {
+                Encoding = Encoding.UTF8
+            };
+
+            string latestVersion = string.Empty;
+            try
+            {
+                latestVersion = client.DownloadString(_latestVersionLink);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            if (!string.IsNullOrEmpty(latestVersion))
+            {
+                if (float.Parse(latestVersion) > Program.GetCurrentVersion())
+                {
+                    if (MessageBox.Show(NewVersionMessage(latestVersion), "Update available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            Process.Start(_releasesLink);
+                        }
+                        catch { }
+                    }
+                }
+                else if (float.Parse(latestVersion) == Program.GetCurrentVersion())
+                {
+                    MessageBox.Show(_noNewVersionMessage, "No update available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show(_betaVersionMessage, "No update available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
 
@@ -115,36 +199,32 @@ namespace Hashing
             {
                 int index = -1;
 
-                if (SumView.SelectedNode.Nodes.Count > 0)
+                try
                 {
-                    index = SumResult.Sums.FindIndex(x => x.File.Equals(SumView.SelectedNode.Text));
+                    if (SumView.SelectedNode.Nodes.Count > 0)
+                    {
+                        index = SumResult.Sums.FindIndex(x => x.File.Equals(SumView.SelectedNode.Text));
+                    }
+                    else
+                    {
+                        index = SumResult.Sums.FindIndex(x => x.File.Equals(SumView.SelectedNode.Parent.Text));
+                    }
                 }
-                else
-                {
-                    index = SumResult.Sums.FindIndex(x => x.File.Equals(SumView.SelectedNode.Parent.Text));
-                }
+                catch { }
 
                 if (index > -1)
                 {
-                    if (!string.IsNullOrEmpty(SumResult.Sums[index].MD5))
-                    {
-                        Utilities.SearchVirusTotal(SumResult.Sums[index].MD5);
-                        return;
-                    }
-
-                    if (!string.IsNullOrEmpty(SumResult.Sums[index].SHA1))
-                    {
-                        Utilities.SearchVirusTotal(SumResult.Sums[index].SHA1);
-                        return;
-                    }
-
                     if (!string.IsNullOrEmpty(SumResult.Sums[index].SHA256))
                     {
                         Utilities.SearchVirusTotal(SumResult.Sums[index].SHA256);
                         return;
                     }
 
-                    MessageBox.Show("VirusTotal recognizes files only by their MD5, SHA1 or SHA256 hash!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (MessageBox.Show("VirusTotal recognizes files only by their SHA256 hash!\n\nDo you wish to enable SHA256 for this operation?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        EnableSHA256();
+                        _tempIndex = index;
+                    }
                 }
             }
         }
@@ -349,12 +429,57 @@ namespace Hashing
                     string[] currentList = SumResult.Sums.Select(x => x.File).ToArray();
                     SumResult.Sums.Clear();
 
-                    CalculateSums(currentList);
+                    DetectFiles(currentList);
                 }
             }
         }
 
-        private void CalculateSums(string[] files)
+        private string ListIncompatibles(List<string> files) 
+        {
+            StringBuilder result = new StringBuilder();
+
+            foreach (string s in files)
+            {
+                result.Append(s + Environment.NewLine);
+            }
+
+            return result.ToString();
+        }
+
+        private List<FileSummary> AnalyzeJsonFiles()
+        {
+            List<FileSummary> fileSummaries = new List<FileSummary>();
+            List<string> incompatibles = new List<string>();
+            
+            foreach (string s in _fileList)
+            {
+                try
+                {
+                    fileSummaries.AddRange(JsonConvert.DeserializeObject<List<FileSummary>>(File.ReadAllText(s)));
+                }
+                catch //(Exception ex)
+                {
+                    incompatibles.Add(s);
+                    continue;
+                }
+            }
+
+            _fileList.RemoveAll(x => x.EndsWith(".json"));
+
+            if (incompatibles.Count > 0)
+            {
+                TopMostMessageBox.Show("Unsupported JSON files detected:\n\n" + ListIncompatibles(incompatibles) + "\nThese files will not be analyzed!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            foreach (FileSummary json in fileSummaries)
+            {
+                _fileList.Add(json.File);
+            }
+
+            return fileSummaries;
+        }
+
+        private void DetectFiles(string[] files)
         {
             this.AllowDrop = false;
 
@@ -375,15 +500,60 @@ namespace Hashing
                 }
             }
 
+            // check if all files are JSON files
+            _allFilesAreJson = true;
+
+            foreach (string y in _fileList)
+            {
+                if (!y.EndsWith(".json"))
+                {
+                    _allFilesAreJson = false;
+                    break;
+                }
+            }
+
+            if (_allFilesAreJson)
+            {
+                if (TopMostMessageBox.Show("Hashing detected that all files are in JSON, do you wish to analyze them?\nThis will clear previously added files!", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Clear();
+                    _fileSummaries = AnalyzeJsonFiles();
+
+                    if (_fileSummaries != null)
+                    {
+                        if (_fileSummaries.Count > 0)
+                        { 
+                            CalculateSums(true);
+                        }
+                    }
+                }
+                else
+                {
+                    CalculateSums();
+                }
+            }
+            else
+            {
+                CalculateSums();
+            }
+
+            this.AllowDrop = true;
+        }
+
+        private void CalculateSums(bool analyzeJson = false)
+        {
             Task.Factory.StartNew(() =>
             {
                 lblCalculating.Invoke((MethodInvoker)delegate
                 {
-                    button1.Enabled = false;
-                    button4.Enabled = false;
-                    button7.Enabled = false;
-                    button2.Enabled = false;
-                    button3.Enabled = false;
+                    btnClear.Enabled = false;
+                    btnOptions.Enabled = false;
+                    btnSaveJson.Enabled = false;
+                    btnFindIdenticals.Enabled = false;
+                    btnCompare.Enabled = false;
+                    btnBrowse.Enabled = false;
+                    btnCalculate.Enabled = false;
+                    txtPath.Enabled = false;
                     lblCalculating.Text = "Calculating...";
                     lblCalculating.Visible = true;
                 }
@@ -404,44 +574,139 @@ namespace Hashing
                 {
                     SumView.Nodes.Clear();
 
-                    foreach (SumResult sr in SumResult.Sums)
+                    TreeNode rootNode = null;
+                    _analyzedFiles = new List<string>();
+
+                    if (analyzeJson)
                     {
-                        TreeNode rootNode = new TreeNode(sr.File);
-
-                        rootNode.ForeColor = Options.ForegroundColor;
-                        rootNode.Tag = Options.ThemeFlag;
-
-                        if (Options.CurrentOptions.HashOptions.MD5) rootNode.Nodes.Add("MD5: " + sr.MD5);
-                        if (Options.CurrentOptions.HashOptions.SHA1) rootNode.Nodes.Add("SHA1: " + sr.SHA1);
-                        if (Options.CurrentOptions.HashOptions.SHA256) rootNode.Nodes.Add("SHA256: " + sr.SHA256);
-                        if (Options.CurrentOptions.HashOptions.SHA384) rootNode.Nodes.Add("SHA384: " + sr.SHA384);
-                        if (Options.CurrentOptions.HashOptions.SHA512) rootNode.Nodes.Add("SHA512: " + sr.SHA512);
-                        if (Options.CurrentOptions.HashOptions.CRC32) rootNode.Nodes.Add("CRC32: " + sr.CRC32);
-                        if (Options.CurrentOptions.HashOptions.RIPEMD160) rootNode.Nodes.Add("RIPEMD160: " + sr.RIPEMD160);
-
-                        SumView.Invoke((MethodInvoker)delegate
+                        for (int i = 0; i < SumResult.Sums.Count; i++)
                         {
-                            SumView.Nodes.Add(rootNode);
-                            SumView.ExpandAll();
-                        });
+                            rootNode = new TreeNode(SumResult.Sums[i].File);
+
+                            rootNode.ForeColor = Options.ForegroundColor;
+                            rootNode.Tag = Options.ThemeFlag;
+
+                            if (Options.CurrentOptions.HashOptions.MD5)
+                            {
+                                rootNode.Nodes.Add("MD5: " + SumResult.Sums[i].MD5);
+                                if (SumResult.Sums[i].MD5 == _fileSummaries[i].MD5) _analyzedFiles.Add(_fileSummaries[i].File);
+                            }
+
+                            if (Options.CurrentOptions.HashOptions.SHA1)
+                            {
+                                rootNode.Nodes.Add("SHA1: " + SumResult.Sums[i].SHA1);
+                                if (SumResult.Sums[i].SHA1 == _fileSummaries[i].SHA1) _analyzedFiles.Add(_fileSummaries[i].File);
+                            }
+
+                            if (Options.CurrentOptions.HashOptions.SHA256)
+                            {
+                                rootNode.Nodes.Add("SHA256: " + SumResult.Sums[i].SHA256);
+                                if (SumResult.Sums[i].SHA256 == _fileSummaries[i].SHA256) _analyzedFiles.Add(_fileSummaries[i].File);
+                            }
+
+                            if (Options.CurrentOptions.HashOptions.SHA384)
+                            {
+                                rootNode.Nodes.Add("SHA384: " + SumResult.Sums[i].SHA384);
+                                if (SumResult.Sums[i].SHA384 == _fileSummaries[i].SHA384) _analyzedFiles.Add(_fileSummaries[i].File);
+                            }
+
+                            if (Options.CurrentOptions.HashOptions.SHA512)
+                            {
+                                rootNode.Nodes.Add("SHA512: " + SumResult.Sums[i].SHA512);
+                                if (SumResult.Sums[i].SHA512 == _fileSummaries[i].SHA512) _analyzedFiles.Add(_fileSummaries[i].File);
+                            }
+
+                            if (Options.CurrentOptions.HashOptions.CRC32)
+                            {
+                                rootNode.Nodes.Add("CRC32: " + SumResult.Sums[i].CRC32);
+                                if (SumResult.Sums[i].CRC32 == _fileSummaries[i].CRC32) _analyzedFiles.Add(_fileSummaries[i].File);
+                            }
+
+                            if (Options.CurrentOptions.HashOptions.RIPEMD160)
+                            {
+                                rootNode.Nodes.Add("RIPEMD160: " + SumResult.Sums[i].RIPEMD160);
+                                if (SumResult.Sums[i].RIPEMD160 == _fileSummaries[i].RIPEMD160) _analyzedFiles.Add(_fileSummaries[i].File);
+                            }
+
+                            SumView.Invoke((MethodInvoker)delegate
+                            {
+                                SumView.Nodes.Add(rootNode);
+                            });
+                        }
                     }
+                    else
+                    {
+                        for (int i = 0; i < SumResult.Sums.Count; i++)
+                        {
+                            rootNode = new TreeNode(SumResult.Sums[i].File);
+
+                            rootNode.ForeColor = Options.ForegroundColor;
+                            rootNode.Tag = Options.ThemeFlag;
+
+                            if (Options.CurrentOptions.HashOptions.MD5) rootNode.Nodes.Add("MD5: " + SumResult.Sums[i].MD5);
+                            if (Options.CurrentOptions.HashOptions.SHA1) rootNode.Nodes.Add("SHA1: " + SumResult.Sums[i].SHA1);
+                            if (Options.CurrentOptions.HashOptions.SHA256) rootNode.Nodes.Add("SHA256: " + SumResult.Sums[i].SHA256);
+                            if (Options.CurrentOptions.HashOptions.SHA384) rootNode.Nodes.Add("SHA384: " + SumResult.Sums[i].SHA384);
+                            if (Options.CurrentOptions.HashOptions.SHA512) rootNode.Nodes.Add("SHA512: " + SumResult.Sums[i].SHA512);
+                            if (Options.CurrentOptions.HashOptions.CRC32) rootNode.Nodes.Add("CRC32: " + SumResult.Sums[i].CRC32);
+                            if (Options.CurrentOptions.HashOptions.RIPEMD160) rootNode.Nodes.Add("RIPEMD160: " + SumResult.Sums[i].RIPEMD160);
+
+                            SumView.Invoke((MethodInvoker)delegate
+                            {
+                                SumView.Nodes.Add(rootNode);
+                            });
+                        }
+                    }
+
+                    SumView.Invoke((MethodInvoker)delegate
+                    {
+                        SumView.ExpandAll();
+                    });
 
                     lblCalculating.Invoke((MethodInvoker)delegate
                     {
                         lblCalculating.Text = "Calculating...";
                         lblCalculating.Visible = false;
-                        button1.Enabled = true;
-                        button4.Enabled = true;
-                        button7.Enabled = true;
-                        button2.Enabled = true;
-                        button3.Enabled = true;
+                        btnClear.Enabled = true;
+                        btnOptions.Enabled = true;
+                        btnSaveJson.Enabled = true;
+                        btnFindIdenticals.Enabled = true;
+                        btnCompare.Enabled = true;
+                        btnBrowse.Enabled = true;
+                        btnCalculate.Enabled = true;
+                        txtPath.Enabled = true;
                     }
                     );
+
+                    try
+                    {
+                        SumView.Nodes[0].EnsureVisible();
+                    }
+                    catch { }
+
+                    // opening VirusTotal, after enabling SHA256 hash
+                    if (_tempIndex > -1)
+                    {
+                        Utilities.SearchVirusTotal(SumResult.Sums[_tempIndex].SHA256);
+                        _tempIndex = -1;
+                    }
+                }
+
+                // if JSON analyzation is enabled, show results
+                if (analyzeJson)
+                {
+                    if (_analyzedFiles.Distinct().Count() > 0)
+                    {
+                        AnalyzedForm f = new AnalyzedForm(_analyzedFiles.Distinct());
+                        f.ShowDialog();
+                    }
+                    else
+                    {
+                        TopMostMessageBox.Show("All files analyzed by JSON are corrupted!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
             }
             );
-
-            this.AllowDrop = true;
         }
 
         internal void FixColor()
@@ -463,12 +728,22 @@ namespace Hashing
             }
             else
             {
-                CalculateSums((string[])e.Data.GetData(DataFormats.FileDrop, false));
+                DetectFiles((string[])e.Data.GetData(DataFormats.FileDrop, false));
             }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            if (Options.CurrentOptions.StayOnTop)
+            {
+                // SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+                this.TopMost = true;
+            }
+            else
+            {
+                this.TopMost = false;
+            }
+
             lblversion.Text = "Version: " + Program.GetCurrentVersionToString();
             trayIcon.Visible = false;
         }
@@ -485,12 +760,12 @@ namespace Hashing
             }
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private void btnSaveJson_Click(object sender, EventArgs e)
         {
             SaveAsJSON();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnClear_Click(object sender, EventArgs e)
         {
             Clear();
         }
@@ -524,7 +799,7 @@ namespace Hashing
             Clear();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btnFindIdenticals_Click(object sender, EventArgs e)
         {
             FindIdenticals();
         }
@@ -543,10 +818,19 @@ namespace Hashing
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void btnOptions_Click(object sender, EventArgs e)
         {
             OptionsForm f = new OptionsForm(this);
             f.ShowDialog();
+
+            if (Options.CurrentOptions.StayOnTop)
+            {
+                this.TopMost = true;
+            }
+            else
+            {
+                this.TopMost = false;
+            }
 
             _allowExit = !Options.CurrentOptions.TrayIcon;
 
@@ -627,7 +911,7 @@ namespace Hashing
             Application.Exit();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void btnCompare_Click(object sender, EventArgs e)
         {
             if (SumView.Nodes.Count > 0)
             {
@@ -639,6 +923,43 @@ namespace Hashing
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
             SearchVirusTotal();
+        }
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "All files|*.*";
+            dialog.Multiselect = false;
+            dialog.CheckFileExists = true;
+            dialog.CheckPathExists = true;
+             
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                txtPath.Text = dialog.FileName;
+            }
+        }
+
+        private void btnCalculate_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtPath.Text))
+            {
+                if (File.Exists(txtPath.Text))
+                {
+                    DetectFiles(new string[] { txtPath.Text });
+                    txtPath.Clear();
+                }
+
+                if (Directory.Exists(txtPath.Text))
+                {
+                    DetectFiles(new string[] { txtPath.Text });
+                    txtPath.Clear();
+                }
+            }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            CheckForUpdate();
         }
     }
 }
