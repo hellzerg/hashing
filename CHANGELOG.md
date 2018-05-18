@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 - Added file browser for adding files/folders
 - Added functionality to analyze JSON files
 - Prompt to enable SHA256 when clicking on VirusTotal, if disabled
-- For security reasons VirusTotal will now works only with SHA256
+- For security reasons VirusTotal will now work only with SHA256
 - Added: Check for new versions
 
 ## [2.0] - 2017-12-19
