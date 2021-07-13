@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.chkCRC32 = new System.Windows.Forms.RadioButton();
-            this.chkSHA512 = new System.Windows.Forms.RadioButton();
-            this.chkSHA384 = new System.Windows.Forms.RadioButton();
-            this.chkRIPEMD160 = new System.Windows.Forms.RadioButton();
-            this.chkSHA256 = new System.Windows.Forms.RadioButton();
-            this.chkSHA1 = new System.Windows.Forms.RadioButton();
-            this.chkMD5 = new System.Windows.Forms.RadioButton();
+            this.chkCRC32 = new ColoredRadioButton();
+            this.chkSHA512 = new ColoredRadioButton();
+            this.chkSHA384 = new ColoredRadioButton();
+            this.chkRIPEMD160 = new ColoredRadioButton();
+            this.chkSHA256 = new ColoredRadioButton();
+            this.chkSHA1 = new ColoredRadioButton();
+            this.chkMD5 = new ColoredRadioButton();
             this.label1 = new System.Windows.Forms.Label();
             this.txtExpected = new System.Windows.Forms.TextBox();
             this.btnCompare = new System.Windows.Forms.Button();
@@ -43,7 +43,7 @@
             this.resultBox = new System.Windows.Forms.ListBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblNoMatch = new System.Windows.Forms.Label();
-            this.chkRemove = new System.Windows.Forms.CheckBox();
+            this.chkRemove = new ColoredCheckBox();
             this.btnPaste = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -327,20 +327,20 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.RadioButton chkSHA512;
-        private System.Windows.Forms.RadioButton chkSHA384;
-        private System.Windows.Forms.RadioButton chkRIPEMD160;
-        private System.Windows.Forms.RadioButton chkSHA256;
-        private System.Windows.Forms.RadioButton chkSHA1;
-        private System.Windows.Forms.RadioButton chkMD5;
+        private ColoredRadioButton chkSHA512;
+        private ColoredRadioButton chkSHA384;
+        private ColoredRadioButton chkRIPEMD160;
+        private ColoredRadioButton chkSHA256;
+        private ColoredRadioButton chkSHA1;
+        private ColoredRadioButton chkMD5;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtExpected;
         private System.Windows.Forms.Button btnCompare;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox resultBox;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.CheckBox chkRemove;
-        private System.Windows.Forms.RadioButton chkCRC32;
+        private ColoredCheckBox chkRemove;
+        private ColoredRadioButton chkCRC32;
         private System.Windows.Forms.Button btnPaste;
         private System.Windows.Forms.Label lblNoMatch;
     }

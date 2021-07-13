@@ -54,10 +54,7 @@ namespace Hashing
             string s7 = "deadmoo";
             string s8 = "deadmoon";
             string s9 = "deadmoon © ";
-            string s10 = "deadmoon © 2";
-            string s11 = "deadmoon © 20";
-            string s12 = "deadmoon © 201";
-            string s13 = "deadmoon © 2018";
+            string s10 = "deadmoon © ∞";
 
             switch (l2.Text)
             {
@@ -90,19 +87,9 @@ namespace Hashing
                     break;
                 case "deadmoon © ":
                     l2.Text = s10;
-                    break;
-                case "deadmoon © 2":
-                    l2.Text = s11;
-                    break;
-                case "deadmoon © 20":
-                    l2.Text = s12;
-                    break;
-                case "deadmoon © 201":
-                    l2.Text = s13;
                     t2.Stop();
-                    //t1.Start();
                     break;
-                case "deadmoon © 2018":
+                case "deadmoon © ∞":
                     l2.Text = s0;
                     break;
             }
@@ -110,7 +97,7 @@ namespace Hashing
 
         private void l2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://elgaming.eu/deadmoon");
+            Process.Start("https://github.com/hellzerg/hashing");
         }
 
         private void t1_Tick(object sender, EventArgs e)
@@ -120,7 +107,7 @@ namespace Hashing
             const string s2 = "Ha";
             const string s3 = "Has";
             const string s4 = "Hash";
-            const string s5 = "Hashi";
+            const string s5 = "Hashi";  
             const string s6 = "Hashin";
             const string s7 = "Hashing";
 

@@ -55,6 +55,7 @@ namespace Hashing
         {
             InitializeComponent();
 
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             Options.ApplyTheme(this);
             CheckForIllegalCrossThreadCalls = false;
 

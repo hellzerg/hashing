@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Hashing")]
-[assembly: AssemblyCopyright("deadmoon © 2018")]
+[assembly: AssemblyCopyright("deadmoon © ∞")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

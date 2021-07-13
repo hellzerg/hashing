@@ -34,14 +34,14 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.radioMD5 = new System.Windows.Forms.RadioButton();
-            this.radioSHA1 = new System.Windows.Forms.RadioButton();
-            this.radioSHA256 = new System.Windows.Forms.RadioButton();
-            this.radioRIPEMD160 = new System.Windows.Forms.RadioButton();
-            this.radioSHA384 = new System.Windows.Forms.RadioButton();
-            this.radioSHA512 = new System.Windows.Forms.RadioButton();
+            this.radioMD5 = new ColoredRadioButton();
+            this.radioSHA1 = new ColoredRadioButton();
+            this.radioSHA256 = new ColoredRadioButton();
+            this.radioRIPEMD160 = new ColoredRadioButton();
+            this.radioSHA384 = new ColoredRadioButton();
+            this.radioSHA512 = new ColoredRadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.radioCRC32 = new System.Windows.Forms.RadioButton();
+            this.radioCRC32 = new ColoredRadioButton();
             this.helperMenu.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -244,13 +244,13 @@
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsJSONToolStripMenuItem;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.RadioButton radioMD5;
-        private System.Windows.Forms.RadioButton radioSHA1;
-        private System.Windows.Forms.RadioButton radioSHA256;
-        private System.Windows.Forms.RadioButton radioRIPEMD160;
-        private System.Windows.Forms.RadioButton radioSHA384;
-        private System.Windows.Forms.RadioButton radioSHA512;
+        private ColoredRadioButton radioMD5;
+        private ColoredRadioButton radioSHA1;
+        private ColoredRadioButton radioSHA256;
+        private ColoredRadioButton radioRIPEMD160;
+        private ColoredRadioButton radioSHA384;
+        private ColoredRadioButton radioSHA512;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.RadioButton radioCRC32;
+        private ColoredRadioButton radioCRC32;
     }
 }

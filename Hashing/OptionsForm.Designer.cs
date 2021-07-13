@@ -36,20 +36,20 @@
             this.oceantheme = new System.Windows.Forms.RadioButton();
             this.zergtheme = new System.Windows.Forms.RadioButton();
             this.label27 = new System.Windows.Forms.Label();
-            this.chkRIPEMD160 = new System.Windows.Forms.CheckBox();
-            this.chkSHA512 = new System.Windows.Forms.CheckBox();
-            this.chkSHA256 = new System.Windows.Forms.CheckBox();
-            this.chkSHA1 = new System.Windows.Forms.CheckBox();
-            this.chkMD5 = new System.Windows.Forms.CheckBox();
+            this.chkRIPEMD160 = new ColoredCheckBox();
+            this.chkSHA512 = new ColoredCheckBox();
+            this.chkSHA256 = new ColoredCheckBox();
+            this.chkSHA1 = new ColoredCheckBox();
+            this.chkMD5 = new ColoredCheckBox();
             this.lblCalculating = new System.Windows.Forms.Label();
-            this.chkSHA384 = new System.Windows.Forms.CheckBox();
-            this.chkTray = new System.Windows.Forms.CheckBox();
-            this.chkHigh = new System.Windows.Forms.CheckBox();
-            this.chkCRC32 = new System.Windows.Forms.CheckBox();
-            this.chkLower = new System.Windows.Forms.CheckBox();
-            this.chkCRCFormat = new System.Windows.Forms.CheckBox();
-            this.chkSingleInstance = new System.Windows.Forms.CheckBox();
-            this.chkStayOnTop = new System.Windows.Forms.CheckBox();
+            this.chkSHA384 = new ColoredCheckBox();
+            this.chkTray = new ColoredCheckBox();
+            this.chkHigh = new ColoredCheckBox();
+            this.chkCRC32 = new ColoredCheckBox();
+            this.chkLower = new ColoredCheckBox();
+            this.chkCRCFormat = new ColoredCheckBox();
+            this.chkSingleInstance = new ColoredCheckBox();
+            this.chkStayOnTop = new ColoredCheckBox();
             this.SuspendLayout();
             // 
             // okbtn
@@ -425,19 +425,19 @@
         private System.Windows.Forms.RadioButton oceantheme;
         private System.Windows.Forms.RadioButton zergtheme;
         private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.CheckBox chkRIPEMD160;
-        private System.Windows.Forms.CheckBox chkSHA512;
-        private System.Windows.Forms.CheckBox chkSHA256;
-        private System.Windows.Forms.CheckBox chkSHA1;
-        private System.Windows.Forms.CheckBox chkMD5;
+        private ColoredCheckBox chkRIPEMD160;
+        private ColoredCheckBox chkSHA512;
+        private ColoredCheckBox chkSHA256;
+        private ColoredCheckBox chkSHA1;
+        private ColoredCheckBox chkMD5;
         private System.Windows.Forms.Label lblCalculating;
-        private System.Windows.Forms.CheckBox chkSHA384;
-        private System.Windows.Forms.CheckBox chkTray;
-        private System.Windows.Forms.CheckBox chkHigh;
-        private System.Windows.Forms.CheckBox chkCRC32;
-        private System.Windows.Forms.CheckBox chkLower;
-        private System.Windows.Forms.CheckBox chkCRCFormat;
-        private System.Windows.Forms.CheckBox chkSingleInstance;
-        private System.Windows.Forms.CheckBox chkStayOnTop;
+        private ColoredCheckBox chkSHA384;
+        private ColoredCheckBox chkTray;
+        private ColoredCheckBox chkHigh;
+        private ColoredCheckBox chkCRC32;
+        private ColoredCheckBox chkLower;
+        private ColoredCheckBox chkCRCFormat;
+        private ColoredCheckBox chkSingleInstance;
+        private ColoredCheckBox chkStayOnTop;
     }
 }

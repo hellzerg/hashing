@@ -76,6 +76,12 @@
     <Compile Include="CompareForm.Designer.cs">
       <DependentUpon>CompareForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ColoredCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ColoredRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FileSummary.cs" />
     <Compile Include="IdenticalsForm.cs">
       <SubType>Form</SubType>

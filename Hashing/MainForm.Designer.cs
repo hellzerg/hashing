@@ -37,6 +37,7 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topPanel = new System.Windows.Forms.Panel();
+            this.btnUpdate = new System.Windows.Forms.Button();
             this.btnCalculate = new System.Windows.Forms.Button();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.txtPath = new System.Windows.Forms.TextBox();
@@ -54,7 +55,6 @@
             this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnUpdate = new System.Windows.Forms.Button();
             this.helperMenu.SuspendLayout();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -73,7 +73,7 @@
             this.SumView.Location = new System.Drawing.Point(0, 0);
             this.SumView.Margin = new System.Windows.Forms.Padding(2);
             this.SumView.Name = "SumView";
-            this.SumView.Size = new System.Drawing.Size(983, 551);
+            this.SumView.Size = new System.Drawing.Size(802, 518);
             this.SumView.TabIndex = 0;
             this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.sumView_NodeMouseClick);
             // 
@@ -91,14 +91,14 @@
             this.helperMenu.Name = "helperMenu";
             this.helperMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.helperMenu.ShowImageMargin = false;
-            this.helperMenu.Size = new System.Drawing.Size(145, 132);
+            this.helperMenu.Size = new System.Drawing.Size(124, 108);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.copyToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(144, 32);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(123, 26);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
@@ -107,7 +107,7 @@
             this.removeToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.removeToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(144, 32);
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(123, 26);
             this.removeToolStripMenuItem.Text = "Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
@@ -116,7 +116,7 @@
             this.toolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStripMenuItem1.ForeColor = System.Drawing.Color.White;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(144, 32);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(123, 26);
             this.toolStripMenuItem1.Text = "VirusTotal";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
@@ -125,7 +125,7 @@
             this.clearToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clearToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.clearToolStripMenuItem.Name = "clearToolStripMenuItem";
-            this.clearToolStripMenuItem.Size = new System.Drawing.Size(144, 32);
+            this.clearToolStripMenuItem.Size = new System.Drawing.Size(123, 26);
             this.clearToolStripMenuItem.Text = "Clear";
             this.clearToolStripMenuItem.Click += new System.EventHandler(this.clearToolStripMenuItem_Click);
             // 
@@ -148,8 +148,28 @@
             this.topPanel.Location = new System.Drawing.Point(0, 0);
             this.topPanel.Margin = new System.Windows.Forms.Padding(2);
             this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(985, 89);
+            this.topPanel.Size = new System.Drawing.Size(804, 72);
             this.topPanel.TabIndex = 7;
+            // 
+            // btnUpdate
+            // 
+            this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUpdate.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnUpdate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnUpdate.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnUpdate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnUpdate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUpdate.ForeColor = System.Drawing.Color.White;
+            this.btnUpdate.Location = new System.Drawing.Point(698, 6);
+            this.btnUpdate.Margin = new System.Windows.Forms.Padding(2);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(97, 27);
+            this.btnUpdate.TabIndex = 81;
+            this.btnUpdate.Tag = "themeable";
+            this.btnUpdate.Text = "Update";
+            this.btnUpdate.UseVisualStyleBackColor = false;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // btnCalculate
             // 
@@ -161,10 +181,10 @@
             this.btnCalculate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCalculate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCalculate.ForeColor = System.Drawing.Color.White;
-            this.btnCalculate.Location = new System.Drawing.Point(852, 46);
+            this.btnCalculate.Location = new System.Drawing.Point(698, 38);
             this.btnCalculate.Margin = new System.Windows.Forms.Padding(2);
             this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(121, 34);
+            this.btnCalculate.Size = new System.Drawing.Size(97, 25);
             this.btnCalculate.TabIndex = 80;
             this.btnCalculate.Tag = "themeable";
             this.btnCalculate.Text = "Calculate";
@@ -181,10 +201,10 @@
             this.btnBrowse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBrowse.ForeColor = System.Drawing.Color.White;
-            this.btnBrowse.Location = new System.Drawing.Point(801, 46);
+            this.btnBrowse.Location = new System.Drawing.Point(657, 38);
             this.btnBrowse.Margin = new System.Windows.Forms.Padding(2);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(47, 34);
+            this.btnBrowse.Size = new System.Drawing.Size(38, 25);
             this.btnBrowse.TabIndex = 79;
             this.btnBrowse.Tag = "themeable";
             this.btnBrowse.Text = "...";
@@ -196,11 +216,12 @@
             this.txtPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.txtPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtPath.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPath.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPath.ForeColor = System.Drawing.Color.Silver;
-            this.txtPath.Location = new System.Drawing.Point(227, 46);
+            this.txtPath.Location = new System.Drawing.Point(198, 38);
+            this.txtPath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(569, 34);
+            this.txtPath.Size = new System.Drawing.Size(456, 25);
             this.txtPath.TabIndex = 78;
             // 
             // btnCompare
@@ -213,10 +234,10 @@
             this.btnCompare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCompare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCompare.ForeColor = System.Drawing.Color.White;
-            this.btnCompare.Location = new System.Drawing.Point(352, 7);
+            this.btnCompare.Location = new System.Drawing.Point(298, 6);
             this.btnCompare.Margin = new System.Windows.Forms.Padding(2);
             this.btnCompare.Name = "btnCompare";
-            this.btnCompare.Size = new System.Drawing.Size(121, 34);
+            this.btnCompare.Size = new System.Drawing.Size(97, 27);
             this.btnCompare.TabIndex = 77;
             this.btnCompare.Tag = "themeable";
             this.btnCompare.Text = "Compare";
@@ -233,10 +254,10 @@
             this.btnOptions.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnOptions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOptions.ForeColor = System.Drawing.Color.White;
-            this.btnOptions.Location = new System.Drawing.Point(727, 7);
+            this.btnOptions.Location = new System.Drawing.Point(598, 6);
             this.btnOptions.Margin = new System.Windows.Forms.Padding(2);
             this.btnOptions.Name = "btnOptions";
-            this.btnOptions.Size = new System.Drawing.Size(121, 34);
+            this.btnOptions.Size = new System.Drawing.Size(97, 27);
             this.btnOptions.TabIndex = 76;
             this.btnOptions.Tag = "themeable";
             this.btnOptions.Text = "Options";
@@ -253,10 +274,10 @@
             this.btnFindIdenticals.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnFindIdenticals.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFindIdenticals.ForeColor = System.Drawing.Color.White;
-            this.btnFindIdenticals.Location = new System.Drawing.Point(227, 7);
+            this.btnFindIdenticals.Location = new System.Drawing.Point(198, 6);
             this.btnFindIdenticals.Margin = new System.Windows.Forms.Padding(2);
             this.btnFindIdenticals.Name = "btnFindIdenticals";
-            this.btnFindIdenticals.Size = new System.Drawing.Size(121, 34);
+            this.btnFindIdenticals.Size = new System.Drawing.Size(97, 27);
             this.btnFindIdenticals.TabIndex = 74;
             this.btnFindIdenticals.Tag = "themeable";
             this.btnFindIdenticals.Text = "Find Identicals";
@@ -273,10 +294,10 @@
             this.btnClear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClear.ForeColor = System.Drawing.Color.White;
-            this.btnClear.Location = new System.Drawing.Point(602, 7);
+            this.btnClear.Location = new System.Drawing.Point(498, 6);
             this.btnClear.Margin = new System.Windows.Forms.Padding(2);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(121, 34);
+            this.btnClear.Size = new System.Drawing.Size(97, 27);
             this.btnClear.TabIndex = 73;
             this.btnClear.Tag = "themeable";
             this.btnClear.Text = "Clear";
@@ -293,10 +314,10 @@
             this.btnSaveJson.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnSaveJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveJson.ForeColor = System.Drawing.Color.White;
-            this.btnSaveJson.Location = new System.Drawing.Point(477, 7);
+            this.btnSaveJson.Location = new System.Drawing.Point(398, 6);
             this.btnSaveJson.Margin = new System.Windows.Forms.Padding(2);
             this.btnSaveJson.Name = "btnSaveJson";
-            this.btnSaveJson.Size = new System.Drawing.Size(121, 34);
+            this.btnSaveJson.Size = new System.Drawing.Size(97, 27);
             this.btnSaveJson.TabIndex = 71;
             this.btnSaveJson.Tag = "themeable";
             this.btnSaveJson.Text = "Save as JSON";
@@ -307,10 +328,10 @@
             // 
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(10, 10);
+            this.pictureBox1.Location = new System.Drawing.Point(8, 8);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(55, 54);
+            this.pictureBox1.Size = new System.Drawing.Size(44, 43);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
@@ -320,10 +341,10 @@
             // 
             this.lblversion.AutoSize = true;
             this.lblversion.ForeColor = System.Drawing.Color.Silver;
-            this.lblversion.Location = new System.Drawing.Point(90, 46);
+            this.lblversion.Location = new System.Drawing.Point(72, 37);
             this.lblversion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblversion.Name = "lblversion";
-            this.lblversion.Size = new System.Drawing.Size(64, 20);
+            this.lblversion.Size = new System.Drawing.Size(49, 15);
             this.lblversion.TabIndex = 4;
             this.lblversion.Text = "Version:";
             // 
@@ -332,10 +353,10 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(88, 9);
+            this.label2.Location = new System.Drawing.Point(70, 7);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(104, 32);
+            this.label2.Size = new System.Drawing.Size(82, 25);
             this.label2.TabIndex = 3;
             this.label2.Text = "Hashing";
             // 
@@ -345,10 +366,10 @@
             this.botPanel.Controls.Add(this.lblCalculating);
             this.botPanel.Controls.Add(this.SumView);
             this.botPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.botPanel.Location = new System.Drawing.Point(0, 89);
+            this.botPanel.Location = new System.Drawing.Point(0, 72);
             this.botPanel.Margin = new System.Windows.Forms.Padding(2);
             this.botPanel.Name = "botPanel";
-            this.botPanel.Size = new System.Drawing.Size(985, 553);
+            this.botPanel.Size = new System.Drawing.Size(804, 520);
             this.botPanel.TabIndex = 8;
             // 
             // lblCalculating
@@ -359,7 +380,7 @@
             this.lblCalculating.Location = new System.Drawing.Point(0, 0);
             this.lblCalculating.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCalculating.Name = "lblCalculating";
-            this.lblCalculating.Size = new System.Drawing.Size(983, 551);
+            this.lblCalculating.Size = new System.Drawing.Size(802, 518);
             this.lblCalculating.TabIndex = 1;
             this.lblCalculating.Tag = "themeable";
             this.lblCalculating.Text = "Drag and drop files here...";
@@ -383,13 +404,13 @@
             this.trayMenu.Name = "trayMenu";
             this.trayMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.trayMenu.ShowImageMargin = false;
-            this.trayMenu.Size = new System.Drawing.Size(125, 68);
+            this.trayMenu.Size = new System.Drawing.Size(109, 56);
             // 
             // restoreToolStripMenuItem
             // 
             this.restoreToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.restoreToolStripMenuItem.Name = "restoreToolStripMenuItem";
-            this.restoreToolStripMenuItem.Size = new System.Drawing.Size(124, 32);
+            this.restoreToolStripMenuItem.Size = new System.Drawing.Size(108, 26);
             this.restoreToolStripMenuItem.Text = "Restore";
             this.restoreToolStripMenuItem.Click += new System.EventHandler(this.restoreToolStripMenuItem_Click);
             // 
@@ -397,37 +418,17 @@
             // 
             this.exitToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(124, 32);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(108, 26);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
-            // btnUpdate
-            // 
-            this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnUpdate.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnUpdate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnUpdate.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.btnUpdate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnUpdate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUpdate.ForeColor = System.Drawing.Color.White;
-            this.btnUpdate.Location = new System.Drawing.Point(852, 7);
-            this.btnUpdate.Margin = new System.Windows.Forms.Padding(2);
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(121, 34);
-            this.btnUpdate.TabIndex = 81;
-            this.btnUpdate.Tag = "themeable";
-            this.btnUpdate.Text = "Update";
-            this.btnUpdate.UseVisualStyleBackColor = false;
-            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // MainForm
             // 
             this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.ClientSize = new System.Drawing.Size(985, 642);
+            this.ClientSize = new System.Drawing.Size(804, 592);
             this.Controls.Add(this.botPanel);
             this.Controls.Add(this.topPanel);
             this.DoubleBuffered = true;
