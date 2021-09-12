@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2] - 2021-09-12
+- Fixed: Grouping all identicals files (#12)
+- Search hash with DuckDuckGo and Google option
+- New: Keep window location and size
+- New: Beautiful colorized UI
+
 ## [2.1] - 2018-05-18
 - Added option for single-instance
 - Added option for staying always on top

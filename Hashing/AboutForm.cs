@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Hashing
@@ -107,7 +100,7 @@ namespace Hashing
             const string s2 = "Ha";
             const string s3 = "Has";
             const string s4 = "Hash";
-            const string s5 = "Hashi";  
+            const string s5 = "Hashi";
             const string s6 = "Hashin";
             const string s7 = "Hashing";
 

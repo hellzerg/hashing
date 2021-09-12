@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace Hashing
@@ -18,6 +13,28 @@ namespace Hashing
 
     public class ColorsMaterial : ProfessionalColorTable
     {
+        public override Color ImageMarginGradientBegin
+        {
+            get
+            {
+                return Options.BackgroundColor;
+            }
+        }
+        public override Color ImageMarginGradientMiddle
+        {
+            get
+            {
+                return Options.BackgroundColor;
+            }
+        }
+        public override Color ImageMarginGradientEnd
+        {
+            get
+            {
+                return Options.BackgroundColor;
+            }
+        }
+
         public override Color ToolStripBorder
         {
             get

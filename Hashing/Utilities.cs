@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Force.Crc32;
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Windows.Forms;
-using System.Diagnostics;
-using Force.Crc32;
 
 namespace Hashing
 {
@@ -16,7 +12,7 @@ namespace Hashing
         internal static SumResult CalculateSums(string file)
         {
             SumResult result = new SumResult();
-            
+
             try
             {
                 if (File.Exists(file))
@@ -33,7 +29,7 @@ namespace Hashing
                             }
                         }
                     }
-                    
+
                     if (Options.CurrentOptions.HashOptions.SHA1)
                     {
                         using (FileStream fs = File.OpenRead(file))
@@ -85,7 +81,7 @@ namespace Hashing
                             using (var crc32 = new Crc32Algorithm())
                             {
                                 result.CRC32 = BitConverter.ToString(crc32.ComputeHash(fs)).Replace("-", string.Empty);
-                                
+
                                 if (Options.CurrentOptions.CRC32Decimal)
                                 {
                                     result.CRC32 = Convert.ToInt64(result.CRC32, 16).ToString();
@@ -100,7 +96,7 @@ namespace Hashing
                         {
                             using (var ripemd160 = RIPEMD160.Create())
                             {
-                                result.RIPEMD160 = BitConverter.ToString(ripemd160.ComputeHash(fs)).Replace ("-", string.Empty);
+                                result.RIPEMD160 = BitConverter.ToString(ripemd160.ComputeHash(fs)).Replace("-", string.Empty);
                             }
                         }
                     }
@@ -118,7 +114,7 @@ namespace Hashing
             }
             else
             {
-                result.ConvertToUpperCasing(); 
+                result.ConvertToUpperCasing();
             }
 
             return result;
@@ -161,6 +157,24 @@ namespace Hashing
             try
             {
                 Process.Start(string.Format("https://www.virustotal.com/#/file/{0}/detection", hash.ToLowerInvariant()));
+            }
+            catch { }
+        }
+
+        internal static void SearchHash(string hash, bool ddg)
+        {
+            hash = hash.Replace("MD5:", string.Empty);
+            hash = hash.Replace("SHA1:", string.Empty);
+            hash = hash.Replace("SHA256:", string.Empty);
+            hash = hash.Replace("SHA384:", string.Empty);
+            hash = hash.Replace("SHA512:", string.Empty);
+            hash = hash.Replace("CRC32:", string.Empty);
+            hash = hash.Replace("RIPEMD160:", string.Empty);
+
+            try
+            {
+                if (ddg) Process.Start(string.Format("https://duckduckgo.com/?q=\"{0}\"", hash.Trim()));
+                if (!ddg) Process.Start(string.Format("https://www.google.com/search?q=\"{0}\"", hash.Trim()));
             }
             catch { }
         }

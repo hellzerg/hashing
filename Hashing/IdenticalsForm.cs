@@ -1,21 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Newtonsoft.Json;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Hashing
 {
     public partial class IdenticalsForm : Form
     {
         List<SumResult> _identicals;
-        List<string> _md5s = new List<string>();
+        List<string> _uniqueHashes = new List<string>();
 
         string _helper = string.Empty;
 
@@ -25,10 +19,9 @@ namespace Hashing
             Options.ApplyTheme(this);
             helperMenu.Renderer = new ToolStripRendererMaterial();
 
-            _identicals = list;
-            ListIdenticals();
-
             ConfigureGUI();
+            _identicals = list;
+            GetActiveHash();
         }
 
         private void ConfigureGUI()
@@ -97,14 +90,68 @@ namespace Hashing
             }
         }
 
-        private void ListIdenticals()
+        private void GetActiveHash()
+        {
+            if (radioMD5.Checked)
+            {
+                MessageBox.Show("md5");
+                ListIdenticalsByMD5();
+                return;
+            }
+
+            if (radioSHA1.Checked)
+            {
+                MessageBox.Show("sha1");
+                ListIdenticalsBySHA1();
+                return;
+            }
+
+            if (radioSHA256.Checked)
+            {
+                MessageBox.Show("sha256");
+                ListIdenticalsBySHA256();
+                return;
+            }
+
+            if (radioSHA384.Checked)
+            {
+                MessageBox.Show("sha384");
+                ListIdenticalsBySHA384();
+                return;
+            }
+
+            if (radioSHA512.Checked)
+            {
+                MessageBox.Show("sha512");
+                ListIdenticalsBySHA512();
+                return;
+            }
+
+            if (radioCRC32.Checked)
+            {
+                MessageBox.Show("crc32");
+                ListIdenticalsByCRC32();
+                return;
+            }
+
+            if (radioRIPEMD160.Checked)
+            {
+                MessageBox.Show("ripemd160");
+                ListIdenticalsByRIPEMD160();
+                return;
+            }
+
+            return;
+        }
+
+        private void ListIdenticalsByMD5()
         {
             foreach (SumResult sr in _identicals)
             {
-                if (!_md5s.Contains(sr.MD5)) _md5s.Add(sr.MD5);
+                if (!_uniqueHashes.Contains(sr.MD5)) _uniqueHashes.Add(sr.MD5);
             }
 
-            foreach (string x in _md5s)
+            foreach (string x in _uniqueHashes)
             {
                 TreeNode rootNode = new TreeNode(x);
                 rootNode.ForeColor = Options.ForegroundColor;
@@ -112,6 +159,162 @@ namespace Hashing
                 foreach (SumResult y in _identicals)
                 {
                     if (y.MD5 == x)
+                    {
+                        rootNode.Nodes.Add(y.File);
+                    }
+                }
+
+                SumView.Nodes.Add(rootNode);
+            }
+
+            SumView.ExpandAll();
+        }
+
+        private void ListIdenticalsBySHA1()
+        {
+            foreach (SumResult sr in _identicals)
+            {
+                if (!_uniqueHashes.Contains(sr.SHA1)) _uniqueHashes.Add(sr.SHA1);
+            }
+
+            foreach (string x in _uniqueHashes)
+            {
+                TreeNode rootNode = new TreeNode(x);
+                rootNode.ForeColor = Options.ForegroundColor;
+
+                foreach (SumResult y in _identicals)
+                {
+                    if (y.SHA1 == x)
+                    {
+                        rootNode.Nodes.Add(y.File);
+                    }
+                }
+
+                SumView.Nodes.Add(rootNode);
+            }
+
+            SumView.ExpandAll();
+        }
+
+        private void ListIdenticalsBySHA256()
+        {
+            foreach (SumResult sr in _identicals)
+            {
+                if (!_uniqueHashes.Contains(sr.SHA256)) _uniqueHashes.Add(sr.SHA256);
+            }
+
+            foreach (string x in _uniqueHashes)
+            {
+                TreeNode rootNode = new TreeNode(x);
+                rootNode.ForeColor = Options.ForegroundColor;
+
+                foreach (SumResult y in _identicals)
+                {
+                    if (y.SHA256 == x)
+                    {
+                        rootNode.Nodes.Add(y.File);
+                    }
+                }
+
+                SumView.Nodes.Add(rootNode);
+            }
+
+            SumView.ExpandAll();
+        }
+
+        private void ListIdenticalsBySHA384()
+        {
+            foreach (SumResult sr in _identicals)
+            {
+                if (!_uniqueHashes.Contains(sr.SHA384)) _uniqueHashes.Add(sr.SHA384);
+            }
+
+            foreach (string x in _uniqueHashes)
+            {
+                TreeNode rootNode = new TreeNode(x);
+                rootNode.ForeColor = Options.ForegroundColor;
+
+                foreach (SumResult y in _identicals)
+                {
+                    if (y.SHA384 == x)
+                    {
+                        rootNode.Nodes.Add(y.File);
+                    }
+                }
+
+                SumView.Nodes.Add(rootNode);
+            }
+
+            SumView.ExpandAll();
+        }
+
+        private void ListIdenticalsBySHA512()
+        {
+            foreach (SumResult sr in _identicals)
+            {
+                if (!_uniqueHashes.Contains(sr.SHA512)) _uniqueHashes.Add(sr.SHA512);
+            }
+
+            foreach (string x in _uniqueHashes)
+            {
+                TreeNode rootNode = new TreeNode(x);
+                rootNode.ForeColor = Options.ForegroundColor;
+
+                foreach (SumResult y in _identicals)
+                {
+                    if (y.SHA512 == x)
+                    {
+                        rootNode.Nodes.Add(y.File);
+                    }
+                }
+
+                SumView.Nodes.Add(rootNode);
+            }
+
+            SumView.ExpandAll();
+        }
+
+        private void ListIdenticalsByCRC32()
+        {
+            foreach (SumResult sr in _identicals)
+            {
+                if (!_uniqueHashes.Contains(sr.CRC32)) _uniqueHashes.Add(sr.CRC32);
+            }
+
+            foreach (string x in _uniqueHashes)
+            {
+                TreeNode rootNode = new TreeNode(x);
+                rootNode.ForeColor = Options.ForegroundColor;
+
+                foreach (SumResult y in _identicals)
+                {
+                    if (y.CRC32 == x)
+                    {
+                        rootNode.Nodes.Add(y.File);
+                    }
+                }
+
+                SumView.Nodes.Add(rootNode);
+            }
+
+            SumView.ExpandAll();
+        }
+
+        private void ListIdenticalsByRIPEMD160()
+        {
+            foreach (SumResult sr in _identicals)
+            {
+                if (!_uniqueHashes.Contains(sr.RIPEMD160)) _uniqueHashes.Add(sr.RIPEMD160);
+            }
+
+            foreach (string x in _uniqueHashes)
+            {
+                TreeNode rootNode = new TreeNode(x);
+                rootNode.ForeColor = Options.ForegroundColor;
+
+                foreach (SumResult y in _identicals)
+                {
+                    if (y.RIPEMD160 == x)
                     {
                         rootNode.Nodes.Add(y.File);
                     }
@@ -166,7 +369,7 @@ namespace Hashing
                     {
                         tmp = _identicals.Find(x => x.File == child.Text);
                         node.Text = tmp.MD5;
-                        break; 
+                        break;
                     }
                 }
             }

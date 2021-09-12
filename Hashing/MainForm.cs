@@ -1,17 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
-using System.Runtime.InteropServices;
-using Newtonsoft.Json;
-using System.Net;
-using System.Diagnostics;
 
 namespace Hashing
 {
@@ -33,7 +31,7 @@ namespace Hashing
         List<string> _analyzedFiles;
 
         bool _allowExit;
-        
+
         // used when auto-enabling SHA256, for VirusTotal
         int _tempIndex = -1;
 
@@ -255,7 +253,7 @@ namespace Hashing
                     SumView.ExpandAll();
                 }
             }
-            }
+        }
 
         private void SaveAsJSON()
         {
@@ -414,7 +412,7 @@ namespace Hashing
 
             return duplicates;
         }
-    
+
         private void ReCalculateSums()
         {
             if (!Options.CurrentOptions.HashOptions.MD5 && !Options.CurrentOptions.HashOptions.SHA1 && !Options.CurrentOptions.HashOptions.SHA256 && !Options.CurrentOptions.HashOptions.SHA384 && !Options.CurrentOptions.HashOptions.SHA512 && !Options.CurrentOptions.HashOptions.RIPEMD160 && !Options.CurrentOptions.HashOptions.CRC32)
@@ -435,7 +433,7 @@ namespace Hashing
             }
         }
 
-        private string ListIncompatibles(List<string> files) 
+        private string ListIncompatibles(List<string> files)
         {
             StringBuilder result = new StringBuilder();
 
@@ -451,7 +449,7 @@ namespace Hashing
         {
             List<FileSummary> fileSummaries = new List<FileSummary>();
             List<string> incompatibles = new List<string>();
-            
+
             foreach (string s in _fileList)
             {
                 try
@@ -523,7 +521,7 @@ namespace Hashing
                     if (_fileSummaries != null)
                     {
                         if (_fileSummaries.Count > 0)
-                        { 
+                        {
                             CalculateSums(true);
                         }
                     }
@@ -733,8 +731,41 @@ namespace Hashing
             }
         }
 
+        private void RestoreWindowState()
+        {
+            this.WindowState = Options.CurrentOptions.WindowState;
+            this.Size = Options.CurrentOptions.WindowSize;
+
+            if (Options.CurrentOptions.WindowLocation != null)
+            {
+                this.Location = (Point)Options.CurrentOptions.WindowLocation;
+            }
+            else
+            {
+                this.CenterToScreen();
+            }
+        }
+
+        private void SaveWindowState()
+        {
+            Options.CurrentOptions.WindowState = this.WindowState;
+
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                Options.CurrentOptions.WindowLocation = this.Location;
+                Options.CurrentOptions.WindowSize = this.Size;
+            }
+            else
+            {
+                Options.CurrentOptions.WindowLocation = this.RestoreBounds.Location;
+                Options.CurrentOptions.WindowSize = this.RestoreBounds.Size;
+            }
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
+            RestoreWindowState();
+
             if (Options.CurrentOptions.StayOnTop)
             {
                 // SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
@@ -809,6 +840,7 @@ namespace Hashing
         {
             if (_allowExit)
             {
+                SaveWindowState();
                 Options.SaveSettings();
             }
             else
@@ -933,7 +965,7 @@ namespace Hashing
             dialog.Multiselect = false;
             dialog.CheckFileExists = true;
             dialog.CheckPathExists = true;
-             
+
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 txtPath.Text = dialog.FileName;
@@ -961,6 +993,27 @@ namespace Hashing
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             CheckForUpdate();
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            SearchByHash(true);
+        }
+
+        private void SearchByHash(bool ddg)
+        {
+            if (SumView.Nodes.Count > 0)
+            {
+                if (SumView.SelectedNode.Nodes.Count == 0)
+                {
+                    Utilities.SearchHash(SumView.SelectedNode.Text, ddg);
+                }
+            }
+        }
+
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            SearchByHash(false);
         }
     }
 }

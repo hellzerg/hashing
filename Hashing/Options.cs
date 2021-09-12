@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
-using Newtonsoft.Json;
 
 namespace Hashing
 {
@@ -22,6 +20,9 @@ namespace Hashing
         public short ActiveHash { get; set; }
         public bool StayOnTop { get; set; }
         public bool SingleInstance { get; set; }
+        public Size WindowSize { get; set; }
+        public Point? WindowLocation { get; set; }
+        public FormWindowState WindowState { get; set; }
 
         public SettingsJson()
         {
@@ -159,7 +160,11 @@ namespace Hashing
                 CurrentOptions.HashOptions.SHA512 = false;
                 CurrentOptions.HashOptions.CRC32 = false;
                 CurrentOptions.HashOptions.RIPEMD160 = false;
-                
+
+                CurrentOptions.WindowLocation = null;
+                CurrentOptions.WindowSize = new Size(820, 632);
+                CurrentOptions.WindowState = FormWindowState.Normal;
+
                 using (FileStream fs = File.Open(SettingsFile, FileMode.CreateNew))
                 using (StreamWriter sw = new StreamWriter(fs))
                 using (JsonWriter jw = new JsonTextWriter(sw))
@@ -173,6 +178,12 @@ namespace Hashing
             else
             {
                 CurrentOptions = JsonConvert.DeserializeObject<SettingsJson>(File.ReadAllText(SettingsFile));
+
+                if (CurrentOptions.WindowSize.IsEmpty)
+                {
+                    CurrentOptions.WindowSize = new Size(820, 632);
+                    SaveSettings();
+                }
             }
         }
     }

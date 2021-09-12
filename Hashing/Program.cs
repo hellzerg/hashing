@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Hashing
@@ -46,7 +42,7 @@ namespace Hashing
             EmbeddedAssembly.Load(resource2, "Crc32.NET.dll");
 
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
-            
+
             Options.LoadSettings();
 
             if (Options.CurrentOptions.SingleInstance)
