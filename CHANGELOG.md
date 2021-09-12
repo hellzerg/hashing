@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [2.2] - 2021-09-12
-- Fixed: Grouping all identicals files (#12)
+- Fixed: Grouping all identical files bug (#12)
 - New: Search hash with DuckDuckGo and Google option
 - New: Keep window location and size
 - New: Beautiful colorized UI
