@@ -28,9 +28,9 @@ https://github.com/hellzerg/hashing/blob/master/IMAGES.md
 
 ## Compatibility: ##
 
-.NET Framework 4.5.2
-Compatible with Windows 7, 8, 8.1, 10
-Does not work with Windows XP or Vista
+* .NET Framework 4.5.2
+* Compatible with Windows 7, 8, 8.1, 10
+* Does not work with Windows XP or Vista
 
 ## Details: ##
 
