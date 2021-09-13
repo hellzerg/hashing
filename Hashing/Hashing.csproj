@@ -70,6 +70,9 @@
     <Compile Include="AnalyzedForm.Designer.cs">
       <DependentUpon>AnalyzedForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ByteSize\BinaryByteSize.cs" />
+    <Compile Include="ByteSize\ByteSize.cs" />
+    <Compile Include="ByteSize\DecimalByteSize.cs" />
     <Compile Include="CompareForm.cs">
       <SubType>Form</SubType>
     </Compile>

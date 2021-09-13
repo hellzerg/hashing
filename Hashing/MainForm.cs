@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -38,6 +39,16 @@ namespace Hashing
         // used for checking if all files are JSON files
         bool _allFilesAreJson = false;
 
+        // used for counting total size of calculated sum
+        FileInfo _fileInfo;
+        long _totalSize;
+        Stopwatch _timer;
+        int _fileCounter;
+        string _tempFileName = string.Empty;
+
+        // used for cancelling hashing procedure
+        CancellationTokenSource tokenSource;
+
         readonly string _latestVersionLink = "https://raw.githubusercontent.com/hellzerg/hashing/master/version.txt";
         readonly string _releasesLink = "https://github.com/hellzerg/hashing/releases";
 
@@ -62,6 +73,8 @@ namespace Hashing
 
             helperMenu.Renderer = new ToolStripRendererMaterial();
             trayMenu.Renderer = new ToolStripRendererMaterial();
+
+            _timer = new Stopwatch();
 
             if (Options.CurrentOptions.HighPriority)
             {
@@ -176,18 +189,22 @@ namespace Hashing
             {
                 lblCalculating.Text = "Drag and drop files here...";
                 lblCalculating.Visible = true;
+                btnCancelHashing.Visible = false;
             }
         }
 
         private void Clear()
         {
+            this.Text = "Hashing";
             this.AllowDrop = false;
 
             SumView.Nodes.Clear();
             SumResult.Sums.Clear();
 
+            _timer.Reset();
             lblCalculating.Text = "Drag and drop files here...";
             lblCalculating.Visible = true;
+            btnCancelHashing.Visible = false;
 
             this.AllowDrop = true;
         }
@@ -541,6 +558,11 @@ namespace Hashing
 
         private void CalculateSums(bool analyzeJson = false)
         {
+            this.Text = "Hashing";
+
+            tokenSource = new CancellationTokenSource();
+            CancellationToken ct = tokenSource.Token;
+
             Task.Factory.StartNew(() =>
             {
                 lblCalculating.Invoke((MethodInvoker)delegate
@@ -555,20 +577,58 @@ namespace Hashing
                     txtPath.Enabled = false;
                     lblCalculating.Text = "Calculating...";
                     lblCalculating.Visible = true;
+                    btnCancelHashing.Visible = true;
                 }
                 );
+                
+                _fileCounter = 0;
+                _timer.Reset();
+                _timer.Start();
+                _totalSize = 0;
 
                 foreach (string f in _fileList)
                 {
+                    ct.ThrowIfCancellationRequested();
+
                     if (File.Exists(f))
                     {
+                        _fileCounter++;
+
+                        _tempFileName = Path.GetFileName(f);
+                        if (_tempFileName.Length > 32) _tempFileName = _tempFileName.Substring(0, 31) + "...";
+
+                        lblCalculating.Invoke((MethodInvoker)delegate
+                        {
+                            lblCalculating.Text = string.Format("Calculating: {0}/{1} - '{2}'", _fileCounter, _fileList.Count, _tempFileName);
+                            lblCalculating.Visible = true;
+                            btnCancelHashing.Visible = true;
+                        });
+
+                        _fileInfo = new FileInfo(f);
+                        _totalSize += _fileInfo.Length;
+
                         SumResult.Sums.Add(Utilities.CalculateSums(f));
                     }
                 }
-            }
+
+                _timer.Stop();
+                
+            }, tokenSource.Token
             )
             .ContinueWith((prevTask) =>
             {
+                // if cancelled: reset UI
+                if (tokenSource.IsCancellationRequested)
+                {
+                    lblCalculating.Invoke((MethodInvoker)delegate
+                    {
+                        _timer.Stop();
+                        btnCancelHashing.Visible = false;
+                        btnCancelHashing.Enabled = true;
+                        btnCancelHashing.Text = "Cancel";
+                    });
+                }
+
                 if ((SumResult.Sums != null) && (SumResult.Sums.Count > 0))
                 {
                     SumView.Nodes.Clear();
@@ -666,6 +726,7 @@ namespace Hashing
                     {
                         lblCalculating.Text = "Calculating...";
                         lblCalculating.Visible = false;
+                        btnCancelHashing.Visible = false;
                         btnClear.Enabled = true;
                         btnOptions.Enabled = true;
                         btnSaveJson.Enabled = true;
@@ -674,8 +735,8 @@ namespace Hashing
                         btnBrowse.Enabled = true;
                         btnCalculate.Enabled = true;
                         txtPath.Enabled = true;
-                    }
-                    );
+                        this.Text += string.Format(" - {0}m:{1}s for {2} files ({3})", _timer.Elapsed.Minutes, _timer.Elapsed.Seconds, _fileCounter, ByteSize.FromBytes(_totalSize));
+                    });
 
                     try
                     {
@@ -1014,6 +1075,20 @@ namespace Hashing
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
             SearchByHash(false);
+        }
+
+        private void botPanel_Resize(object sender, EventArgs e)
+        {
+            btnCancelHashing.Left = (botPanel.Width - btnCancelHashing.Width) / 2;
+            btnCancelHashing.Top = (botPanel.Height - btnCancelHashing.Height + 74) / 2;
+        }
+
+        private void btnCancelHashing_Click(object sender, EventArgs e)
+        {
+            tokenSource.Cancel();
+
+            btnCancelHashing.Enabled = false;
+            btnCancelHashing.Text = "Cancelling...";
         }
     }
 }

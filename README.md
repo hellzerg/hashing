@@ -34,6 +34,6 @@ https://github.com/hellzerg/hashing/blob/master/IMAGES.md
 
 ## Details: ##
 
-* Latest version: 2.2
-* Released: September 12, 2021
-* SHA256: 4B1D8E72BF9287B3868986197131F37B39061D82B26CFEE8CAFD5533CA0B34AF
+* Latest version: 2.3
+* Released: September 13, 2021
+* SHA256: AAA2382FAF09F58047745E1DC7C43C9B25B3E3076B21F00CCF23F3A2EDA041C7

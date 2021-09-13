@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3] - 2021-09-13
+- New: Implemented simple progress and Cancel feature (#5)
+- New: Show time elapsed and total size evaluated in titlebar
+
 ## [2.2] - 2021-09-12
 - Fixed: Grouping all identical files bug (#12)
 - New: Search hash with DuckDuckGo and Google option

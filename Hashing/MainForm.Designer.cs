@@ -34,7 +34,11 @@
             this.helperMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topPanel = new System.Windows.Forms.Panel();
             this.btnUpdate = new System.Windows.Forms.Button();
@@ -55,10 +59,7 @@
             this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnCancelHashing = new System.Windows.Forms.Button();
             this.helperMenu.SuspendLayout();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -120,6 +121,11 @@
             this.removeToolStripMenuItem.Text = "Delete";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(264, 6);
+            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -129,6 +135,31 @@
             this.toolStripMenuItem1.Size = new System.Drawing.Size(267, 26);
             this.toolStripMenuItem1.Text = "Check in VirusTotal...";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripMenuItem2.ForeColor = System.Drawing.Color.White;
+            this.toolStripMenuItem2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem2.Image")));
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(267, 26);
+            this.toolStripMenuItem2.Text = "Search with DuckDuckGo...";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripMenuItem3.ForeColor = System.Drawing.Color.White;
+            this.toolStripMenuItem3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem3.Image")));
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(267, 26);
+            this.toolStripMenuItem3.Text = "Search with Google...";
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(264, 6);
             // 
             // clearToolStripMenuItem
             // 
@@ -375,6 +406,7 @@
             // botPanel
             // 
             this.botPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.botPanel.Controls.Add(this.btnCancelHashing);
             this.botPanel.Controls.Add(this.lblCalculating);
             this.botPanel.Controls.Add(this.SumView);
             this.botPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -383,11 +415,12 @@
             this.botPanel.Name = "botPanel";
             this.botPanel.Size = new System.Drawing.Size(804, 520);
             this.botPanel.TabIndex = 8;
+            this.botPanel.Resize += new System.EventHandler(this.botPanel_Resize);
             // 
             // lblCalculating
             // 
             this.lblCalculating.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCalculating.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCalculating.Font = new System.Drawing.Font("Segoe UI Semibold", 15F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCalculating.ForeColor = System.Drawing.Color.DodgerBlue;
             this.lblCalculating.Location = new System.Drawing.Point(0, 0);
             this.lblCalculating.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
@@ -434,35 +467,25 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem2
+            // btnCancelHashing
             // 
-            this.toolStripMenuItem2.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripMenuItem2.ForeColor = System.Drawing.Color.White;
-            this.toolStripMenuItem2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem2.Image")));
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(267, 26);
-            this.toolStripMenuItem2.Text = "Search with DuckDuckGo...";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripMenuItem3.ForeColor = System.Drawing.Color.White;
-            this.toolStripMenuItem3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem3.Image")));
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(267, 26);
-            this.toolStripMenuItem3.Text = "Search with Google...";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(235, 6);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(235, 6);
+            this.btnCancelHashing.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnCancelHashing.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancelHashing.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnCancelHashing.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnCancelHashing.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnCancelHashing.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCancelHashing.ForeColor = System.Drawing.Color.White;
+            this.btnCancelHashing.Location = new System.Drawing.Point(346, 285);
+            this.btnCancelHashing.Margin = new System.Windows.Forms.Padding(2);
+            this.btnCancelHashing.Name = "btnCancelHashing";
+            this.btnCancelHashing.Size = new System.Drawing.Size(97, 27);
+            this.btnCancelHashing.TabIndex = 82;
+            this.btnCancelHashing.Tag = "themeable";
+            this.btnCancelHashing.Text = "Cancel";
+            this.btnCancelHashing.UseVisualStyleBackColor = false;
+            this.btnCancelHashing.Visible = false;
+            this.btnCancelHashing.Click += new System.EventHandler(this.btnCancelHashing_Click);
             // 
             // MainForm
             // 
@@ -478,6 +501,7 @@
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
+            this.MinimumSize = new System.Drawing.Size(820, 631);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hashing";
@@ -526,6 +550,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.Button btnCancelHashing;
     }
 }
 
