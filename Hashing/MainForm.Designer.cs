@@ -54,12 +54,13 @@
             this.lblversion = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.botPanel = new System.Windows.Forms.Panel();
+            this.btnCancelHashing = new System.Windows.Forms.Button();
             this.lblCalculating = new System.Windows.Forms.Label();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnCancelHashing = new System.Windows.Forms.Button();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.helperMenu.SuspendLayout();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -90,6 +91,7 @@
             this.helperMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.helperMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyToolStripMenuItem,
+            this.toolStripMenuItem4,
             this.removeToolStripMenuItem,
             this.toolStripSeparator1,
             this.toolStripMenuItem1,
@@ -99,7 +101,7 @@
             this.clearToolStripMenuItem});
             this.helperMenu.Name = "helperMenu";
             this.helperMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.helperMenu.Size = new System.Drawing.Size(268, 172);
+            this.helperMenu.Size = new System.Drawing.Size(268, 220);
             // 
             // copyToolStripMenuItem
             // 
@@ -417,6 +419,26 @@
             this.botPanel.TabIndex = 8;
             this.botPanel.Resize += new System.EventHandler(this.botPanel_Resize);
             // 
+            // btnCancelHashing
+            // 
+            this.btnCancelHashing.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnCancelHashing.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancelHashing.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnCancelHashing.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnCancelHashing.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnCancelHashing.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCancelHashing.ForeColor = System.Drawing.Color.White;
+            this.btnCancelHashing.Location = new System.Drawing.Point(346, 285);
+            this.btnCancelHashing.Margin = new System.Windows.Forms.Padding(2);
+            this.btnCancelHashing.Name = "btnCancelHashing";
+            this.btnCancelHashing.Size = new System.Drawing.Size(97, 27);
+            this.btnCancelHashing.TabIndex = 82;
+            this.btnCancelHashing.Tag = "themeable";
+            this.btnCancelHashing.Text = "Cancel";
+            this.btnCancelHashing.UseVisualStyleBackColor = false;
+            this.btnCancelHashing.Visible = false;
+            this.btnCancelHashing.Click += new System.EventHandler(this.btnCancelHashing_Click);
+            // 
             // lblCalculating
             // 
             this.lblCalculating.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -467,25 +489,15 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // btnCancelHashing
+            // toolStripMenuItem4
             // 
-            this.btnCancelHashing.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnCancelHashing.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancelHashing.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.btnCancelHashing.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnCancelHashing.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnCancelHashing.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCancelHashing.ForeColor = System.Drawing.Color.White;
-            this.btnCancelHashing.Location = new System.Drawing.Point(346, 285);
-            this.btnCancelHashing.Margin = new System.Windows.Forms.Padding(2);
-            this.btnCancelHashing.Name = "btnCancelHashing";
-            this.btnCancelHashing.Size = new System.Drawing.Size(97, 27);
-            this.btnCancelHashing.TabIndex = 82;
-            this.btnCancelHashing.Tag = "themeable";
-            this.btnCancelHashing.Text = "Cancel";
-            this.btnCancelHashing.UseVisualStyleBackColor = false;
-            this.btnCancelHashing.Visible = false;
-            this.btnCancelHashing.Click += new System.EventHandler(this.btnCancelHashing_Click);
+            this.toolStripMenuItem4.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripMenuItem4.ForeColor = System.Drawing.Color.White;
+            this.toolStripMenuItem4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem4.Image")));
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(267, 26);
+            this.toolStripMenuItem4.Text = "Show file...";
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
             // 
             // MainForm
             // 
@@ -551,6 +563,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.Button btnCancelHashing;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
     }
 }
 

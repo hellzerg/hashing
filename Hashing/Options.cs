@@ -151,7 +151,7 @@ namespace Hashing
                 CurrentOptions.CRC32Decimal = false;
                 CurrentOptions.ActiveHash = 1;
                 CurrentOptions.StayOnTop = false;
-                CurrentOptions.SingleInstance = false;
+                CurrentOptions.SingleInstance = true;
 
                 CurrentOptions.HashOptions.MD5 = false;
                 CurrentOptions.HashOptions.SHA1 = true;

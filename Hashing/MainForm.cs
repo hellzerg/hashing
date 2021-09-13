@@ -497,8 +497,7 @@ namespace Hashing
 
         private void DetectFiles(string[] files)
         {
-            this.AllowDrop = false;
-
+            //this.AllowDrop = false;
             _fileList.Clear();
 
             foreach (string f in files)
@@ -735,7 +734,7 @@ namespace Hashing
                         btnBrowse.Enabled = true;
                         btnCalculate.Enabled = true;
                         txtPath.Enabled = true;
-                        this.Text += string.Format(" - {0}m:{1}s for {2} files ({3})", _timer.Elapsed.Minutes, _timer.Elapsed.Seconds, _fileCounter, ByteSize.FromBytes(_totalSize));
+                        this.Text = string.Format("Hashing - {0}m : {1}s for {2} files ({3})", _timer.Elapsed.Minutes, _timer.Elapsed.Seconds, _fileCounter, ByteSize.FromBytes(_totalSize));
                     });
 
                     try
@@ -1072,6 +1071,21 @@ namespace Hashing
             }
         }
 
+        private void FindFile()
+        {
+            if (SumView.Nodes.Count > 0)
+            {
+                if (SumView.SelectedNode.Nodes.Count > 0)
+                {
+                    if (File.Exists(SumView.SelectedNode.Text)) Process.Start("explorer.exe", "/select, " + SumView.SelectedNode.Text);
+                }
+                else
+                {
+                    if (File.Exists(SumView.SelectedNode.Parent.Text)) Process.Start("explorer.exe", "/select, " + SumView.SelectedNode.Parent.Text);
+                }
+            }         
+        }
+
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
             SearchByHash(false);
@@ -1089,6 +1103,11 @@ namespace Hashing
 
             btnCancelHashing.Enabled = false;
             btnCancelHashing.Text = "Cancelling...";
+        }
+
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            FindFile();
         }
     }
 }
