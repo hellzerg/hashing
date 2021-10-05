@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4] - 2021-10-05
+- Necessary hotfixes and cosmetic changes
+
 ## [2.3] - 2021-09-13
 - New: Implemented simple progress and Cancel feature (#5)
 - New: Show time elapsed and total size evaluated in titlebar

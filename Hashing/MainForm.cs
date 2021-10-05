@@ -45,6 +45,7 @@ namespace Hashing
         Stopwatch _timer;
         int _fileCounter;
         string _tempFileName = string.Empty;
+        string _tempFileExtension = string.Empty;
 
         // used for cancelling hashing procedure
         CancellationTokenSource tokenSource;
@@ -594,11 +595,12 @@ namespace Hashing
                         _fileCounter++;
 
                         _tempFileName = Path.GetFileName(f);
-                        if (_tempFileName.Length > 32) _tempFileName = _tempFileName.Substring(0, 31) + "...";
+                        _tempFileExtension = Path.GetExtension(f);
+                        if (_tempFileName.Length > 28) _tempFileName = _tempFileName.Substring(0, 27) + " ... " + _tempFileExtension;
 
                         lblCalculating.Invoke((MethodInvoker)delegate
                         {
-                            lblCalculating.Text = string.Format("Calculating: {0}/{1} - '{2}'", _fileCounter, _fileList.Count, _tempFileName);
+                            lblCalculating.Text = string.Format("{0}/{1} - '{2}'", _fileCounter, _fileList.Count, _tempFileName);
                             lblCalculating.Visible = true;
                             btnCancelHashing.Visible = true;
                         });

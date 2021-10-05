@@ -94,49 +94,42 @@ namespace Hashing
         {
             if (radioMD5.Checked)
             {
-                MessageBox.Show("md5");
                 ListIdenticalsByMD5();
                 return;
             }
 
             if (radioSHA1.Checked)
             {
-                MessageBox.Show("sha1");
                 ListIdenticalsBySHA1();
                 return;
             }
 
             if (radioSHA256.Checked)
             {
-                MessageBox.Show("sha256");
                 ListIdenticalsBySHA256();
                 return;
             }
 
             if (radioSHA384.Checked)
             {
-                MessageBox.Show("sha384");
                 ListIdenticalsBySHA384();
                 return;
             }
 
             if (radioSHA512.Checked)
             {
-                MessageBox.Show("sha512");
                 ListIdenticalsBySHA512();
                 return;
             }
 
             if (radioCRC32.Checked)
             {
-                MessageBox.Show("crc32");
                 ListIdenticalsByCRC32();
                 return;
             }
 
             if (radioRIPEMD160.Checked)
             {
-                MessageBox.Show("ripemd160");
                 ListIdenticalsByRIPEMD160();
                 return;
             }
