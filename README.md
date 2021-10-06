@@ -1,6 +1,15 @@
+<p align="center">
+   <img src="banner.png">
+</p> 
+
 ## Summary: ##
 
 Simple utility to calculate and compare hashes of multiple files
+<p align="center">
+	<a href="https://github.com/hellzerg/hashing/releases/download/2.4/Hashing-2.4.exe" target="_blank">
+		<img src="download-button.png">
+	</a>
+</p> 
 
 ## Features: ##
 
