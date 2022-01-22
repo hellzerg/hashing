@@ -3,16 +3,42 @@ using System.Windows.Forms;
 
 namespace Hashing
 {
-    public class ToolStripRendererMaterial : ToolStripProfessionalRenderer
+    internal class ToolStripRendererMaterial : ToolStripProfessionalRenderer
     {
-        public ToolStripRendererMaterial() : base(new ColorsMaterial())
+        internal ToolStripRendererMaterial() : base(new ColorsMaterial())
         {
 
         }
+
+        //protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
+        //{
+        //    var tsMenuItem = e.Item as ToolStripMenuItem;
+        //    if (tsMenuItem != null)
+        //        e.ArrowColor = Options.ForegroundColor;
+        //    base.OnRenderArrow(e);
+        //}
     }
 
-    public class ColorsMaterial : ProfessionalColorTable
+    internal class ColorsMaterial : ProfessionalColorTable
     {
+        public override Color SeparatorLight
+        {
+            get { return Color.FromArgb(40, 40, 40); }
+        }
+
+        public override Color SeparatorDark
+        {
+            get { return Color.FromArgb(40, 40, 40); }
+        }
+
+        public override Color ToolStripDropDownBackground
+        {
+            get
+            {
+                return Options.BackgroundColor;
+            }
+        }
+
         public override Color ImageMarginGradientBegin
         {
             get
@@ -39,7 +65,7 @@ namespace Hashing
         {
             get
             {
-                return Options.ForegroundColor;
+                return Options.BackgroundColor;
             }
         }
 
@@ -47,7 +73,7 @@ namespace Hashing
         {
             get
             {
-                return Options.ForegroundColor;
+                return Color.FromArgb(40, 40, 40);
             }
         }
 
@@ -55,7 +81,7 @@ namespace Hashing
         {
             get
             {
-                return Options.ForegroundAccentColor;
+                return Color.FromArgb(40, 40, 40);
             }
         }
 
@@ -63,7 +89,7 @@ namespace Hashing
         {
             get
             {
-                return Options.ForegroundAccentColor;
+                return Color.FromArgb(40, 40, 40);
             }
         }
 
@@ -71,7 +97,7 @@ namespace Hashing
         {
             get
             {
-                return Options.ForegroundAccentColor;
+                return Color.FromArgb(40, 40, 40);
             }
         }
 
@@ -79,7 +105,7 @@ namespace Hashing
         {
             get
             {
-                return Options.ForegroundColor;
+                return Color.FromArgb(40, 40, 40);
             }
         }
     }

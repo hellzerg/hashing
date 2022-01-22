@@ -6,7 +6,7 @@
 
 Simple utility to calculate and compare hashes of multiple files
 <p align="center">
-	<a href="https://github.com/hellzerg/hashing/releases/download/2.4/Hashing-2.4.exe" target="_blank">
+	<a href="https://github.com/hellzerg/hashing/releases/download/2.5/Hashing-2.5.exe" target="_blank">
 		<img src="download-button.png">
 	</a>
 </p> 
@@ -38,11 +38,11 @@ https://github.com/hellzerg/hashing/blob/master/IMAGES.md
 ## Compatibility: ##
 
 * .NET Framework 4.5.2
-* Compatible with Windows 7, 8, 8.1, 10
+* Compatible with Windows 7, 8, 8.1, 10, 11
 * Does not work with Windows XP or Vista
 
 ## Details: ##
 
-* Latest version: 2.4
-* Released: October 5, 2021
-* SHA256: 04CA0A3F440B876AE014250041F10938EBF7F2ABF10A62DA4CEBDC566DBE2C9E
+* Latest version: 2.5
+* Released: January 22, 2022
+* SHA256: 5F75103420AA64BC9935E5DE0D8E0F0E15338ECE5FEAAEA12EFAFBEAA35AFF3B

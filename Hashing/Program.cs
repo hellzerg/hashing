@@ -12,7 +12,7 @@ namespace Hashing
 
         // Enter current version here
         internal readonly static float Major = 2;
-        internal readonly static float Minor = 4;
+        internal readonly static float Minor = 5;
 
         /* END OF VERSION PROPERTIES */
 
@@ -27,6 +27,7 @@ namespace Hashing
         }
 
         const string _mutexGuid = @"{DEADMOON-0EFC7B9A-D7FC-437F-B4B3-0118C643FE19-HASHING}";
+        internal static Mutex MUTEX;
         static bool _notRunning;
 
         [STAThread]
@@ -47,7 +48,7 @@ namespace Hashing
 
             if (Options.CurrentOptions.SingleInstance)
             {
-                using (Mutex m = new Mutex(true, _mutexGuid, out _notRunning))
+                using (MUTEX = new Mutex(true, _mutexGuid, out _notRunning))
                 {
                     if (_notRunning)
                     {

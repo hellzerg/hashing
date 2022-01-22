@@ -9,4 +9,11 @@
         Lime,
         Minimal
     }
+
+    public enum FeatureAction
+    {
+        Calculate,
+        AnalyzeJSON,
+        ListJSON
+    }
 }

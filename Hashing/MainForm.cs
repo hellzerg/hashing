@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -102,6 +103,11 @@ namespace Hashing
             ReCalculateSums();
         }
 
+        private string NewDownloadLink(string latestVersion)
+        {
+            return string.Format("https://github.com/hellzerg/hashing/releases/download/{0}/Hashing-{0}.exe", latestVersion);
+        }
+
         private void CheckForUpdate()
         {
             WebClient client = new WebClient
@@ -112,33 +118,75 @@ namespace Hashing
             string latestVersion = string.Empty;
             try
             {
-                latestVersion = client.DownloadString(_latestVersionLink);
+                latestVersion = client.DownloadString(_latestVersionLink).Trim();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ex.Message, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             if (!string.IsNullOrEmpty(latestVersion))
             {
                 if (float.Parse(latestVersion) > Program.GetCurrentVersion())
                 {
-                    if (MessageBox.Show(NewVersionMessage(latestVersion), "Update available", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    if (MessageBox.Show(NewVersionMessage(latestVersion), "Hashing", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
+                        // PATCHING PROCESS
                         try
                         {
-                            Process.Start(_releasesLink);
+                            Assembly currentAssembly = Assembly.GetEntryAssembly();
+
+                            if (currentAssembly == null)
+                            {
+                                currentAssembly = Assembly.GetCallingAssembly();
+                            }
+
+                            string appFolder = Path.GetDirectoryName(currentAssembly.Location);
+                            string appName = Path.GetFileNameWithoutExtension(currentAssembly.Location);
+                            string appExtension = Path.GetExtension(currentAssembly.Location);
+
+                            string archiveFile = Path.Combine(appFolder, "Hashing_old" + appExtension);
+                            string appFile = Path.Combine(appFolder, appName + appExtension);
+                            string tempFile = Path.Combine(appFolder, "Hashing_tmp" + appExtension);
+
+                            // DOWNLOAD NEW VERSION
+                            client.DownloadFile(NewDownloadLink(latestVersion), tempFile);
+
+                            // DELETE PREVIOUS BACK-UP
+                            if (File.Exists(archiveFile))
+                            {
+                                File.Delete(archiveFile);
+                            }
+
+                            // MAKE BACK-UP
+                            File.Move(appFile, archiveFile);
+
+                            // PATCH
+                            File.Move(tempFile, appFile);
+
+                            // BYPASS SINGLE-INSTANCE MECHANISM
+                            if (Program.MUTEX != null)
+                            {
+                                Program.MUTEX.ReleaseMutex();
+                                Program.MUTEX.Dispose();
+                                Program.MUTEX = null;
+                            }
+
+                            Application.Restart();
                         }
-                        catch { }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
                     }
                 }
                 else if (float.Parse(latestVersion) == Program.GetCurrentVersion())
                 {
-                    MessageBox.Show(_noNewVersionMessage, "No update available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(_noNewVersionMessage, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show(_betaVersionMessage, "No update available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(_betaVersionMessage, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -284,7 +332,10 @@ namespace Hashing
                 {
                     try
                     {
-                        File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(SumResult.Sums, Formatting.Indented));
+                        File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(SumResult.Sums, Formatting.Indented, new JsonSerializerSettings
+                        {
+                            NullValueHandling = NullValueHandling.Ignore
+                        }));
                     }
                     catch (Exception ex)
                     {
@@ -530,10 +581,18 @@ namespace Hashing
 
             if (_allFilesAreJson)
             {
-                if (TopMostMessageBox.Show("Hashing detected that all files are in JSON, do you wish to analyze them?\nThis will clear previously added files!", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                FeatureBox ab = new FeatureBox();
+                ab.ShowDialog(this);
+
+                if (FeatureBox.SelectedAction == FeatureAction.Calculate)
+                {
+                    CalculateSums();
+                }
+                else if (FeatureBox.SelectedAction == FeatureAction.AnalyzeJSON)
                 {
                     Clear();
                     _fileSummaries = AnalyzeJsonFiles();
+                    _fileSummaries.RemoveAll(x => !File.Exists(x.File));
 
                     if (_fileSummaries != null)
                     {
@@ -541,11 +600,51 @@ namespace Hashing
                         {
                             CalculateSums(true);
                         }
+                        else
+                        {
+                            TopMostMessageBox.Show("JSON analysis cannot be performed. All file paths are invalid.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
-                else
+                else if (FeatureBox.SelectedAction == FeatureAction.ListJSON)
                 {
-                    CalculateSums();
+                    List<SumResult> listing = new List<SumResult>();
+
+                    foreach (string s in _fileList)
+                    {
+                        try
+                        {
+                            listing.AddRange(JsonConvert.DeserializeObject<List<SumResult>>(File.ReadAllText(s)));
+                        }
+                        catch { continue; }
+                    }
+
+                    if (listing.Count > 0)
+                    {
+                        lblCalculating.Visible = false;
+                        List<TreeNode> roots = new List<TreeNode>();
+
+                        for (int i = 0; i < listing.Count; i++)
+                        {
+                            TreeNode rootNode = new TreeNode(listing[i].File);
+
+                            rootNode.ForeColor = Options.ForegroundColor;
+                            rootNode.Tag = Options.ThemeFlag;
+
+                            if (!string.IsNullOrEmpty(listing[i].MD5)) rootNode.Nodes.Add("MD5: " + listing[i].MD5);
+                            if (!string.IsNullOrEmpty(listing[i].SHA1)) rootNode.Nodes.Add("SHA1: " + listing[i].SHA1);
+                            if (!string.IsNullOrEmpty(listing[i].SHA256)) rootNode.Nodes.Add("SHA256: " + listing[i].SHA256);
+                            if (!string.IsNullOrEmpty(listing[i].SHA384)) rootNode.Nodes.Add("SHA384: " + listing[i].SHA384);
+                            if (!string.IsNullOrEmpty(listing[i].SHA512)) rootNode.Nodes.Add("SHA512: " + listing[i].SHA512);
+                            if (!string.IsNullOrEmpty(listing[i].CRC32)) rootNode.Nodes.Add("CRC32: " + listing[i].CRC32);
+                            if (!string.IsNullOrEmpty(listing[i].RIPEMD160)) rootNode.Nodes.Add("RIPEMD160: " + listing[i].RIPEMD160);
+
+                            roots.Add(rootNode);
+                        }
+
+                        SumView.Nodes.AddRange(roots.ToArray());
+                        SumView.ExpandAll();
+                    }
                 }
             }
             else
@@ -568,6 +667,7 @@ namespace Hashing
                 lblCalculating.Invoke((MethodInvoker)delegate
                 {
                     btnClear.Enabled = false;
+                    btnUpdate.Enabled = false;
                     btnOptions.Enabled = false;
                     btnSaveJson.Enabled = false;
                     btnFindIdenticals.Enabled = false;
@@ -610,6 +710,7 @@ namespace Hashing
 
                         SumResult.Sums.Add(Utilities.CalculateSums(f));
                     }
+                    else { continue; }
                 }
 
                 _timer.Stop();
@@ -660,6 +761,7 @@ namespace Hashing
 
                             if (Options.CurrentOptions.HashOptions.SHA256)
                             {
+                               
                                 rootNode.Nodes.Add("SHA256: " + SumResult.Sums[i].SHA256);
                                 if (SumResult.Sums[i].SHA256 == _fileSummaries[i].SHA256) _analyzedFiles.Add(_fileSummaries[i].File);
                             }
@@ -730,6 +832,7 @@ namespace Hashing
                         btnCancelHashing.Visible = false;
                         btnClear.Enabled = true;
                         btnOptions.Enabled = true;
+                        btnUpdate.Enabled = true;
                         btnSaveJson.Enabled = true;
                         btnFindIdenticals.Enabled = true;
                         btnCompare.Enabled = true;
@@ -753,6 +856,7 @@ namespace Hashing
                     }
                 }
 
+                
                 // if JSON analyzation is enabled, show results
                 if (analyzeJson)
                 {
@@ -765,7 +869,7 @@ namespace Hashing
                     {
                         TopMostMessageBox.Show("All files analyzed by JSON are corrupted!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                }
+                } 
             }
             );
         }

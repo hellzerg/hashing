@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5] - 2022-01-22
+- New: Listing JSON file summaries (#13)
+- New: Auto-updater is now available
+- Hotfix: Stuck on calculating when analyzing corrupted JSON file (#13)
+- Hotfix: Ignores disabled hashes when saving results
+
 ## [2.4] - 2021-10-05
 - Necessary hotfixes and cosmetic changes
 

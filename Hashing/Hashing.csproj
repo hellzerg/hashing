@@ -85,6 +85,12 @@
     <Compile Include="Controls\ColoredRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="FeatureBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FeatureBox.Designer.cs">
+      <DependentUpon>FeatureBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="FileSummary.cs" />
     <Compile Include="IdenticalsForm.cs">
       <SubType>Form</SubType>
@@ -122,6 +128,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CompareForm.resx">
       <DependentUpon>CompareForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FeatureBox.resx">
+      <DependentUpon>FeatureBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IdenticalsForm.resx">
       <DependentUpon>IdenticalsForm.cs</DependentUpon>
