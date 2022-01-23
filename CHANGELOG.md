@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6] - 2022-01-23
+- Improved: Listing JSON file summaries (#14)
+
 ## [2.5] - 2022-01-22
 - New: Listing JSON file summaries (#13)
 - New: Auto-updater is now available

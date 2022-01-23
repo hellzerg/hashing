@@ -621,6 +621,7 @@ namespace Hashing
 
                     if (listing.Count > 0)
                     {
+                        SumResult.Sums.AddRange(listing);
                         lblCalculating.Visible = false;
                         List<TreeNode> roots = new List<TreeNode>();
 
