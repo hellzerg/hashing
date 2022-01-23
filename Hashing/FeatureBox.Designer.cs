@@ -41,6 +41,7 @@ namespace Hashing
             this.btnCalc.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnCalc.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCalc.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnCalc.FlatAppearance.BorderSize = 0;
             this.btnCalc.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCalc.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCalc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -62,6 +63,7 @@ namespace Hashing
             this.btnAnalyze.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnAnalyze.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnAnalyze.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnAnalyze.FlatAppearance.BorderSize = 0;
             this.btnAnalyze.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnAnalyze.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnAnalyze.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -83,6 +85,7 @@ namespace Hashing
             this.btnList.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnList.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnList.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnList.FlatAppearance.BorderSize = 0;
             this.btnList.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnList.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

@@ -23,12 +23,12 @@ namespace Hashing
     {
         public override Color SeparatorLight
         {
-            get { return Color.FromArgb(40, 40, 40); }
+            get { return Color.FromArgb(50, 50, 50); }
         }
 
         public override Color SeparatorDark
         {
-            get { return Color.FromArgb(40, 40, 40); }
+            get { return Color.FromArgb(50, 50, 50); }
         }
 
         public override Color ToolStripDropDownBackground
@@ -73,7 +73,7 @@ namespace Hashing
         {
             get
             {
-                return Color.FromArgb(40, 40, 40);
+                return Color.FromArgb(50, 50, 50);
             }
         }
 
@@ -81,7 +81,7 @@ namespace Hashing
         {
             get
             {
-                return Color.FromArgb(40, 40, 40);
+                return Color.FromArgb(50, 50, 50);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Hashing
         {
             get
             {
-                return Color.FromArgb(40, 40, 40);
+                return Color.FromArgb(50, 50, 50);
             }
         }
 
@@ -97,7 +97,7 @@ namespace Hashing
         {
             get
             {
-                return Color.FromArgb(40, 40, 40);
+                return Color.FromArgb(50, 50, 50);
             }
         }
 
@@ -105,7 +105,7 @@ namespace Hashing
         {
             get
             {
-                return Color.FromArgb(40, 40, 40);
+                return Color.FromArgb(50, 50, 50);
             }
         }
     }

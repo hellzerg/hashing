@@ -211,6 +211,7 @@
             this.btnUpdate.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnUpdate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnUpdate.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnUpdate.FlatAppearance.BorderSize = 0;
             this.btnUpdate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnUpdate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -231,6 +232,7 @@
             this.btnCalculate.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnCalculate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCalculate.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnCalculate.FlatAppearance.BorderSize = 0;
             this.btnCalculate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCalculate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCalculate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -251,6 +253,7 @@
             this.btnBrowse.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnBrowse.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnBrowse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnBrowse.FlatAppearance.BorderSize = 0;
             this.btnBrowse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnBrowse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -284,6 +287,7 @@
             this.btnCompare.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnCompare.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCompare.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnCompare.FlatAppearance.BorderSize = 0;
             this.btnCompare.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCompare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCompare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -304,6 +308,7 @@
             this.btnOptions.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnOptions.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnOptions.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnOptions.FlatAppearance.BorderSize = 0;
             this.btnOptions.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnOptions.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnOptions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -324,6 +329,7 @@
             this.btnFindIdenticals.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnFindIdenticals.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnFindIdenticals.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnFindIdenticals.FlatAppearance.BorderSize = 0;
             this.btnFindIdenticals.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnFindIdenticals.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnFindIdenticals.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -344,6 +350,7 @@
             this.btnClear.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnClear.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnClear.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnClear.FlatAppearance.BorderSize = 0;
             this.btnClear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnClear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -365,6 +372,7 @@
             this.btnSaveJson.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnSaveJson.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnSaveJson.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnSaveJson.FlatAppearance.BorderSize = 0;
             this.btnSaveJson.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnSaveJson.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnSaveJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -434,6 +442,7 @@
             this.btnCancelHashing.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnCancelHashing.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancelHashing.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnCancelHashing.FlatAppearance.BorderSize = 0;
             this.btnCancelHashing.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCancelHashing.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCancelHashing.FlatStyle = System.Windows.Forms.FlatStyle.Flat;

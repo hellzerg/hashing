@@ -58,6 +58,7 @@
             this.okbtn.BackColor = System.Drawing.Color.DodgerBlue;
             this.okbtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.okbtn.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.okbtn.FlatAppearance.BorderSize = 0;
             this.okbtn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.okbtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.okbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
