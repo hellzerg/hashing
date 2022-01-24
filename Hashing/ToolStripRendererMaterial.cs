@@ -10,25 +10,42 @@ namespace Hashing
 
         }
 
-        //protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
+
+        //protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         //{
         //    var tsMenuItem = e.Item as ToolStripMenuItem;
         //    if (tsMenuItem != null)
-        //        e.ArrowColor = Options.ForegroundColor;
-        //    base.OnRenderArrow(e);
+        //        e.TextColor = Color.GhostWhite;
+        //    base.OnRenderItemText(e);
         //}
+
+        //protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
+        //{
+        //    var tsMenuItem = e.Item as ToolStripMenuItem;
+        //    if (tsMenuItem != null)
+        //        e.Graphics.bru
+        //    base.OnRenderSeparator(e);
+        //}
+
+        protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e)
+        {
+            var tsMenuItem = e.Item as ToolStripMenuItem;
+            if (tsMenuItem != null)
+                e.ArrowColor = Color.DimGray;
+            base.OnRenderArrow(e);
+        }
     }
 
     internal class ColorsMaterial : ProfessionalColorTable
     {
         public override Color SeparatorLight
         {
-            get { return Color.FromArgb(50, 50, 50); }
+            get { return Color.DimGray; }
         }
 
         public override Color SeparatorDark
         {
-            get { return Color.FromArgb(50, 50, 50); }
+            get { return Color.DimGray; }
         }
 
         public override Color ToolStripDropDownBackground
@@ -73,7 +90,7 @@ namespace Hashing
         {
             get
             {
-                return Color.FromArgb(50, 50, 50);
+                return Color.FromArgb(45, 45, 45);
             }
         }
 
@@ -81,7 +98,7 @@ namespace Hashing
         {
             get
             {
-                return Color.FromArgb(50, 50, 50);
+                return Color.FromArgb(45, 45, 45);
             }
         }
 
@@ -89,7 +106,7 @@ namespace Hashing
         {
             get
             {
-                return Color.FromArgb(50, 50, 50);
+                return Color.FromArgb(45, 45, 45);
             }
         }
 
@@ -97,7 +114,7 @@ namespace Hashing
         {
             get
             {
-                return Color.FromArgb(50, 50, 50);
+                return Color.FromArgb(45, 45, 45);
             }
         }
 
@@ -105,7 +122,7 @@ namespace Hashing
         {
             get
             {
-                return Color.FromArgb(50, 50, 50);
+                return Color.FromArgb(45, 45, 45);
             }
         }
     }
