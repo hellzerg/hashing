@@ -36,7 +36,7 @@
             this.oceantheme = new System.Windows.Forms.RadioButton();
             this.zergtheme = new System.Windows.Forms.RadioButton();
             this.label27 = new System.Windows.Forms.Label();
-            this.lblCalculating = new System.Windows.Forms.Label();
+            this.lbl88 = new System.Windows.Forms.Label();
             this.chkStayOnTop = new Hashing.ColoredCheckBox();
             this.chkSingleInstance = new Hashing.ColoredCheckBox();
             this.chkCRCFormat = new Hashing.ColoredCheckBox();
@@ -64,7 +64,7 @@
             this.okbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.okbtn.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.okbtn.ForeColor = System.Drawing.Color.White;
-            this.okbtn.Location = new System.Drawing.Point(232, 504);
+            this.okbtn.Location = new System.Drawing.Point(379, 504);
             this.okbtn.Margin = new System.Windows.Forms.Padding(2);
             this.okbtn.Name = "okbtn";
             this.okbtn.Size = new System.Drawing.Size(71, 31);
@@ -163,29 +163,29 @@
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Font = new System.Drawing.Font("Segoe UI Semibold", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label27.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label27.ForeColor = System.Drawing.Color.DodgerBlue;
             this.label27.Location = new System.Drawing.Point(10, 8);
             this.label27.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(192, 28);
+            this.label27.Size = new System.Drawing.Size(153, 21);
             this.label27.TabIndex = 63;
             this.label27.Tag = "themeable";
             this.label27.Text = "Choose your theme";
             // 
-            // lblCalculating
+            // lbl88
             // 
-            this.lblCalculating.AutoSize = true;
-            this.lblCalculating.Font = new System.Drawing.Font("Segoe UI Semibold", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCalculating.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.lblCalculating.Location = new System.Drawing.Point(10, 152);
-            this.lblCalculating.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblCalculating.Name = "lblCalculating";
-            this.lblCalculating.Size = new System.Drawing.Size(269, 28);
-            this.lblCalculating.TabIndex = 71;
-            this.lblCalculating.Tag = "themeable";
-            this.lblCalculating.Text = "Choose your desired hashes";
-            this.lblCalculating.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbl88.AutoSize = true;
+            this.lbl88.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl88.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.lbl88.Location = new System.Drawing.Point(10, 152);
+            this.lbl88.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lbl88.Name = "lbl88";
+            this.lbl88.Size = new System.Drawing.Size(214, 21);
+            this.lbl88.TabIndex = 71;
+            this.lbl88.Tag = "themeable";
+            this.lbl88.Text = "Choose your desired hashes";
+            this.lbl88.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // chkStayOnTop
             // 
@@ -376,7 +376,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.CancelButton = this.okbtn;
-            this.ClientSize = new System.Drawing.Size(312, 544);
+            this.ClientSize = new System.Drawing.Size(459, 544);
             this.Controls.Add(this.chkStayOnTop);
             this.Controls.Add(this.chkSingleInstance);
             this.Controls.Add(this.chkCRCFormat);
@@ -390,7 +390,7 @@
             this.Controls.Add(this.chkSHA256);
             this.Controls.Add(this.chkSHA1);
             this.Controls.Add(this.chkMD5);
-            this.Controls.Add(this.lblCalculating);
+            this.Controls.Add(this.lbl88);
             this.Controls.Add(this.okbtn);
             this.Controls.Add(this.minimaltheme);
             this.Controls.Add(this.carameltheme);
@@ -431,7 +431,7 @@
         private ColoredCheckBox chkSHA256;
         private ColoredCheckBox chkSHA1;
         private ColoredCheckBox chkMD5;
-        private System.Windows.Forms.Label lblCalculating;
+        private System.Windows.Forms.Label lbl88;
         private ColoredCheckBox chkSHA384;
         private ColoredCheckBox chkTray;
         private ColoredCheckBox chkHigh;
