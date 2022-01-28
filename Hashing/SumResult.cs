@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Hashing
@@ -19,14 +18,14 @@ namespace Hashing
 
         public SumResult()
         {
-            
+
         }
 
         public void ConvertToLowerCasing()
         {
             if (!string.IsNullOrEmpty(MD5)) MD5 = MD5.ToLower();
-            if (!string.IsNullOrEmpty(SHA1))  SHA1 = SHA1.ToLower();
-            if (!string.IsNullOrEmpty(SHA256))  SHA256 = SHA256.ToLower();
+            if (!string.IsNullOrEmpty(SHA1)) SHA1 = SHA1.ToLower();
+            if (!string.IsNullOrEmpty(SHA256)) SHA256 = SHA256.ToLower();
             if (!string.IsNullOrEmpty(SHA384)) SHA384 = SHA384.ToLower();
             if (!string.IsNullOrEmpty(SHA512)) SHA512 = SHA512.ToLower();
             if (!string.IsNullOrEmpty(CRC32)) CRC32 = CRC32.ToLower();

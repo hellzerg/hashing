@@ -16,4 +16,11 @@
         AnalyzeJSON,
         ListJSON
     }
+
+    public enum LanguageCode
+    {
+        EN, // english
+        EL, // hellenic
+        CN // chinese
+    }
 }

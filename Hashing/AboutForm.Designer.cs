@@ -44,16 +44,16 @@
             this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button7.BackColor = System.Drawing.Color.DodgerBlue;
             this.button7.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button7.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.button7.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.button7.FlatAppearance.BorderSize = 0;
             this.button7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.button7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.ForeColor = System.Drawing.Color.White;
-            this.button7.Location = new System.Drawing.Point(306, 10);
-            this.button7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button7.Location = new System.Drawing.Point(238, 10);
+            this.button7.Margin = new System.Windows.Forms.Padding(2);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(71, 31);
+            this.button7.Size = new System.Drawing.Size(139, 31);
             this.button7.TabIndex = 41;
             this.button7.Tag = "themeable";
             this.button7.Text = "OK";
@@ -64,7 +64,7 @@
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(10, 10);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(88, 86);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;

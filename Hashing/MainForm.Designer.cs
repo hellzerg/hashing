@@ -49,11 +49,10 @@
             this.btnCompare = new System.Windows.Forms.Button();
             this.btnOptions = new System.Windows.Forms.Button();
             this.btnFindIdenticals = new System.Windows.Forms.Button();
-            this.btnClear = new System.Windows.Forms.Button();
             this.btnSaveJson = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblversion = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
             this.botPanel = new System.Windows.Forms.Panel();
             this.btnCancelHashing = new System.Windows.Forms.Button();
             this.lblCalculating = new System.Windows.Forms.Label();
@@ -79,7 +78,7 @@
             this.SumView.Location = new System.Drawing.Point(0, 0);
             this.SumView.Margin = new System.Windows.Forms.Padding(2);
             this.SumView.Name = "SumView";
-            this.SumView.Size = new System.Drawing.Size(802, 518);
+            this.SumView.Size = new System.Drawing.Size(985, 555);
             this.SumView.TabIndex = 0;
             this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.sumView_NodeMouseClick);
             // 
@@ -101,7 +100,7 @@
             this.clearToolStripMenuItem});
             this.helperMenu.Name = "helperMenu";
             this.helperMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.helperMenu.Size = new System.Drawing.Size(252, 220);
+            this.helperMenu.Size = new System.Drawing.Size(252, 198);
             // 
             // copyToolStripMenuItem
             // 
@@ -120,7 +119,7 @@
             this.toolStripMenuItem4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem4.Image")));
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
             this.toolStripMenuItem4.Size = new System.Drawing.Size(251, 26);
-            this.toolStripMenuItem4.Text = "Show file...";
+            this.toolStripMenuItem4.Text = "Show file";
             this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
             // 
             // removeToolStripMenuItem
@@ -193,16 +192,15 @@
             this.topPanel.Controls.Add(this.btnCompare);
             this.topPanel.Controls.Add(this.btnOptions);
             this.topPanel.Controls.Add(this.btnFindIdenticals);
-            this.topPanel.Controls.Add(this.btnClear);
             this.topPanel.Controls.Add(this.btnSaveJson);
             this.topPanel.Controls.Add(this.pictureBox1);
             this.topPanel.Controls.Add(this.lblversion);
-            this.topPanel.Controls.Add(this.label2);
+            this.topPanel.Controls.Add(this.label24);
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.topPanel.Location = new System.Drawing.Point(0, 0);
             this.topPanel.Margin = new System.Windows.Forms.Padding(2);
             this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(804, 72);
+            this.topPanel.Size = new System.Drawing.Size(987, 72);
             this.topPanel.TabIndex = 7;
             // 
             // btnUpdate
@@ -210,16 +208,16 @@
             this.btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUpdate.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnUpdate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnUpdate.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnUpdate.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.btnUpdate.FlatAppearance.BorderSize = 0;
             this.btnUpdate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnUpdate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnUpdate.ForeColor = System.Drawing.Color.White;
-            this.btnUpdate.Location = new System.Drawing.Point(698, 6);
+            this.btnUpdate.Location = new System.Drawing.Point(824, 5);
             this.btnUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(97, 27);
+            this.btnUpdate.Size = new System.Drawing.Size(156, 27);
             this.btnUpdate.TabIndex = 81;
             this.btnUpdate.Tag = "themeable";
             this.btnUpdate.Text = "Update";
@@ -231,16 +229,16 @@
             this.btnCalculate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCalculate.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnCalculate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCalculate.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnCalculate.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.btnCalculate.FlatAppearance.BorderSize = 0;
             this.btnCalculate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCalculate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCalculate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCalculate.ForeColor = System.Drawing.Color.White;
-            this.btnCalculate.Location = new System.Drawing.Point(698, 38);
+            this.btnCalculate.Location = new System.Drawing.Point(824, 36);
             this.btnCalculate.Margin = new System.Windows.Forms.Padding(2);
             this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(97, 25);
+            this.btnCalculate.Size = new System.Drawing.Size(156, 27);
             this.btnCalculate.TabIndex = 80;
             this.btnCalculate.Tag = "themeable";
             this.btnCalculate.Text = "Calculate";
@@ -252,16 +250,16 @@
             this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBrowse.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnBrowse.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnBrowse.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnBrowse.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.btnBrowse.FlatAppearance.BorderSize = 0;
             this.btnBrowse.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnBrowse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBrowse.ForeColor = System.Drawing.Color.White;
-            this.btnBrowse.Location = new System.Drawing.Point(657, 38);
+            this.btnBrowse.Location = new System.Drawing.Point(782, 36);
             this.btnBrowse.Margin = new System.Windows.Forms.Padding(2);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(38, 25);
+            this.btnBrowse.Size = new System.Drawing.Size(38, 27);
             this.btnBrowse.TabIndex = 79;
             this.btnBrowse.Tag = "themeable";
             this.btnBrowse.Text = "...";
@@ -275,10 +273,10 @@
             this.txtPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPath.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPath.ForeColor = System.Drawing.Color.Silver;
-            this.txtPath.Location = new System.Drawing.Point(198, 38);
+            this.txtPath.Location = new System.Drawing.Point(184, 38);
             this.txtPath.Margin = new System.Windows.Forms.Padding(2);
             this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(456, 25);
+            this.txtPath.Size = new System.Drawing.Size(594, 25);
             this.txtPath.TabIndex = 78;
             // 
             // btnCompare
@@ -286,16 +284,16 @@
             this.btnCompare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCompare.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnCompare.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCompare.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnCompare.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.btnCompare.FlatAppearance.BorderSize = 0;
             this.btnCompare.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCompare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCompare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCompare.ForeColor = System.Drawing.Color.White;
-            this.btnCompare.Location = new System.Drawing.Point(298, 6);
+            this.btnCompare.Location = new System.Drawing.Point(344, 5);
             this.btnCompare.Margin = new System.Windows.Forms.Padding(2);
             this.btnCompare.Name = "btnCompare";
-            this.btnCompare.Size = new System.Drawing.Size(97, 27);
+            this.btnCompare.Size = new System.Drawing.Size(156, 27);
             this.btnCompare.TabIndex = 77;
             this.btnCompare.Tag = "themeable";
             this.btnCompare.Text = "Compare";
@@ -307,16 +305,16 @@
             this.btnOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOptions.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnOptions.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnOptions.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnOptions.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.btnOptions.FlatAppearance.BorderSize = 0;
             this.btnOptions.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnOptions.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnOptions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOptions.ForeColor = System.Drawing.Color.White;
-            this.btnOptions.Location = new System.Drawing.Point(598, 6);
+            this.btnOptions.Location = new System.Drawing.Point(664, 5);
             this.btnOptions.Margin = new System.Windows.Forms.Padding(2);
             this.btnOptions.Name = "btnOptions";
-            this.btnOptions.Size = new System.Drawing.Size(97, 27);
+            this.btnOptions.Size = new System.Drawing.Size(156, 27);
             this.btnOptions.TabIndex = 76;
             this.btnOptions.Tag = "themeable";
             this.btnOptions.Text = "Options";
@@ -328,59 +326,37 @@
             this.btnFindIdenticals.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnFindIdenticals.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnFindIdenticals.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnFindIdenticals.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnFindIdenticals.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.btnFindIdenticals.FlatAppearance.BorderSize = 0;
             this.btnFindIdenticals.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnFindIdenticals.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnFindIdenticals.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFindIdenticals.ForeColor = System.Drawing.Color.White;
-            this.btnFindIdenticals.Location = new System.Drawing.Point(198, 6);
+            this.btnFindIdenticals.Location = new System.Drawing.Point(184, 5);
             this.btnFindIdenticals.Margin = new System.Windows.Forms.Padding(2);
             this.btnFindIdenticals.Name = "btnFindIdenticals";
-            this.btnFindIdenticals.Size = new System.Drawing.Size(97, 27);
+            this.btnFindIdenticals.Size = new System.Drawing.Size(156, 27);
             this.btnFindIdenticals.TabIndex = 74;
             this.btnFindIdenticals.Tag = "themeable";
             this.btnFindIdenticals.Text = "Find Identicals";
             this.btnFindIdenticals.UseVisualStyleBackColor = false;
             this.btnFindIdenticals.Click += new System.EventHandler(this.btnFindIdenticals_Click);
             // 
-            // btnClear
-            // 
-            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnClear.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClear.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
-            this.btnClear.FlatAppearance.BorderSize = 0;
-            this.btnClear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnClear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClear.ForeColor = System.Drawing.Color.White;
-            this.btnClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClear.Location = new System.Drawing.Point(498, 6);
-            this.btnClear.Margin = new System.Windows.Forms.Padding(2);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(97, 27);
-            this.btnClear.TabIndex = 73;
-            this.btnClear.Tag = "themeable";
-            this.btnClear.Text = "Clear All";
-            this.btnClear.UseVisualStyleBackColor = false;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-            // 
             // btnSaveJson
             // 
             this.btnSaveJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveJson.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnSaveJson.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSaveJson.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnSaveJson.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.btnSaveJson.FlatAppearance.BorderSize = 0;
             this.btnSaveJson.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnSaveJson.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnSaveJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveJson.ForeColor = System.Drawing.Color.White;
-            this.btnSaveJson.Location = new System.Drawing.Point(398, 6);
+            this.btnSaveJson.Location = new System.Drawing.Point(504, 5);
             this.btnSaveJson.Margin = new System.Windows.Forms.Padding(2);
             this.btnSaveJson.Name = "btnSaveJson";
-            this.btnSaveJson.Size = new System.Drawing.Size(97, 27);
+            this.btnSaveJson.Size = new System.Drawing.Size(156, 27);
             this.btnSaveJson.TabIndex = 71;
             this.btnSaveJson.Tag = "themeable";
             this.btnSaveJson.Text = "Save as JSON";
@@ -411,17 +387,17 @@
             this.lblversion.TabIndex = 4;
             this.lblversion.Text = "Version:";
             // 
-            // label2
+            // label24
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(70, 7);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(82, 25);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Hashing";
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Segoe UI Semibold", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.ForeColor = System.Drawing.Color.White;
+            this.label24.Location = new System.Drawing.Point(70, 7);
+            this.label24.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(82, 25);
+            this.label24.TabIndex = 3;
+            this.label24.Text = "Hashing";
             // 
             // botPanel
             // 
@@ -433,7 +409,7 @@
             this.botPanel.Location = new System.Drawing.Point(0, 72);
             this.botPanel.Margin = new System.Windows.Forms.Padding(2);
             this.botPanel.Name = "botPanel";
-            this.botPanel.Size = new System.Drawing.Size(804, 520);
+            this.botPanel.Size = new System.Drawing.Size(987, 557);
             this.botPanel.TabIndex = 8;
             this.botPanel.Resize += new System.EventHandler(this.botPanel_Resize);
             // 
@@ -441,16 +417,16 @@
             // 
             this.btnCancelHashing.BackColor = System.Drawing.Color.DodgerBlue;
             this.btnCancelHashing.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancelHashing.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnCancelHashing.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.btnCancelHashing.FlatAppearance.BorderSize = 0;
             this.btnCancelHashing.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCancelHashing.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCancelHashing.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancelHashing.ForeColor = System.Drawing.Color.White;
-            this.btnCancelHashing.Location = new System.Drawing.Point(346, 285);
+            this.btnCancelHashing.Location = new System.Drawing.Point(416, 301);
             this.btnCancelHashing.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancelHashing.Name = "btnCancelHashing";
-            this.btnCancelHashing.Size = new System.Drawing.Size(97, 27);
+            this.btnCancelHashing.Size = new System.Drawing.Size(153, 27);
             this.btnCancelHashing.TabIndex = 82;
             this.btnCancelHashing.Tag = "themeable";
             this.btnCancelHashing.Text = "Cancel";
@@ -466,7 +442,7 @@
             this.lblCalculating.Location = new System.Drawing.Point(0, 0);
             this.lblCalculating.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCalculating.Name = "lblCalculating";
-            this.lblCalculating.Size = new System.Drawing.Size(802, 518);
+            this.lblCalculating.Size = new System.Drawing.Size(985, 555);
             this.lblCalculating.TabIndex = 1;
             this.lblCalculating.Tag = "themeable";
             this.lblCalculating.Text = "Drag and drop files here...";
@@ -516,7 +492,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.ClientSize = new System.Drawing.Size(804, 592);
+            this.ClientSize = new System.Drawing.Size(987, 629);
             this.Controls.Add(this.botPanel);
             this.Controls.Add(this.topPanel);
             this.DoubleBuffered = true;
@@ -524,7 +500,7 @@
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(820, 631);
+            this.MinimumSize = new System.Drawing.Size(1003, 668);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hashing";
@@ -550,7 +526,6 @@
         private System.Windows.Forms.Panel botPanel;
         private System.Windows.Forms.Label lblCalculating;
         private System.Windows.Forms.Button btnSaveJson;
-        private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.ContextMenuStrip helperMenu;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
@@ -567,7 +542,7 @@
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.Label lblversion;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;

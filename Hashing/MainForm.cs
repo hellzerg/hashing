@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -54,17 +55,20 @@ namespace Hashing
         readonly string _latestVersionLink = "https://raw.githubusercontent.com/hellzerg/hashing/master/version.txt";
         readonly string _releasesLink = "https://github.com/hellzerg/hashing/releases";
 
-        readonly string _noNewVersionMessage = "You already have the latest version!";
-        readonly string _betaVersionMessage = "You are using an experimental version!";
+        string _noNewVersionMessage = "You already have the latest version!";
+        string _betaVersionMessage = "You are using an experimental version!";
 
-        private string NewVersionMessage(string latest)
+        private string NewVersionMessage(string latestVersion)
         {
-            return string.Format("There is a new version available!\n\nLatest version: {0}\nCurrent version: {1}\n\nDo you want to download it now?", latest, Program.GetCurrentVersionToString());
+            return Options.TranslationList["newVersion"].ToString().Replace("{LATEST}", latestVersion).Replace("{CURRENT}", Program.GetCurrentVersionToString());
         }
 
         public MainForm(string[] files)
         {
             InitializeComponent();
+
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
 
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             Options.ApplyTheme(this);
@@ -87,10 +91,56 @@ namespace Hashing
                 Utilities.DisableHighPriority();
             }
 
+            // Translation-related
+            if (Options.CurrentOptions.LanguageCode == LanguageCode.EN)
+            {
+                Translate(true);
+            }
+            else
+            {
+                Translate();
+            }
+
             if (files.Count() > 0)
             {
                 DetectFiles(files);
             }
+        }
+
+        internal void Translate(bool skipFull = false)
+        {
+            Dictionary<string, string> translationList = Options.TranslationList.ToObject<Dictionary<string, string>>();
+
+            if (!skipFull)
+            {
+                _noNewVersionMessage = Options.TranslationList["noNewVersion"];
+                _betaVersionMessage = Options.TranslationList["betaVersion"];
+
+                restoreToolStripMenuItem.Text = Options.TranslationList["restoreToolStripMenuItem"];
+                exitToolStripMenuItem.Text = Options.TranslationList["exitToolStripMenuItem"];
+                copyToolStripMenuItem.Text = Options.TranslationList["copyToolStripMenuItem"];
+                toolStripMenuItem4.Text = Options.TranslationList["toolStripMenuItem4"];
+                removeToolStripMenuItem.Text = Options.TranslationList["removeToolStripMenuItem"];
+                toolStripMenuItem1.Text = Options.TranslationList["toolStripMenuItem1"];
+                toolStripMenuItem2.Text = Options.TranslationList["toolStripMenuItem2"];
+                toolStripMenuItem3.Text = Options.TranslationList["toolStripMenuItem3"];
+                clearToolStripMenuItem.Text = Options.TranslationList["clearToolStripMenuItem"];
+
+                Control element;
+
+                foreach (var x in translationList)
+                {
+                    if (x.Key == null || x.Key == string.Empty) continue;
+                    element = this.Controls.Find(x.Key, true).FirstOrDefault();
+
+                    if (element == null) continue;
+
+                    element.Text = x.Value;
+                }
+
+            }
+
+            lblversion.Text = lblversion.Text.Replace("{VN}", Program.GetCurrentVersionToString());
         }
 
         private void EnableSHA256()
@@ -236,7 +286,7 @@ namespace Hashing
 
             if (SumView.Nodes.Count == 0)
             {
-                lblCalculating.Text = "Drag and drop files here...";
+                lblCalculating.Text = Options.TranslationList["lblCalculating"].ToString();
                 lblCalculating.Visible = true;
                 btnCancelHashing.Visible = false;
             }
@@ -251,7 +301,7 @@ namespace Hashing
             SumResult.Sums.Clear();
 
             _timer.Reset();
-            lblCalculating.Text = "Drag and drop files here...";
+            lblCalculating.Text = Options.TranslationList["lblCalculating"].ToString();
             lblCalculating.Visible = true;
             btnCancelHashing.Visible = false;
 
@@ -284,8 +334,8 @@ namespace Hashing
                         Utilities.SearchVirusTotal(SumResult.Sums[index].SHA256);
                         return;
                     }
-
-                    if (MessageBox.Show("VirusTotal recognizes files only by their SHA256 hash!\n\nDo you wish to enable SHA256 for this operation?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    // enableSHA256Message
+                    if (MessageBox.Show(Options.TranslationList["enableSHA256Message"].ToString(), "Hashing", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         EnableSHA256();
                         _tempIndex = index;
@@ -366,7 +416,7 @@ namespace Hashing
             }
             else if (SumView.Nodes.Count > 0 && list.Count == 0)
             {
-                MessageBox.Show("No identical files have been found!", "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Options.TranslationList["noIdenticalsMessage"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -536,7 +586,7 @@ namespace Hashing
 
             if (incompatibles.Count > 0)
             {
-                TopMostMessageBox.Show("Unsupported JSON files detected:\n\n" + ListIncompatibles(incompatibles) + "\nThese files will not be analyzed!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                TopMostMessageBox.Show(Options.TranslationList["unsupportedJSON1"].ToString() + ListIncompatibles(incompatibles) + Options.TranslationList["unsupportedJSON2"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             foreach (FileSummary json in fileSummaries)
@@ -602,7 +652,7 @@ namespace Hashing
                         }
                         else
                         {
-                            TopMostMessageBox.Show("JSON analysis cannot be performed. All file paths are invalid.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            TopMostMessageBox.Show(Options.TranslationList["invalidPath"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
@@ -667,7 +717,6 @@ namespace Hashing
             {
                 lblCalculating.Invoke((MethodInvoker)delegate
                 {
-                    btnClear.Enabled = false;
                     btnUpdate.Enabled = false;
                     btnOptions.Enabled = false;
                     btnSaveJson.Enabled = false;
@@ -676,12 +725,12 @@ namespace Hashing
                     btnBrowse.Enabled = false;
                     btnCalculate.Enabled = false;
                     txtPath.Enabled = false;
-                    lblCalculating.Text = "Calculating...";
+                    lblCalculating.Text = Options.TranslationList["lblCalculatingNow"].ToString();
                     lblCalculating.Visible = true;
                     btnCancelHashing.Visible = true;
                 }
                 );
-                
+
                 _fileCounter = 0;
                 _timer.Reset();
                 _timer.Start();
@@ -715,7 +764,7 @@ namespace Hashing
                 }
 
                 _timer.Stop();
-                
+
             }, tokenSource.Token
             )
             .ContinueWith((prevTask) =>
@@ -728,7 +777,7 @@ namespace Hashing
                         _timer.Stop();
                         btnCancelHashing.Visible = false;
                         btnCancelHashing.Enabled = true;
-                        btnCancelHashing.Text = "Cancel";
+                        btnCancelHashing.Text = Options.TranslationList["btnCancelHashing"].ToString();
                     });
                 }
 
@@ -762,7 +811,7 @@ namespace Hashing
 
                             if (Options.CurrentOptions.HashOptions.SHA256)
                             {
-                               
+
                                 rootNode.Nodes.Add("SHA256: " + SumResult.Sums[i].SHA256);
                                 if (SumResult.Sums[i].SHA256 == _fileSummaries[i].SHA256) _analyzedFiles.Add(_fileSummaries[i].File);
                             }
@@ -828,10 +877,9 @@ namespace Hashing
 
                     lblCalculating.Invoke((MethodInvoker)delegate
                     {
-                        lblCalculating.Text = "Calculating...";
+                        lblCalculating.Text = Options.TranslationList["lblCalculatingNow"].ToString();
                         lblCalculating.Visible = false;
                         btnCancelHashing.Visible = false;
-                        btnClear.Enabled = true;
                         btnOptions.Enabled = true;
                         btnUpdate.Enabled = true;
                         btnSaveJson.Enabled = true;
@@ -840,7 +888,8 @@ namespace Hashing
                         btnBrowse.Enabled = true;
                         btnCalculate.Enabled = true;
                         txtPath.Enabled = true;
-                        this.Text = string.Format("Hashing - {0}m : {1}s for {2} files ({3})", _timer.Elapsed.Minutes, _timer.Elapsed.Seconds, _fileCounter, ByteSize.FromBytes(_totalSize));
+
+                        this.Text = string.Format("Hashing - {0}m : {1}s / {2} {3} ({4})", _timer.Elapsed.Minutes, _timer.Elapsed.Seconds, _fileCounter, Options.TranslationList["filesWord"].ToString(), ByteSize.FromBytes(_totalSize));
                     });
 
                     try
@@ -857,7 +906,7 @@ namespace Hashing
                     }
                 }
 
-                
+
                 // if JSON analyzation is enabled, show results
                 if (analyzeJson)
                 {
@@ -868,9 +917,9 @@ namespace Hashing
                     }
                     else
                     {
-                        TopMostMessageBox.Show("All files analyzed by JSON are corrupted!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        TopMostMessageBox.Show(Options.TranslationList["corruptedJSON"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                } 
+                }
             }
             );
         }
@@ -890,7 +939,7 @@ namespace Hashing
         {
             if (!Options.CurrentOptions.HashOptions.MD5 && !Options.CurrentOptions.HashOptions.SHA1 && !Options.CurrentOptions.HashOptions.SHA256 && !Options.CurrentOptions.HashOptions.SHA384 && !Options.CurrentOptions.HashOptions.SHA512 && !Options.CurrentOptions.HashOptions.RIPEMD160 && !Options.CurrentOptions.HashOptions.CRC32)
             {
-                MessageBox.Show("No active hashes! Please select at least one hash from options!", "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Options.TranslationList["noActiveHash"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -962,11 +1011,6 @@ namespace Hashing
         private void btnSaveJson_Click(object sender, EventArgs e)
         {
             SaveAsJSON();
-        }
-
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            Clear();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -1190,7 +1234,7 @@ namespace Hashing
                 {
                     if (File.Exists(SumView.SelectedNode.Parent.Text)) Process.Start("explorer.exe", "/select, " + SumView.SelectedNode.Parent.Text);
                 }
-            }         
+            }
         }
 
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
@@ -1209,7 +1253,7 @@ namespace Hashing
             tokenSource.Cancel();
 
             btnCancelHashing.Enabled = false;
-            btnCancelHashing.Text = "Cancelling...";
+            btnCancelHashing.Text = Options.TranslationList["btnCancelHashingPressed"].ToString();
         }
 
         private void toolStripMenuItem4_Click(object sender, EventArgs e)

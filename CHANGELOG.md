@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7] - 2022-01-28
+- New: Multilingual support (starting with Hellenic and Chinese)
+
 ## [2.6] - 2022-01-23
 - Improved: Listing JSON file summaries (#14)
 

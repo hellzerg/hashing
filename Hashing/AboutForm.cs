@@ -11,6 +11,8 @@ namespace Hashing
             InitializeComponent();
             Options.ApplyTheme(this);
             CheckForIllegalCrossThreadCalls = false;
+
+            button7.Text = Options.TranslationList["button7"].ToString();
         }
 
         private void button7_Click(object sender, EventArgs e)

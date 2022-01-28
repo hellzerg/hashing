@@ -11,6 +11,13 @@ namespace Hashing
             CheckForIllegalCrossThreadCalls = false;
             Options.ApplyTheme(this);
 
+            label1.Text = Options.TranslationList["label1"].ToString();
+            btnPaste.Text = Options.TranslationList["btnPaste"].ToString();
+            btnCompare.Text = Options.TranslationList["btnCompare"].ToString();
+            chkRemove.Text = Options.TranslationList["chkRemove"].ToString();
+            label2.Text = Options.TranslationList["label2"].ToString();
+            lblNoMatch.Text = Options.TranslationList["lblNoMatch"].ToString();
+
             LoadActiveHash();
 
             KeyPreview = true;

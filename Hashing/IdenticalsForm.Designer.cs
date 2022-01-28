@@ -34,14 +34,14 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.radioMD5 = new Hashing.ColoredRadioButton();
-            this.radioSHA1 = new Hashing.ColoredRadioButton();
-            this.radioSHA256 = new Hashing.ColoredRadioButton();
-            this.radioRIPEMD160 = new Hashing.ColoredRadioButton();
-            this.radioSHA384 = new Hashing.ColoredRadioButton();
-            this.radioSHA512 = new Hashing.ColoredRadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.radioCRC32 = new Hashing.ColoredRadioButton();
+            this.radioSHA512 = new Hashing.ColoredRadioButton();
+            this.radioSHA384 = new Hashing.ColoredRadioButton();
+            this.radioRIPEMD160 = new Hashing.ColoredRadioButton();
+            this.radioSHA256 = new Hashing.ColoredRadioButton();
+            this.radioSHA1 = new Hashing.ColoredRadioButton();
+            this.radioMD5 = new Hashing.ColoredRadioButton();
             this.helperMenu.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -74,21 +74,23 @@
             this.helperMenu.Name = "helperMenu";
             this.helperMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.helperMenu.ShowImageMargin = false;
-            this.helperMenu.Size = new System.Drawing.Size(151, 56);
+            this.helperMenu.Size = new System.Drawing.Size(156, 74);
             // 
             // copyToolStripMenuItem
             // 
+            this.copyToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.copyToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(155, 24);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // saveAsJSONToolStripMenuItem
             // 
+            this.saveAsJSONToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.saveAsJSONToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.saveAsJSONToolStripMenuItem.Name = "saveAsJSONToolStripMenuItem";
-            this.saveAsJSONToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
+            this.saveAsJSONToolStripMenuItem.Size = new System.Drawing.Size(155, 24);
             this.saveAsJSONToolStripMenuItem.Text = "Save as JSON";
             this.saveAsJSONToolStripMenuItem.Click += new System.EventHandler(this.saveAsJSONToolStripMenuItem_Click);
             // 
@@ -102,90 +104,6 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(715, 461);
             this.panel2.TabIndex = 4;
-            // 
-            // radioMD5
-            // 
-            this.radioMD5.AutoSize = true;
-            this.radioMD5.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioMD5.Location = new System.Drawing.Point(10, 4);
-            this.radioMD5.Margin = new System.Windows.Forms.Padding(2);
-            this.radioMD5.Name = "radioMD5";
-            this.radioMD5.Size = new System.Drawing.Size(58, 23);
-            this.radioMD5.TabIndex = 0;
-            this.radioMD5.TabStop = true;
-            this.radioMD5.Text = "MD5";
-            this.radioMD5.UseVisualStyleBackColor = true;
-            this.radioMD5.CheckedChanged += new System.EventHandler(this.radioMD5_CheckedChanged);
-            // 
-            // radioSHA1
-            // 
-            this.radioSHA1.AutoSize = true;
-            this.radioSHA1.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioSHA1.Location = new System.Drawing.Point(72, 4);
-            this.radioSHA1.Margin = new System.Windows.Forms.Padding(2);
-            this.radioSHA1.Name = "radioSHA1";
-            this.radioSHA1.Size = new System.Drawing.Size(60, 23);
-            this.radioSHA1.TabIndex = 1;
-            this.radioSHA1.TabStop = true;
-            this.radioSHA1.Text = "SHA1";
-            this.radioSHA1.UseVisualStyleBackColor = true;
-            this.radioSHA1.CheckedChanged += new System.EventHandler(this.radioSHA1_CheckedChanged);
-            // 
-            // radioSHA256
-            // 
-            this.radioSHA256.AutoSize = true;
-            this.radioSHA256.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioSHA256.Location = new System.Drawing.Point(136, 4);
-            this.radioSHA256.Margin = new System.Windows.Forms.Padding(2);
-            this.radioSHA256.Name = "radioSHA256";
-            this.radioSHA256.Size = new System.Drawing.Size(78, 23);
-            this.radioSHA256.TabIndex = 2;
-            this.radioSHA256.TabStop = true;
-            this.radioSHA256.Text = "SHA256";
-            this.radioSHA256.UseVisualStyleBackColor = true;
-            this.radioSHA256.CheckedChanged += new System.EventHandler(this.radioSHA256_CheckedChanged);
-            // 
-            // radioRIPEMD160
-            // 
-            this.radioRIPEMD160.AutoSize = true;
-            this.radioRIPEMD160.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioRIPEMD160.Location = new System.Drawing.Point(454, 4);
-            this.radioRIPEMD160.Margin = new System.Windows.Forms.Padding(2);
-            this.radioRIPEMD160.Name = "radioRIPEMD160";
-            this.radioRIPEMD160.Size = new System.Drawing.Size(100, 23);
-            this.radioRIPEMD160.TabIndex = 3;
-            this.radioRIPEMD160.TabStop = true;
-            this.radioRIPEMD160.Text = "RIPEMD160";
-            this.radioRIPEMD160.UseVisualStyleBackColor = true;
-            this.radioRIPEMD160.CheckedChanged += new System.EventHandler(this.radioRIPEMD160_CheckedChanged);
-            // 
-            // radioSHA384
-            // 
-            this.radioSHA384.AutoSize = true;
-            this.radioSHA384.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioSHA384.Location = new System.Drawing.Point(218, 4);
-            this.radioSHA384.Margin = new System.Windows.Forms.Padding(2);
-            this.radioSHA384.Name = "radioSHA384";
-            this.radioSHA384.Size = new System.Drawing.Size(78, 23);
-            this.radioSHA384.TabIndex = 4;
-            this.radioSHA384.TabStop = true;
-            this.radioSHA384.Text = "SHA384";
-            this.radioSHA384.UseVisualStyleBackColor = true;
-            this.radioSHA384.CheckedChanged += new System.EventHandler(this.radioSHA384_CheckedChanged);
-            // 
-            // radioSHA512
-            // 
-            this.radioSHA512.AutoSize = true;
-            this.radioSHA512.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioSHA512.Location = new System.Drawing.Point(300, 4);
-            this.radioSHA512.Margin = new System.Windows.Forms.Padding(2);
-            this.radioSHA512.Name = "radioSHA512";
-            this.radioSHA512.Size = new System.Drawing.Size(76, 23);
-            this.radioSHA512.TabIndex = 5;
-            this.radioSHA512.TabStop = true;
-            this.radioSHA512.Text = "SHA512";
-            this.radioSHA512.UseVisualStyleBackColor = true;
-            this.radioSHA512.CheckedChanged += new System.EventHandler(this.radioSHA512_CheckedChanged);
             // 
             // panel1
             // 
@@ -217,6 +135,90 @@
             this.radioCRC32.Text = "CRC32";
             this.radioCRC32.UseVisualStyleBackColor = true;
             this.radioCRC32.CheckedChanged += new System.EventHandler(this.radioCRC32_CheckedChanged);
+            // 
+            // radioSHA512
+            // 
+            this.radioSHA512.AutoSize = true;
+            this.radioSHA512.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioSHA512.Location = new System.Drawing.Point(300, 4);
+            this.radioSHA512.Margin = new System.Windows.Forms.Padding(2);
+            this.radioSHA512.Name = "radioSHA512";
+            this.radioSHA512.Size = new System.Drawing.Size(76, 23);
+            this.radioSHA512.TabIndex = 5;
+            this.radioSHA512.TabStop = true;
+            this.radioSHA512.Text = "SHA512";
+            this.radioSHA512.UseVisualStyleBackColor = true;
+            this.radioSHA512.CheckedChanged += new System.EventHandler(this.radioSHA512_CheckedChanged);
+            // 
+            // radioSHA384
+            // 
+            this.radioSHA384.AutoSize = true;
+            this.radioSHA384.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioSHA384.Location = new System.Drawing.Point(218, 4);
+            this.radioSHA384.Margin = new System.Windows.Forms.Padding(2);
+            this.radioSHA384.Name = "radioSHA384";
+            this.radioSHA384.Size = new System.Drawing.Size(78, 23);
+            this.radioSHA384.TabIndex = 4;
+            this.radioSHA384.TabStop = true;
+            this.radioSHA384.Text = "SHA384";
+            this.radioSHA384.UseVisualStyleBackColor = true;
+            this.radioSHA384.CheckedChanged += new System.EventHandler(this.radioSHA384_CheckedChanged);
+            // 
+            // radioRIPEMD160
+            // 
+            this.radioRIPEMD160.AutoSize = true;
+            this.radioRIPEMD160.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioRIPEMD160.Location = new System.Drawing.Point(454, 4);
+            this.radioRIPEMD160.Margin = new System.Windows.Forms.Padding(2);
+            this.radioRIPEMD160.Name = "radioRIPEMD160";
+            this.radioRIPEMD160.Size = new System.Drawing.Size(100, 23);
+            this.radioRIPEMD160.TabIndex = 3;
+            this.radioRIPEMD160.TabStop = true;
+            this.radioRIPEMD160.Text = "RIPEMD160";
+            this.radioRIPEMD160.UseVisualStyleBackColor = true;
+            this.radioRIPEMD160.CheckedChanged += new System.EventHandler(this.radioRIPEMD160_CheckedChanged);
+            // 
+            // radioSHA256
+            // 
+            this.radioSHA256.AutoSize = true;
+            this.radioSHA256.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioSHA256.Location = new System.Drawing.Point(136, 4);
+            this.radioSHA256.Margin = new System.Windows.Forms.Padding(2);
+            this.radioSHA256.Name = "radioSHA256";
+            this.radioSHA256.Size = new System.Drawing.Size(78, 23);
+            this.radioSHA256.TabIndex = 2;
+            this.radioSHA256.TabStop = true;
+            this.radioSHA256.Text = "SHA256";
+            this.radioSHA256.UseVisualStyleBackColor = true;
+            this.radioSHA256.CheckedChanged += new System.EventHandler(this.radioSHA256_CheckedChanged);
+            // 
+            // radioSHA1
+            // 
+            this.radioSHA1.AutoSize = true;
+            this.radioSHA1.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioSHA1.Location = new System.Drawing.Point(72, 4);
+            this.radioSHA1.Margin = new System.Windows.Forms.Padding(2);
+            this.radioSHA1.Name = "radioSHA1";
+            this.radioSHA1.Size = new System.Drawing.Size(60, 23);
+            this.radioSHA1.TabIndex = 1;
+            this.radioSHA1.TabStop = true;
+            this.radioSHA1.Text = "SHA1";
+            this.radioSHA1.UseVisualStyleBackColor = true;
+            this.radioSHA1.CheckedChanged += new System.EventHandler(this.radioSHA1_CheckedChanged);
+            // 
+            // radioMD5
+            // 
+            this.radioMD5.AutoSize = true;
+            this.radioMD5.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioMD5.Location = new System.Drawing.Point(10, 4);
+            this.radioMD5.Margin = new System.Windows.Forms.Padding(2);
+            this.radioMD5.Name = "radioMD5";
+            this.radioMD5.Size = new System.Drawing.Size(58, 23);
+            this.radioMD5.TabIndex = 0;
+            this.radioMD5.TabStop = true;
+            this.radioMD5.Text = "MD5";
+            this.radioMD5.UseVisualStyleBackColor = true;
+            this.radioMD5.CheckedChanged += new System.EventHandler(this.radioMD5_CheckedChanged);
             // 
             // IdenticalsForm
             // 

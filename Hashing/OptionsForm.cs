@@ -21,9 +21,24 @@ namespace Hashing
             LoadSettings();
             Options.ApplyTheme(this);
 
+            Translate();
+
             HashesChanged = false;
             CasingChanged = false;
             CRC32FormatChanged = false;
+        }
+        private void Translate()
+        {
+            label27.Text = Options.TranslationList["label27"].ToString();
+            lbl88.Text = Options.TranslationList["lbl88"].ToString();
+            chkLower.Text = Options.TranslationList["chkLower"].ToString();
+            chkCRCFormat.Text = Options.TranslationList["chkCRCFormat"].ToString();
+            chkSingleInstance.Text = Options.TranslationList["chkSingleInstance"].ToString();
+            chkStayOnTop.Text = Options.TranslationList["chkStayOnTop"].ToString();
+            chkTray.Text = Options.TranslationList["chkTray"].ToString();
+            chkHigh.Text = Options.TranslationList["chkHigh"].ToString();
+            okbtn.Text = Options.TranslationList["button7"].ToString();
+            label3.Text = Options.TranslationList["label3"].ToString();
         }
 
         private void LoadSettings()
@@ -64,6 +79,10 @@ namespace Hashing
             chkCRCFormat.Checked = Options.CurrentOptions.CRC32Decimal;
             chkStayOnTop.Checked = Options.CurrentOptions.StayOnTop;
             chkSingleInstance.Checked = Options.CurrentOptions.SingleInstance;
+
+            if (Options.CurrentOptions.LanguageCode == LanguageCode.EN) radioEnglish.Checked = true;
+            if (Options.CurrentOptions.LanguageCode == LanguageCode.EL) radioHellenic.Checked = true;
+            if (Options.CurrentOptions.LanguageCode == LanguageCode.CN) radioChinese.Checked = true;
         }
 
         private void OptionsForm_Load(object sender, EventArgs e)
@@ -216,6 +235,51 @@ namespace Hashing
         private void chkStayOnTop_CheckedChanged(object sender, EventArgs e)
         {
             Options.CurrentOptions.StayOnTop = chkStayOnTop.Checked;
+        }
+
+        private void radioEnglish_Click(object sender, EventArgs e)
+        {
+            radioEnglish.Checked = true;
+            Options.CurrentOptions.LanguageCode = LanguageCode.EN;
+            Options.SaveSettings();
+            Options.LoadTranslation();
+            _main.Translate();
+            Translate();
+        }
+
+        private void radioHellenic_Click(object sender, EventArgs e)
+        {
+            radioHellenic.Checked = true;
+            Options.CurrentOptions.LanguageCode = LanguageCode.EL;
+            Options.SaveSettings();
+            Options.LoadTranslation();
+            _main.Translate();
+            Translate();
+        }
+
+        private void radioChinese_Click(object sender, EventArgs e)
+        {
+            radioChinese.Checked = true;
+            Options.CurrentOptions.LanguageCode = LanguageCode.CN;
+            Options.SaveSettings();
+            Options.LoadTranslation();
+            _main.Translate();
+            Translate();
+        }
+
+        private void pictureBox86_Click(object sender, EventArgs e)
+        {
+            radioEnglish.PerformClick();
+        }
+
+        private void pictureBox88_Click(object sender, EventArgs e)
+        {
+            radioHellenic.PerformClick();
+        }
+
+        private void pictureBox7_Click(object sender, EventArgs e)
+        {
+            radioChinese.PerformClick();
         }
     }
 }

@@ -186,23 +186,23 @@
             this.txtExpected.Location = new System.Drawing.Point(10, 61);
             this.txtExpected.Margin = new System.Windows.Forms.Padding(2);
             this.txtExpected.Name = "txtExpected";
-            this.txtExpected.Size = new System.Drawing.Size(558, 27);
+            this.txtExpected.Size = new System.Drawing.Size(696, 27);
             this.txtExpected.TabIndex = 6;
             // 
             // btnCompare
             // 
             this.btnCompare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCompare.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnCompare.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnCompare.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.btnCompare.FlatAppearance.BorderSize = 0;
             this.btnCompare.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCompare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCompare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCompare.ForeColor = System.Drawing.Color.White;
-            this.btnCompare.Location = new System.Drawing.Point(641, 61);
+            this.btnCompare.Location = new System.Drawing.Point(555, 92);
             this.btnCompare.Margin = new System.Windows.Forms.Padding(2);
             this.btnCompare.Name = "btnCompare";
-            this.btnCompare.Size = new System.Drawing.Size(65, 27);
+            this.btnCompare.Size = new System.Drawing.Size(151, 27);
             this.btnCompare.TabIndex = 74;
             this.btnCompare.Tag = "themeable";
             this.btnCompare.Text = "Compare";
@@ -270,16 +270,16 @@
             // 
             this.btnPaste.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPaste.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnPaste.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue;
+            this.btnPaste.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.btnPaste.FlatAppearance.BorderSize = 0;
             this.btnPaste.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
             this.btnPaste.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnPaste.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPaste.ForeColor = System.Drawing.Color.White;
-            this.btnPaste.Location = new System.Drawing.Point(572, 61);
+            this.btnPaste.Location = new System.Drawing.Point(400, 92);
             this.btnPaste.Margin = new System.Windows.Forms.Padding(2);
             this.btnPaste.Name = "btnPaste";
-            this.btnPaste.Size = new System.Drawing.Size(65, 27);
+            this.btnPaste.Size = new System.Drawing.Size(151, 27);
             this.btnPaste.TabIndex = 79;
             this.btnPaste.Tag = "themeable";
             this.btnPaste.Text = "Paste";
@@ -324,7 +324,6 @@
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Compare files";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CompareForm_FormClosing);
             this.Load += new System.EventHandler(this.CompareForm_Load);
             this.panel1.ResumeLayout(false);

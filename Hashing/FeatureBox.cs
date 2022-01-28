@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Hashing
@@ -31,13 +24,18 @@ namespace Hashing
             Options.ApplyTheme(this);
             CheckForIllegalCrossThreadCalls = false;
 
+            label77.Text = Options.TranslationList["label77"].ToString();
+            btnCalc.Text = Options.TranslationList["btnCalc"].ToString();
+            btnAnalyze.Text = Options.TranslationList["btnAnalyze"].ToString();
+            btnList.Text = Options.TranslationList["btnList"].ToString();
+
             var sm = GetSystemMenu(Handle, false);
             EnableMenuItem(sm, SC_CLOSE, MF_BYCOMMAND | MF_DISABLED);
         }
 
         private void FeatureBox_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void btnCalc_Click(object sender, EventArgs e)

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -24,6 +25,8 @@ namespace Hashing
         public Point? WindowLocation { get; set; }
         public FormWindowState WindowState { get; set; }
 
+        public LanguageCode LanguageCode { get; set; }
+
         public SettingsJson()
         {
             HashOptions = new HashOptions();
@@ -41,6 +44,8 @@ namespace Hashing
         readonly static string SettingsFile = Application.StartupPath + "\\Hashing.json";
 
         internal static SettingsJson CurrentOptions = new SettingsJson();
+
+        internal static dynamic TranslationList;
 
         internal static IEnumerable<Control> GetSelfAndChildrenRecursive(Control parent)
         {
@@ -185,6 +190,16 @@ namespace Hashing
                     SaveSettings();
                 }
             }
+
+            LoadTranslation();
+        }
+
+        internal static void LoadTranslation()
+        {
+            // load proper translation list
+            if (CurrentOptions.LanguageCode == LanguageCode.EN) TranslationList = JObject.Parse(Properties.Resources.EN);
+            if (CurrentOptions.LanguageCode == LanguageCode.EL) TranslationList = JObject.Parse(Properties.Resources.EL);
+            if (CurrentOptions.LanguageCode == LanguageCode.CN) TranslationList = JObject.Parse(Properties.Resources.CN);
         }
     }
 }
