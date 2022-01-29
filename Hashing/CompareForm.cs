@@ -17,6 +17,7 @@ namespace Hashing
             chkRemove.Text = Options.TranslationList["chkRemove"].ToString();
             label2.Text = Options.TranslationList["label2"].ToString();
             lblNoMatch.Text = Options.TranslationList["lblNoMatch"].ToString();
+            this.Text = Options.TranslationList["btnCompare"].ToString();
 
             LoadActiveHash();
 

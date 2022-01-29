@@ -19,6 +19,10 @@ namespace Hashing
             Options.ApplyTheme(this);
             helperMenu.Renderer = new ToolStripRendererMaterial();
 
+            this.Text = Options.TranslationList["btnFindIdenticals"].ToString();
+            copyToolStripMenuItem.Text = Options.TranslationList["copyToolStripMenuItem"].ToString();
+            saveAsJSONToolStripMenuItem.Text = Options.TranslationList["btnSaveJson"].ToString();
+
             ConfigureGUI();
             _identicals = list;
             GetActiveHash();

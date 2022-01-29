@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.8] - 2022-01-29
+- Hotfix: Can't change theme and language at the same time (#16)
+- Hotfix: Updated translation for Chinese (#16)
+
 ## [2.7] - 2022-01-28
 - New: Multilingual support (starting with Hellenic and Chinese)
 

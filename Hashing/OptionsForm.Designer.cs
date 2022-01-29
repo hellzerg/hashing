@@ -58,9 +58,13 @@
             this.chkSHA256 = new Hashing.ColoredCheckBox();
             this.chkSHA1 = new Hashing.ColoredCheckBox();
             this.chkMD5 = new Hashing.ColoredCheckBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox88)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox86)).BeginInit();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // okbtn
@@ -90,7 +94,7 @@
             this.minimaltheme.AutoSize = true;
             this.minimaltheme.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.minimaltheme.ForeColor = System.Drawing.Color.Gray;
-            this.minimaltheme.Location = new System.Drawing.Point(122, 108);
+            this.minimaltheme.Location = new System.Drawing.Point(114, 110);
             this.minimaltheme.Margin = new System.Windows.Forms.Padding(2);
             this.minimaltheme.Name = "minimaltheme";
             this.minimaltheme.Size = new System.Drawing.Size(86, 25);
@@ -104,7 +108,7 @@
             this.carameltheme.AutoSize = true;
             this.carameltheme.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.carameltheme.ForeColor = System.Drawing.Color.DarkOrange;
-            this.carameltheme.Location = new System.Drawing.Point(122, 47);
+            this.carameltheme.Location = new System.Drawing.Point(114, 49);
             this.carameltheme.Margin = new System.Windows.Forms.Padding(2);
             this.carameltheme.Name = "carameltheme";
             this.carameltheme.Size = new System.Drawing.Size(87, 25);
@@ -118,7 +122,7 @@
             this.limetheme.AutoSize = true;
             this.limetheme.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.limetheme.ForeColor = System.Drawing.Color.LimeGreen;
-            this.limetheme.Location = new System.Drawing.Point(122, 78);
+            this.limetheme.Location = new System.Drawing.Point(114, 80);
             this.limetheme.Margin = new System.Windows.Forms.Padding(2);
             this.limetheme.Name = "limetheme";
             this.limetheme.Size = new System.Drawing.Size(63, 25);
@@ -132,7 +136,7 @@
             this.magmatheme.AutoSize = true;
             this.magmatheme.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.magmatheme.ForeColor = System.Drawing.Color.Tomato;
-            this.magmatheme.Location = new System.Drawing.Point(30, 78);
+            this.magmatheme.Location = new System.Drawing.Point(22, 80);
             this.magmatheme.Margin = new System.Windows.Forms.Padding(2);
             this.magmatheme.Name = "magmatheme";
             this.magmatheme.Size = new System.Drawing.Size(83, 25);
@@ -147,7 +151,7 @@
             this.oceantheme.Checked = true;
             this.oceantheme.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.oceantheme.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.oceantheme.Location = new System.Drawing.Point(30, 47);
+            this.oceantheme.Location = new System.Drawing.Point(22, 49);
             this.oceantheme.Margin = new System.Windows.Forms.Padding(2);
             this.oceantheme.Name = "oceantheme";
             this.oceantheme.Size = new System.Drawing.Size(74, 25);
@@ -162,7 +166,7 @@
             this.zergtheme.AutoSize = true;
             this.zergtheme.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.zergtheme.ForeColor = System.Drawing.Color.MediumOrchid;
-            this.zergtheme.Location = new System.Drawing.Point(30, 108);
+            this.zergtheme.Location = new System.Drawing.Point(22, 110);
             this.zergtheme.Margin = new System.Windows.Forms.Padding(2);
             this.zergtheme.Name = "zergtheme";
             this.zergtheme.Size = new System.Drawing.Size(62, 25);
@@ -176,7 +180,7 @@
             this.label27.AutoSize = true;
             this.label27.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label27.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.label27.Location = new System.Drawing.Point(10, 8);
+            this.label27.Location = new System.Drawing.Point(2, 10);
             this.label27.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(153, 21);
@@ -203,7 +207,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.label3.Location = new System.Drawing.Point(279, 8);
+            this.label3.Location = new System.Drawing.Point(2, 10);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(136, 21);
@@ -214,7 +218,7 @@
             // pictureBox7
             // 
             this.pictureBox7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox7.Image")));
-            this.pictureBox7.Location = new System.Drawing.Point(304, 111);
+            this.pictureBox7.Location = new System.Drawing.Point(27, 113);
             this.pictureBox7.Name = "pictureBox7";
             this.pictureBox7.Size = new System.Drawing.Size(36, 22);
             this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -225,7 +229,7 @@
             // pictureBox88
             // 
             this.pictureBox88.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox88.Image")));
-            this.pictureBox88.Location = new System.Drawing.Point(304, 79);
+            this.pictureBox88.Location = new System.Drawing.Point(27, 81);
             this.pictureBox88.Name = "pictureBox88";
             this.pictureBox88.Size = new System.Drawing.Size(36, 22);
             this.pictureBox88.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -236,7 +240,7 @@
             // pictureBox86
             // 
             this.pictureBox86.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox86.Image")));
-            this.pictureBox86.Location = new System.Drawing.Point(304, 48);
+            this.pictureBox86.Location = new System.Drawing.Point(27, 50);
             this.pictureBox86.Name = "pictureBox86";
             this.pictureBox86.Size = new System.Drawing.Size(36, 22);
             this.pictureBox86.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -248,7 +252,7 @@
             // 
             this.radioChinese.AutoSize = true;
             this.radioChinese.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioChinese.Location = new System.Drawing.Point(345, 109);
+            this.radioChinese.Location = new System.Drawing.Point(68, 111);
             this.radioChinese.Name = "radioChinese";
             this.radioChinese.Size = new System.Drawing.Size(96, 25);
             this.radioChinese.TabIndex = 107;
@@ -261,7 +265,7 @@
             // 
             this.radioHellenic.AutoSize = true;
             this.radioHellenic.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioHellenic.Location = new System.Drawing.Point(345, 78);
+            this.radioHellenic.Location = new System.Drawing.Point(68, 80);
             this.radioHellenic.Name = "radioHellenic";
             this.radioHellenic.Size = new System.Drawing.Size(94, 25);
             this.radioHellenic.TabIndex = 106;
@@ -274,7 +278,7 @@
             // 
             this.radioEnglish.AutoSize = true;
             this.radioEnglish.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioEnglish.Location = new System.Drawing.Point(345, 47);
+            this.radioEnglish.Location = new System.Drawing.Point(68, 49);
             this.radioEnglish.Name = "radioEnglish";
             this.radioEnglish.Size = new System.Drawing.Size(79, 25);
             this.radioEnglish.TabIndex = 105;
@@ -465,6 +469,34 @@
             this.chkMD5.UseVisualStyleBackColor = true;
             this.chkMD5.CheckedChanged += new System.EventHandler(this.chkMD5_CheckedChanged);
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.label27);
+            this.panel1.Controls.Add(this.zergtheme);
+            this.panel1.Controls.Add(this.oceantheme);
+            this.panel1.Controls.Add(this.magmatheme);
+            this.panel1.Controls.Add(this.limetheme);
+            this.panel1.Controls.Add(this.carameltheme);
+            this.panel1.Controls.Add(this.minimaltheme);
+            this.panel1.Location = new System.Drawing.Point(12, 8);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(245, 156);
+            this.panel1.TabIndex = 108;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.label3);
+            this.panel2.Controls.Add(this.pictureBox86);
+            this.panel2.Controls.Add(this.radioChinese);
+            this.panel2.Controls.Add(this.pictureBox88);
+            this.panel2.Controls.Add(this.radioHellenic);
+            this.panel2.Controls.Add(this.pictureBox7);
+            this.panel2.Controls.Add(this.radioEnglish);
+            this.panel2.Location = new System.Drawing.Point(271, 8);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(181, 150);
+            this.panel2.TabIndex = 109;
+            // 
             // OptionsForm
             // 
             this.AcceptButton = this.okbtn;
@@ -473,13 +505,8 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.CancelButton = this.okbtn;
             this.ClientSize = new System.Drawing.Size(584, 411);
-            this.Controls.Add(this.radioChinese);
-            this.Controls.Add(this.radioHellenic);
-            this.Controls.Add(this.radioEnglish);
-            this.Controls.Add(this.pictureBox7);
-            this.Controls.Add(this.pictureBox88);
-            this.Controls.Add(this.pictureBox86);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.chkStayOnTop);
             this.Controls.Add(this.chkSingleInstance);
             this.Controls.Add(this.chkCRCFormat);
@@ -495,13 +522,6 @@
             this.Controls.Add(this.chkMD5);
             this.Controls.Add(this.lbl88);
             this.Controls.Add(this.okbtn);
-            this.Controls.Add(this.minimaltheme);
-            this.Controls.Add(this.carameltheme);
-            this.Controls.Add(this.limetheme);
-            this.Controls.Add(this.magmatheme);
-            this.Controls.Add(this.oceantheme);
-            this.Controls.Add(this.zergtheme);
-            this.Controls.Add(this.label27);
             this.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -517,6 +537,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox88)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox86)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -553,5 +577,7 @@
         private ColoredRadioButton radioEnglish;
         private ColoredRadioButton radioHellenic;
         private ColoredRadioButton radioChinese;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
     }
 }

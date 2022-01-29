@@ -39,6 +39,7 @@ namespace Hashing
             chkHigh.Text = Options.TranslationList["chkHigh"].ToString();
             okbtn.Text = Options.TranslationList["button7"].ToString();
             label3.Text = Options.TranslationList["label3"].ToString();
+            this.Text = Options.TranslationList["btnOptions"].ToString();
         }
 
         private void LoadSettings()
