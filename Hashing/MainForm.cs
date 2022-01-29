@@ -70,6 +70,8 @@ namespace Hashing
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
 
+            this.DoubleBuffered = true;
+
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             Options.ApplyTheme(this);
             CheckForIllegalCrossThreadCalls = false;
@@ -105,6 +107,21 @@ namespace Hashing
             {
                 DetectFiles(files);
             }
+
+            RestoreWindowState();
+
+            if (Options.CurrentOptions.StayOnTop)
+            {
+                // SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
+                this.TopMost = true;
+            }
+            else
+            {
+                this.TopMost = false;
+            }
+
+            lblversion.Text = Options.TranslationList["lblversion"].ToString().Replace("{VN}", Program.GetCurrentVersionToString());
+            trayIcon.Visible = false;
         }
 
         internal void Translate(bool skipFull = false)
@@ -980,20 +997,7 @@ namespace Hashing
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            RestoreWindowState();
-
-            if (Options.CurrentOptions.StayOnTop)
-            {
-                // SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
-                this.TopMost = true;
-            }
-            else
-            {
-                this.TopMost = false;
-            }
-
-            lblversion.Text = "Version: " + Program.GetCurrentVersionToString();
-            trayIcon.Visible = false;
+            
         }
 
         private void MainForm_DragEnter(object sender, DragEventArgs e)
