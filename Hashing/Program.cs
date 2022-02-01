@@ -57,7 +57,7 @@ namespace Hashing
                     else
                     {
                         MessageBox.Show("Hashing is already running in the background!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        Application.Exit();
+                        Environment.Exit(0);
                     }
                 }
             }
