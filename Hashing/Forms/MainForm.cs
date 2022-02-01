@@ -79,8 +79,8 @@ namespace Hashing
             _allowExit = !Options.CurrentOptions.TrayIcon;
             _fileList = new List<string>();
 
-            helperMenu.Renderer = new ToolStripRendererMaterial();
-            trayMenu.Renderer = new ToolStripRendererMaterial();
+            helperMenu.Renderer = new MoonMenuRenderer();
+            trayMenu.Renderer = new MoonMenuRenderer();
 
             _timer = new Stopwatch();
 

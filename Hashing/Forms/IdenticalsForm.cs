@@ -17,7 +17,7 @@ namespace Hashing
         {
             InitializeComponent();
             Options.ApplyTheme(this);
-            helperMenu.Renderer = new ToolStripRendererMaterial();
+            helperMenu.Renderer = new MoonMenuRenderer();
 
             this.Text = Options.TranslationList["btnFindIdenticals"].ToString();
             copyToolStripMenuItem.Text = Options.TranslationList["copyToolStripMenuItem"].ToString();

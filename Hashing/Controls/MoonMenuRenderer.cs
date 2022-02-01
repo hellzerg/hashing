@@ -3,9 +3,9 @@ using System.Windows.Forms;
 
 namespace Hashing
 {
-    internal class ToolStripRendererMaterial : ToolStripProfessionalRenderer
+    internal class MoonMenuRenderer : ToolStripProfessionalRenderer
     {
-        internal ToolStripRendererMaterial() : base(new ColorsMaterial())
+        internal MoonMenuRenderer() : base(new MoonColors())
         {
 
         }
@@ -36,7 +36,7 @@ namespace Hashing
         }
     }
 
-    internal class ColorsMaterial : ProfessionalColorTable
+    internal class MoonColors : ProfessionalColorTable
     {
         public override Color SeparatorLight
         {
