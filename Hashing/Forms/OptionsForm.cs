@@ -46,23 +46,23 @@ namespace Hashing
         {
             switch (Options.CurrentOptions.Color)
             {
-                case Theme.Caramel:
-                    carameltheme.Checked = true;
+                case Theme.Amber:
+                    rAmber.Checked = true;
                     break;
-                case Theme.Lime:
-                    limetheme.Checked = true;
+                case Theme.Jade:
+                    rJade.Checked = true;
                     break;
-                case Theme.Magma:
-                    magmatheme.Checked = true;
+                case Theme.Ruby:
+                    rRuby.Checked = true;
                     break;
-                case Theme.Minimal:
-                    minimaltheme.Checked = true;
+                case Theme.Silver:
+                    rSilver.Checked = true;
                     break;
-                case Theme.Ocean:
-                    oceantheme.Checked = true;
+                case Theme.Azurite:
+                    rAzurite.Checked = true;
                     break;
-                case Theme.Zerg:
-                    zergtheme.Checked = true;
+                case Theme.Amethyst:
+                    rAmethyst.Checked = true;
                     break;
             }
 
@@ -105,7 +105,7 @@ namespace Hashing
 
         private void oceantheme_CheckedChanged(object sender, EventArgs e)
         {
-            Options.CurrentOptions.Color = Theme.Ocean;
+            Options.CurrentOptions.Color = Theme.Azurite;
             Options.ApplyTheme(this);
             Options.ApplyTheme(_main);
             _main.FixColor();
@@ -113,7 +113,7 @@ namespace Hashing
 
         private void magmatheme_CheckedChanged(object sender, EventArgs e)
         {
-            Options.CurrentOptions.Color = Theme.Magma;
+            Options.CurrentOptions.Color = Theme.Ruby;
             Options.ApplyTheme(this);
             Options.ApplyTheme(_main);
             _main.FixColor();
@@ -121,7 +121,7 @@ namespace Hashing
 
         private void zergtheme_CheckedChanged(object sender, EventArgs e)
         {
-            Options.CurrentOptions.Color = Theme.Zerg;
+            Options.CurrentOptions.Color = Theme.Amethyst;
             Options.ApplyTheme(this);
             Options.ApplyTheme(_main);
             _main.FixColor();
@@ -129,7 +129,7 @@ namespace Hashing
 
         private void carameltheme_CheckedChanged(object sender, EventArgs e)
         {
-            Options.CurrentOptions.Color = Theme.Caramel;
+            Options.CurrentOptions.Color = Theme.Amber;
             Options.ApplyTheme(this);
             Options.ApplyTheme(_main);
             _main.FixColor();
@@ -137,7 +137,7 @@ namespace Hashing
 
         private void limetheme_CheckedChanged(object sender, EventArgs e)
         {
-            Options.CurrentOptions.Color = Theme.Lime;
+            Options.CurrentOptions.Color = Theme.Jade;
             Options.ApplyTheme(this);
             Options.ApplyTheme(_main);
             _main.FixColor();
@@ -145,7 +145,7 @@ namespace Hashing
 
         private void minimaltheme_CheckedChanged(object sender, EventArgs e)
         {
-            Options.CurrentOptions.Color = Theme.Minimal;
+            Options.CurrentOptions.Color = Theme.Silver;
             Options.ApplyTheme(this);
             Options.ApplyTheme(_main);
             _main.FixColor();

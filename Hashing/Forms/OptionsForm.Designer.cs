@@ -30,18 +30,20 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionsForm));
             this.okbtn = new System.Windows.Forms.Button();
-            this.minimaltheme = new System.Windows.Forms.RadioButton();
-            this.carameltheme = new System.Windows.Forms.RadioButton();
-            this.limetheme = new System.Windows.Forms.RadioButton();
-            this.magmatheme = new System.Windows.Forms.RadioButton();
-            this.oceantheme = new System.Windows.Forms.RadioButton();
-            this.zergtheme = new System.Windows.Forms.RadioButton();
+            this.rSilver = new System.Windows.Forms.RadioButton();
+            this.rAmber = new System.Windows.Forms.RadioButton();
+            this.rJade = new System.Windows.Forms.RadioButton();
+            this.rRuby = new System.Windows.Forms.RadioButton();
+            this.rAzurite = new System.Windows.Forms.RadioButton();
+            this.rAmethyst = new System.Windows.Forms.RadioButton();
             this.label27 = new System.Windows.Forms.Label();
             this.lbl88 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
             this.pictureBox88 = new System.Windows.Forms.PictureBox();
             this.pictureBox86 = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.radioChinese = new Hashing.MoonRadio();
             this.radioHellenic = new Hashing.MoonRadio();
             this.radioEnglish = new Hashing.MoonRadio();
@@ -58,8 +60,6 @@
             this.chkSHA256 = new Hashing.MoonCheck();
             this.chkSHA1 = new Hashing.MoonCheck();
             this.chkMD5 = new Hashing.MoonCheck();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox88)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox86)).BeginInit();
@@ -89,91 +89,91 @@
             this.okbtn.UseVisualStyleBackColor = false;
             this.okbtn.Click += new System.EventHandler(this.okbtn_Click);
             // 
-            // minimaltheme
+            // rSilver
             // 
-            this.minimaltheme.AutoSize = true;
-            this.minimaltheme.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.minimaltheme.ForeColor = System.Drawing.Color.Gray;
-            this.minimaltheme.Location = new System.Drawing.Point(114, 110);
-            this.minimaltheme.Margin = new System.Windows.Forms.Padding(2);
-            this.minimaltheme.Name = "minimaltheme";
-            this.minimaltheme.Size = new System.Drawing.Size(86, 25);
-            this.minimaltheme.TabIndex = 69;
-            this.minimaltheme.Text = "Minimal";
-            this.minimaltheme.UseVisualStyleBackColor = true;
-            this.minimaltheme.CheckedChanged += new System.EventHandler(this.minimaltheme_CheckedChanged);
+            this.rSilver.AutoSize = true;
+            this.rSilver.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rSilver.ForeColor = System.Drawing.Color.Gray;
+            this.rSilver.Location = new System.Drawing.Point(131, 108);
+            this.rSilver.Margin = new System.Windows.Forms.Padding(2);
+            this.rSilver.Name = "rSilver";
+            this.rSilver.Size = new System.Drawing.Size(68, 25);
+            this.rSilver.TabIndex = 69;
+            this.rSilver.Text = "Silver";
+            this.rSilver.UseVisualStyleBackColor = true;
+            this.rSilver.CheckedChanged += new System.EventHandler(this.minimaltheme_CheckedChanged);
             // 
-            // carameltheme
+            // rAmber
             // 
-            this.carameltheme.AutoSize = true;
-            this.carameltheme.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.carameltheme.ForeColor = System.Drawing.Color.DarkOrange;
-            this.carameltheme.Location = new System.Drawing.Point(114, 49);
-            this.carameltheme.Margin = new System.Windows.Forms.Padding(2);
-            this.carameltheme.Name = "carameltheme";
-            this.carameltheme.Size = new System.Drawing.Size(87, 25);
-            this.carameltheme.TabIndex = 68;
-            this.carameltheme.Text = "Caramel";
-            this.carameltheme.UseVisualStyleBackColor = true;
-            this.carameltheme.CheckedChanged += new System.EventHandler(this.carameltheme_CheckedChanged);
+            this.rAmber.AutoSize = true;
+            this.rAmber.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rAmber.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(195)))), ((int)(((byte)(146)))), ((int)(((byte)(0)))));
+            this.rAmber.Location = new System.Drawing.Point(131, 49);
+            this.rAmber.Margin = new System.Windows.Forms.Padding(2);
+            this.rAmber.Name = "rAmber";
+            this.rAmber.Size = new System.Drawing.Size(78, 25);
+            this.rAmber.TabIndex = 68;
+            this.rAmber.Text = "Amber";
+            this.rAmber.UseVisualStyleBackColor = true;
+            this.rAmber.CheckedChanged += new System.EventHandler(this.carameltheme_CheckedChanged);
             // 
-            // limetheme
+            // rJade
             // 
-            this.limetheme.AutoSize = true;
-            this.limetheme.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.limetheme.ForeColor = System.Drawing.Color.LimeGreen;
-            this.limetheme.Location = new System.Drawing.Point(114, 80);
-            this.limetheme.Margin = new System.Windows.Forms.Padding(2);
-            this.limetheme.Name = "limetheme";
-            this.limetheme.Size = new System.Drawing.Size(63, 25);
-            this.limetheme.TabIndex = 67;
-            this.limetheme.Text = "Lime";
-            this.limetheme.UseVisualStyleBackColor = true;
-            this.limetheme.CheckedChanged += new System.EventHandler(this.limetheme_CheckedChanged);
+            this.rJade.AutoSize = true;
+            this.rJade.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rJade.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(175)))), ((int)(((byte)(105)))));
+            this.rJade.Location = new System.Drawing.Point(131, 78);
+            this.rJade.Margin = new System.Windows.Forms.Padding(2);
+            this.rJade.Name = "rJade";
+            this.rJade.Size = new System.Drawing.Size(61, 25);
+            this.rJade.TabIndex = 67;
+            this.rJade.Text = "Jade";
+            this.rJade.UseVisualStyleBackColor = true;
+            this.rJade.CheckedChanged += new System.EventHandler(this.limetheme_CheckedChanged);
             // 
-            // magmatheme
+            // rRuby
             // 
-            this.magmatheme.AutoSize = true;
-            this.magmatheme.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.magmatheme.ForeColor = System.Drawing.Color.Tomato;
-            this.magmatheme.Location = new System.Drawing.Point(22, 80);
-            this.magmatheme.Margin = new System.Windows.Forms.Padding(2);
-            this.magmatheme.Name = "magmatheme";
-            this.magmatheme.Size = new System.Drawing.Size(83, 25);
-            this.magmatheme.TabIndex = 66;
-            this.magmatheme.Text = "Magma";
-            this.magmatheme.UseVisualStyleBackColor = true;
-            this.magmatheme.CheckedChanged += new System.EventHandler(this.magmatheme_CheckedChanged);
+            this.rRuby.AutoSize = true;
+            this.rRuby.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rRuby.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(22)))), ((int)(((byte)(39)))));
+            this.rRuby.Location = new System.Drawing.Point(22, 77);
+            this.rRuby.Margin = new System.Windows.Forms.Padding(2);
+            this.rRuby.Name = "rRuby";
+            this.rRuby.Size = new System.Drawing.Size(65, 25);
+            this.rRuby.TabIndex = 66;
+            this.rRuby.Text = "Ruby";
+            this.rRuby.UseVisualStyleBackColor = true;
+            this.rRuby.CheckedChanged += new System.EventHandler(this.magmatheme_CheckedChanged);
             // 
-            // oceantheme
+            // rAzurite
             // 
-            this.oceantheme.AutoSize = true;
-            this.oceantheme.Checked = true;
-            this.oceantheme.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.oceantheme.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.oceantheme.Location = new System.Drawing.Point(22, 49);
-            this.oceantheme.Margin = new System.Windows.Forms.Padding(2);
-            this.oceantheme.Name = "oceantheme";
-            this.oceantheme.Size = new System.Drawing.Size(74, 25);
-            this.oceantheme.TabIndex = 65;
-            this.oceantheme.TabStop = true;
-            this.oceantheme.Text = "Ocean";
-            this.oceantheme.UseVisualStyleBackColor = true;
-            this.oceantheme.CheckedChanged += new System.EventHandler(this.oceantheme_CheckedChanged);
+            this.rAzurite.AutoSize = true;
+            this.rAzurite.Checked = true;
+            this.rAzurite.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rAzurite.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(127)))), ((int)(((byte)(255)))));
+            this.rAzurite.Location = new System.Drawing.Point(22, 106);
+            this.rAzurite.Margin = new System.Windows.Forms.Padding(2);
+            this.rAzurite.Name = "rAzurite";
+            this.rAzurite.Size = new System.Drawing.Size(80, 25);
+            this.rAzurite.TabIndex = 65;
+            this.rAzurite.TabStop = true;
+            this.rAzurite.Text = "Azurite";
+            this.rAzurite.UseVisualStyleBackColor = true;
+            this.rAzurite.CheckedChanged += new System.EventHandler(this.oceantheme_CheckedChanged);
             // 
-            // zergtheme
+            // rAmethyst
             // 
-            this.zergtheme.AutoSize = true;
-            this.zergtheme.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.zergtheme.ForeColor = System.Drawing.Color.MediumOrchid;
-            this.zergtheme.Location = new System.Drawing.Point(22, 110);
-            this.zergtheme.Margin = new System.Windows.Forms.Padding(2);
-            this.zergtheme.Name = "zergtheme";
-            this.zergtheme.Size = new System.Drawing.Size(62, 25);
-            this.zergtheme.TabIndex = 64;
-            this.zergtheme.Text = "Zerg";
-            this.zergtheme.UseVisualStyleBackColor = true;
-            this.zergtheme.CheckedChanged += new System.EventHandler(this.zergtheme_CheckedChanged);
+            this.rAmethyst.AutoSize = true;
+            this.rAmethyst.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rAmethyst.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(102)))), ((int)(((byte)(204)))));
+            this.rAmethyst.Location = new System.Drawing.Point(22, 48);
+            this.rAmethyst.Margin = new System.Windows.Forms.Padding(2);
+            this.rAmethyst.Name = "rAmethyst";
+            this.rAmethyst.Size = new System.Drawing.Size(98, 25);
+            this.rAmethyst.TabIndex = 64;
+            this.rAmethyst.Text = "Amethyst";
+            this.rAmethyst.UseVisualStyleBackColor = true;
+            this.rAmethyst.CheckedChanged += new System.EventHandler(this.zergtheme_CheckedChanged);
             // 
             // label27
             // 
@@ -247,6 +247,34 @@
             this.pictureBox86.TabIndex = 102;
             this.pictureBox86.TabStop = false;
             this.pictureBox86.Click += new System.EventHandler(this.pictureBox86_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.label27);
+            this.panel1.Controls.Add(this.rAmethyst);
+            this.panel1.Controls.Add(this.rAzurite);
+            this.panel1.Controls.Add(this.rRuby);
+            this.panel1.Controls.Add(this.rJade);
+            this.panel1.Controls.Add(this.rAmber);
+            this.panel1.Controls.Add(this.rSilver);
+            this.panel1.Location = new System.Drawing.Point(12, 8);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(245, 156);
+            this.panel1.TabIndex = 108;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.label3);
+            this.panel2.Controls.Add(this.pictureBox86);
+            this.panel2.Controls.Add(this.radioChinese);
+            this.panel2.Controls.Add(this.pictureBox88);
+            this.panel2.Controls.Add(this.radioHellenic);
+            this.panel2.Controls.Add(this.pictureBox7);
+            this.panel2.Controls.Add(this.radioEnglish);
+            this.panel2.Location = new System.Drawing.Point(271, 8);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(181, 150);
+            this.panel2.TabIndex = 109;
             // 
             // radioChinese
             // 
@@ -469,34 +497,6 @@
             this.chkMD5.UseVisualStyleBackColor = true;
             this.chkMD5.CheckedChanged += new System.EventHandler(this.chkMD5_CheckedChanged);
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.label27);
-            this.panel1.Controls.Add(this.zergtheme);
-            this.panel1.Controls.Add(this.oceantheme);
-            this.panel1.Controls.Add(this.magmatheme);
-            this.panel1.Controls.Add(this.limetheme);
-            this.panel1.Controls.Add(this.carameltheme);
-            this.panel1.Controls.Add(this.minimaltheme);
-            this.panel1.Location = new System.Drawing.Point(12, 8);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(245, 156);
-            this.panel1.TabIndex = 108;
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.label3);
-            this.panel2.Controls.Add(this.pictureBox86);
-            this.panel2.Controls.Add(this.radioChinese);
-            this.panel2.Controls.Add(this.pictureBox88);
-            this.panel2.Controls.Add(this.radioHellenic);
-            this.panel2.Controls.Add(this.pictureBox7);
-            this.panel2.Controls.Add(this.radioEnglish);
-            this.panel2.Location = new System.Drawing.Point(271, 8);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(181, 150);
-            this.panel2.TabIndex = 109;
-            // 
             // OptionsForm
             // 
             this.AcceptButton = this.okbtn;
@@ -549,12 +549,12 @@
         #endregion
 
         private System.Windows.Forms.Button okbtn;
-        private System.Windows.Forms.RadioButton minimaltheme;
-        private System.Windows.Forms.RadioButton carameltheme;
-        private System.Windows.Forms.RadioButton limetheme;
-        private System.Windows.Forms.RadioButton magmatheme;
-        private System.Windows.Forms.RadioButton oceantheme;
-        private System.Windows.Forms.RadioButton zergtheme;
+        private System.Windows.Forms.RadioButton rSilver;
+        private System.Windows.Forms.RadioButton rAmber;
+        private System.Windows.Forms.RadioButton rJade;
+        private System.Windows.Forms.RadioButton rRuby;
+        private System.Windows.Forms.RadioButton rAzurite;
+        private System.Windows.Forms.RadioButton rAmethyst;
         private System.Windows.Forms.Label label27;
         private MoonCheck chkRIPEMD160;
         private MoonCheck chkSHA512;
