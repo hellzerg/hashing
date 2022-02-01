@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listFiles = new System.Windows.Forms.ListBox();
+            this.listFiles = new Hashing.MoonList();
             this.SuspendLayout();
             // 
             // listFiles
@@ -36,12 +36,13 @@
             this.listFiles.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.listFiles.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listFiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listFiles.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listFiles.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.listFiles.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listFiles.ForeColor = System.Drawing.Color.White;
             this.listFiles.FormattingEnabled = true;
             this.listFiles.ItemHeight = 21;
             this.listFiles.Location = new System.Drawing.Point(0, 0);
-            this.listFiles.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.listFiles.Margin = new System.Windows.Forms.Padding(2);
             this.listFiles.Name = "listFiles";
             this.listFiles.Size = new System.Drawing.Size(590, 404);
             this.listFiles.TabIndex = 0;
@@ -56,7 +57,7 @@
             this.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "AnalyzedForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -67,6 +68,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.ListBox listFiles;
+        private MoonList listFiles;
     }
 }

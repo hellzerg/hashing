@@ -49,30 +49,38 @@ namespace Hashing
 
         private void LoadActiveHash()
         {
-            switch (Options.CurrentOptions.ActiveHash)
-            {
-                case 1:
-                    chkMD5.Checked = true;
-                    break;
-                case 2:
-                    chkSHA1.Checked = true;
-                    break;
-                case 3:
-                    chkSHA256.Checked = true;
-                    break;
-                case 4:
-                    chkSHA384.Checked = true;
-                    break;
-                case 5:
-                    chkSHA512.Checked = true;
-                    break;
-                case 6:
-                    chkCRC32.Checked = true;
-                    break;
-                case 7:
-                    chkRIPEMD160.Checked = true;
-                    break;
-            }
+            //switch (Options.CurrentOptions.ActiveHash)
+            //{
+            //    case 1:
+            //        chkMD5.Checked = true;
+            //        break;
+            //    case 2:
+            //        chkSHA1.Checked = true;
+            //        break;
+            //    case 3:
+            //        chkSHA256.Checked = true;
+            //        break;
+            //    case 4:
+            //        chkSHA384.Checked = true;
+            //        break;
+            //    case 5:
+            //        chkSHA512.Checked = true;
+            //        break;
+            //    case 6:
+            //        chkCRC32.Checked = true;
+            //        break;
+            //    case 7:
+            //        chkRIPEMD160.Checked = true;
+            //        break;
+            //}
+
+            chkRIPEMD160.Checked = Options.CurrentOptions.HashOptions.RIPEMD160;
+            chkSHA512.Checked = Options.CurrentOptions.HashOptions.SHA512;
+            chkSHA384.Checked = Options.CurrentOptions.HashOptions.SHA384;
+            chkSHA256.Checked = Options.CurrentOptions.HashOptions.SHA256;
+            chkSHA1.Checked = Options.CurrentOptions.HashOptions.SHA1;
+            chkCRC32.Checked = Options.CurrentOptions.HashOptions.CRC32;
+            chkMD5.Checked = Options.CurrentOptions.HashOptions.MD5;
         }
 
         private void Compare()

@@ -2,8 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.9] - 2022-01-29
-- Hotfix: Updated translation for Chinese (#17)
+## [3.0] - 2022-02-01
+- New: Quickly change hashing algorithms by right-clicking
+- Improved: Visuals and eye-candies
+- Improved: Code refactoring
 
 ## [2.8] - 2022-01-29
 - Hotfix: Can't change theme and language at the same time (#16)

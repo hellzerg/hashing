@@ -58,60 +58,66 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutForm.cs">
+    <Compile Include="Controls\MoonList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AboutForm.Designer.cs">
+    <Compile Include="Forms\AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnalyzedForm.cs">
+    <Compile Include="Forms\AnalyzedForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AnalyzedForm.Designer.cs">
+    <Compile Include="Forms\AnalyzedForm.Designer.cs">
       <DependentUpon>AnalyzedForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ByteSize\BinaryByteSize.cs" />
     <Compile Include="ByteSize\ByteSize.cs" />
     <Compile Include="ByteSize\DecimalByteSize.cs" />
-    <Compile Include="CompareForm.cs">
+    <Compile Include="Forms\CompareForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CompareForm.Designer.cs">
+    <Compile Include="Forms\CompareForm.Designer.cs">
       <DependentUpon>CompareForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ColoredCheckBox.cs">
+    <Compile Include="Controls\MoonCheck.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\ColoredRadioButton.cs">
+    <Compile Include="Controls\MoonRadio.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FeatureBox.cs">
+    <Compile Include="Controls\MoonTree.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\FeatureBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FeatureBox.Designer.cs">
+    <Compile Include="Forms\FeatureBox.Designer.cs">
       <DependentUpon>FeatureBox.cs</DependentUpon>
     </Compile>
     <Compile Include="FileSummary.cs" />
-    <Compile Include="IdenticalsForm.cs">
+    <Compile Include="Forms\IdenticalsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="IdenticalsForm.Designer.cs">
+    <Compile Include="Forms\IdenticalsForm.Designer.cs">
       <DependentUpon>IdenticalsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EmbeddedAssembly.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="HashOptions.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Options.cs" />
-    <Compile Include="OptionsForm.cs">
+    <Compile Include="Forms\OptionsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OptionsForm.Designer.cs">
+    <Compile Include="Forms\OptionsForm.Designer.cs">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -120,25 +126,25 @@
     <Compile Include="ToolStripRendererMaterial.cs" />
     <Compile Include="TopMostMessageBox.cs" />
     <Compile Include="Utilities.cs" />
-    <EmbeddedResource Include="AboutForm.resx">
+    <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AnalyzedForm.resx">
+    <EmbeddedResource Include="Forms\AnalyzedForm.resx">
       <DependentUpon>AnalyzedForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CompareForm.resx">
+    <EmbeddedResource Include="Forms\CompareForm.resx">
       <DependentUpon>CompareForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FeatureBox.resx">
+    <EmbeddedResource Include="Forms\FeatureBox.resx">
       <DependentUpon>FeatureBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="IdenticalsForm.resx">
+    <EmbeddedResource Include="Forms\IdenticalsForm.resx">
       <DependentUpon>IdenticalsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OptionsForm.resx">
+    <EmbeddedResource Include="Forms\OptionsForm.resx">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

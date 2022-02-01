@@ -29,22 +29,22 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.chkCRC32 = new Hashing.ColoredRadioButton();
-            this.chkSHA512 = new Hashing.ColoredRadioButton();
-            this.chkSHA384 = new Hashing.ColoredRadioButton();
-            this.chkRIPEMD160 = new Hashing.ColoredRadioButton();
-            this.chkSHA256 = new Hashing.ColoredRadioButton();
-            this.chkSHA1 = new Hashing.ColoredRadioButton();
-            this.chkMD5 = new Hashing.ColoredRadioButton();
+            this.chkCRC32 = new Hashing.MoonCheck();
+            this.chkSHA512 = new Hashing.MoonCheck();
+            this.chkSHA384 = new Hashing.MoonCheck();
+            this.chkRIPEMD160 = new Hashing.MoonCheck();
+            this.chkSHA256 = new Hashing.MoonCheck();
+            this.chkSHA1 = new Hashing.MoonCheck();
+            this.chkMD5 = new Hashing.MoonCheck();
             this.label1 = new System.Windows.Forms.Label();
             this.txtExpected = new System.Windows.Forms.TextBox();
             this.btnCompare = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.resultBox = new System.Windows.Forms.ListBox();
+            this.resultBox = new Hashing.MoonList();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblNoMatch = new System.Windows.Forms.Label();
             this.btnPaste = new System.Windows.Forms.Button();
-            this.chkRemove = new Hashing.ColoredCheckBox();
+            this.chkRemove = new Hashing.MoonCheck();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -73,7 +73,7 @@
             this.chkCRC32.Location = new System.Drawing.Point(379, 4);
             this.chkCRC32.Margin = new System.Windows.Forms.Padding(2);
             this.chkCRC32.Name = "chkCRC32";
-            this.chkCRC32.Size = new System.Drawing.Size(70, 23);
+            this.chkCRC32.Size = new System.Drawing.Size(71, 23);
             this.chkCRC32.TabIndex = 6;
             this.chkCRC32.Text = "CRC32";
             this.chkCRC32.UseVisualStyleBackColor = true;
@@ -86,7 +86,7 @@
             this.chkSHA512.Location = new System.Drawing.Point(299, 4);
             this.chkSHA512.Margin = new System.Windows.Forms.Padding(2);
             this.chkSHA512.Name = "chkSHA512";
-            this.chkSHA512.Size = new System.Drawing.Size(76, 23);
+            this.chkSHA512.Size = new System.Drawing.Size(77, 23);
             this.chkSHA512.TabIndex = 5;
             this.chkSHA512.Text = "SHA512";
             this.chkSHA512.UseVisualStyleBackColor = true;
@@ -99,7 +99,7 @@
             this.chkSHA384.Location = new System.Drawing.Point(217, 4);
             this.chkSHA384.Margin = new System.Windows.Forms.Padding(2);
             this.chkSHA384.Name = "chkSHA384";
-            this.chkSHA384.Size = new System.Drawing.Size(78, 23);
+            this.chkSHA384.Size = new System.Drawing.Size(79, 23);
             this.chkSHA384.TabIndex = 4;
             this.chkSHA384.Text = "SHA384";
             this.chkSHA384.UseVisualStyleBackColor = true;
@@ -112,7 +112,7 @@
             this.chkRIPEMD160.Location = new System.Drawing.Point(453, 4);
             this.chkRIPEMD160.Margin = new System.Windows.Forms.Padding(2);
             this.chkRIPEMD160.Name = "chkRIPEMD160";
-            this.chkRIPEMD160.Size = new System.Drawing.Size(100, 23);
+            this.chkRIPEMD160.Size = new System.Drawing.Size(101, 23);
             this.chkRIPEMD160.TabIndex = 3;
             this.chkRIPEMD160.Text = "RIPEMD160";
             this.chkRIPEMD160.UseVisualStyleBackColor = true;
@@ -125,7 +125,7 @@
             this.chkSHA256.Location = new System.Drawing.Point(135, 4);
             this.chkSHA256.Margin = new System.Windows.Forms.Padding(2);
             this.chkSHA256.Name = "chkSHA256";
-            this.chkSHA256.Size = new System.Drawing.Size(78, 23);
+            this.chkSHA256.Size = new System.Drawing.Size(79, 23);
             this.chkSHA256.TabIndex = 2;
             this.chkSHA256.Text = "SHA256";
             this.chkSHA256.UseVisualStyleBackColor = true;
@@ -138,7 +138,7 @@
             this.chkSHA1.Location = new System.Drawing.Point(71, 4);
             this.chkSHA1.Margin = new System.Windows.Forms.Padding(2);
             this.chkSHA1.Name = "chkSHA1";
-            this.chkSHA1.Size = new System.Drawing.Size(60, 23);
+            this.chkSHA1.Size = new System.Drawing.Size(61, 23);
             this.chkSHA1.TabIndex = 1;
             this.chkSHA1.Text = "SHA1";
             this.chkSHA1.UseVisualStyleBackColor = true;
@@ -147,16 +147,14 @@
             // chkMD5
             // 
             this.chkMD5.AutoSize = true;
-            this.chkMD5.Checked = true;
-            this.chkMD5.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkMD5.ForeColor = System.Drawing.Color.MediumOrchid;
+            this.chkMD5.Font = new System.Drawing.Font("Segoe UI Semibold", 10F);
+            this.chkMD5.ForeColor = System.Drawing.Color.White;
             this.chkMD5.Location = new System.Drawing.Point(9, 4);
             this.chkMD5.Margin = new System.Windows.Forms.Padding(2);
             this.chkMD5.Name = "chkMD5";
-            this.chkMD5.Size = new System.Drawing.Size(58, 23);
+            this.chkMD5.Size = new System.Drawing.Size(59, 23);
             this.chkMD5.TabIndex = 0;
-            this.chkMD5.TabStop = true;
-            this.chkMD5.Tag = "themeable";
+            this.chkMD5.Tag = "";
             this.chkMD5.Text = "MD5";
             this.chkMD5.UseVisualStyleBackColor = true;
             this.chkMD5.CheckedChanged += new System.EventHandler(this.chkMD5_CheckedChanged);
@@ -227,7 +225,8 @@
             this.resultBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.resultBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.resultBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resultBox.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resultBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.resultBox.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.resultBox.ForeColor = System.Drawing.Color.White;
             this.resultBox.FormattingEnabled = true;
             this.resultBox.HorizontalScrollbar = true;
@@ -337,20 +336,20 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private ColoredRadioButton chkSHA512;
-        private ColoredRadioButton chkSHA384;
-        private ColoredRadioButton chkRIPEMD160;
-        private ColoredRadioButton chkSHA256;
-        private ColoredRadioButton chkSHA1;
-        private ColoredRadioButton chkMD5;
+        private MoonCheck chkSHA512;
+        private MoonCheck chkSHA384;
+        private MoonCheck chkRIPEMD160;
+        private MoonCheck chkSHA256;
+        private MoonCheck chkSHA1;
+        private MoonCheck chkMD5;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtExpected;
         private System.Windows.Forms.Button btnCompare;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListBox resultBox;
+        private MoonList resultBox;
         private System.Windows.Forms.Panel panel2;
-        private ColoredCheckBox chkRemove;
-        private ColoredRadioButton chkCRC32;
+        private MoonCheck chkRemove;
+        private MoonCheck chkCRC32;
         private System.Windows.Forms.Button btnPaste;
         private System.Windows.Forms.Label lblNoMatch;
     }

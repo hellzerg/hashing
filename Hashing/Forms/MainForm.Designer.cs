@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.SumView = new System.Windows.Forms.TreeView();
             this.helperMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,6 +39,15 @@
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemMD5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemSHA1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemSHA256 = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemSHA384 = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemSHA512 = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemCRC32 = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemRIPEMD160 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topPanel = new System.Windows.Forms.Panel();
             this.btnUpdate = new System.Windows.Forms.Button();
@@ -56,31 +64,18 @@
             this.botPanel = new System.Windows.Forms.Panel();
             this.btnCancelHashing = new System.Windows.Forms.Button();
             this.lblCalculating = new System.Windows.Forms.Label();
+            this.SumView = new Hashing.MoonTree();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
             this.helperMenu.SuspendLayout();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.botPanel.SuspendLayout();
             this.trayMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // SumView
-            // 
-            this.SumView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.SumView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SumView.ContextMenuStrip = this.helperMenu;
-            this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SumView.ForeColor = System.Drawing.Color.White;
-            this.SumView.Location = new System.Drawing.Point(0, 0);
-            this.SumView.Margin = new System.Windows.Forms.Padding(2);
-            this.SumView.Name = "SumView";
-            this.SumView.Size = new System.Drawing.Size(985, 555);
-            this.SumView.TabIndex = 0;
-            this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.sumView_NodeMouseClick);
             // 
             // helperMenu
             // 
@@ -97,10 +92,12 @@
             this.toolStripMenuItem2,
             this.toolStripMenuItem3,
             this.toolStripSeparator2,
+            this.toolStripMenuItem5,
+            this.toolStripSeparator3,
             this.clearToolStripMenuItem});
             this.helperMenu.Name = "helperMenu";
             this.helperMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.helperMenu.Size = new System.Drawing.Size(252, 198);
+            this.helperMenu.Size = new System.Drawing.Size(252, 230);
             // 
             // copyToolStripMenuItem
             // 
@@ -171,6 +168,97 @@
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(248, 6);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.itemMD5,
+            this.itemSHA1,
+            this.itemSHA256,
+            this.itemSHA384,
+            this.itemSHA512,
+            this.itemCRC32,
+            this.itemRIPEMD160});
+            this.toolStripMenuItem5.ForeColor = System.Drawing.Color.White;
+            this.toolStripMenuItem5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem5.Image")));
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(251, 26);
+            this.toolStripMenuItem5.Text = "Hashes";
+            // 
+            // itemMD5
+            // 
+            this.itemMD5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.itemMD5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.itemMD5.ForeColor = System.Drawing.Color.White;
+            this.itemMD5.Name = "itemMD5";
+            this.itemMD5.Size = new System.Drawing.Size(180, 24);
+            this.itemMD5.Tag = "md5";
+            this.itemMD5.Text = "MD5";
+            // 
+            // itemSHA1
+            // 
+            this.itemSHA1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.itemSHA1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.itemSHA1.ForeColor = System.Drawing.Color.White;
+            this.itemSHA1.Name = "itemSHA1";
+            this.itemSHA1.Size = new System.Drawing.Size(180, 24);
+            this.itemSHA1.Tag = "sha1";
+            this.itemSHA1.Text = "SHA1";
+            // 
+            // itemSHA256
+            // 
+            this.itemSHA256.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.itemSHA256.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.itemSHA256.ForeColor = System.Drawing.Color.White;
+            this.itemSHA256.Name = "itemSHA256";
+            this.itemSHA256.Size = new System.Drawing.Size(180, 24);
+            this.itemSHA256.Tag = "sha256";
+            this.itemSHA256.Text = "SHA256";
+            // 
+            // itemSHA384
+            // 
+            this.itemSHA384.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.itemSHA384.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.itemSHA384.ForeColor = System.Drawing.Color.White;
+            this.itemSHA384.Name = "itemSHA384";
+            this.itemSHA384.Size = new System.Drawing.Size(180, 24);
+            this.itemSHA384.Tag = "sha384";
+            this.itemSHA384.Text = "SHA384";
+            // 
+            // itemSHA512
+            // 
+            this.itemSHA512.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.itemSHA512.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.itemSHA512.ForeColor = System.Drawing.Color.White;
+            this.itemSHA512.Name = "itemSHA512";
+            this.itemSHA512.Size = new System.Drawing.Size(180, 24);
+            this.itemSHA512.Tag = "sha512";
+            this.itemSHA512.Text = "SHA512";
+            // 
+            // itemCRC32
+            // 
+            this.itemCRC32.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.itemCRC32.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.itemCRC32.ForeColor = System.Drawing.Color.White;
+            this.itemCRC32.Name = "itemCRC32";
+            this.itemCRC32.Size = new System.Drawing.Size(180, 24);
+            this.itemCRC32.Tag = "crc32";
+            this.itemCRC32.Text = "CRC32";
+            // 
+            // itemRIPEMD160
+            // 
+            this.itemRIPEMD160.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.itemRIPEMD160.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.itemRIPEMD160.ForeColor = System.Drawing.Color.White;
+            this.itemRIPEMD160.Name = "itemRIPEMD160";
+            this.itemRIPEMD160.Size = new System.Drawing.Size(180, 24);
+            this.itemRIPEMD160.Tag = "ripemd160";
+            this.itemRIPEMD160.Text = "RIPEMD160";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(248, 6);
             // 
             // clearToolStripMenuItem
             // 
@@ -273,7 +361,7 @@
             this.txtPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtPath.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPath.ForeColor = System.Drawing.Color.Silver;
-            this.txtPath.Location = new System.Drawing.Point(184, 38);
+            this.txtPath.Location = new System.Drawing.Point(184, 37);
             this.txtPath.Margin = new System.Windows.Forms.Padding(2);
             this.txtPath.Name = "txtPath";
             this.txtPath.Size = new System.Drawing.Size(594, 25);
@@ -448,6 +536,22 @@
             this.lblCalculating.Text = "Drag and drop files here...";
             this.lblCalculating.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // SumView
+            // 
+            this.SumView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.SumView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SumView.ContextMenuStrip = this.helperMenu;
+            this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SumView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
+            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SumView.ForeColor = System.Drawing.Color.White;
+            this.SumView.Location = new System.Drawing.Point(0, 0);
+            this.SumView.Margin = new System.Windows.Forms.Padding(2);
+            this.SumView.Name = "SumView";
+            this.SumView.Size = new System.Drawing.Size(985, 555);
+            this.SumView.TabIndex = 0;
+            this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.sumView_NodeMouseClick);
+            // 
             // trayIcon
             // 
             this.trayIcon.ContextMenuStrip = this.trayMenu;
@@ -486,6 +590,14 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // toolStripMenuItem11
+            // 
+            this.toolStripMenuItem11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.toolStripMenuItem11.ForeColor = System.Drawing.Color.White;
+            this.toolStripMenuItem11.Name = "toolStripMenuItem11";
+            this.toolStripMenuItem11.Size = new System.Drawing.Size(211, 24);
+            this.toolStripMenuItem11.Text = "RIPEMD160";
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -520,7 +632,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView SumView;
+        private MoonTree SumView;
         private System.Windows.Forms.Panel topPanel;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel botPanel;
@@ -550,6 +662,16 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.Button btnCancelHashing;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem itemMD5;
+        private System.Windows.Forms.ToolStripMenuItem itemSHA1;
+        private System.Windows.Forms.ToolStripMenuItem itemSHA256;
+        private System.Windows.Forms.ToolStripMenuItem itemSHA384;
+        private System.Windows.Forms.ToolStripMenuItem itemSHA512;
+        private System.Windows.Forms.ToolStripMenuItem itemCRC32;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem11;
+        private System.Windows.Forms.ToolStripMenuItem itemRIPEMD160;
     }
 }
 

@@ -29,19 +29,19 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.SumView = new System.Windows.Forms.TreeView();
+            this.SumView = new MoonTree();
             this.helperMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.radioCRC32 = new Hashing.ColoredRadioButton();
-            this.radioSHA512 = new Hashing.ColoredRadioButton();
-            this.radioSHA384 = new Hashing.ColoredRadioButton();
-            this.radioRIPEMD160 = new Hashing.ColoredRadioButton();
-            this.radioSHA256 = new Hashing.ColoredRadioButton();
-            this.radioSHA1 = new Hashing.ColoredRadioButton();
-            this.radioMD5 = new Hashing.ColoredRadioButton();
+            this.radioCRC32 = new Hashing.MoonRadio();
+            this.radioSHA512 = new Hashing.MoonRadio();
+            this.radioSHA384 = new Hashing.MoonRadio();
+            this.radioRIPEMD160 = new Hashing.MoonRadio();
+            this.radioSHA256 = new Hashing.MoonRadio();
+            this.radioSHA1 = new Hashing.MoonRadio();
+            this.radioMD5 = new Hashing.MoonRadio();
             this.helperMenu.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -248,18 +248,18 @@
 
         #endregion
 
-        private System.Windows.Forms.TreeView SumView;
+        private MoonTree SumView;
         private System.Windows.Forms.ContextMenuStrip helperMenu;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsJSONToolStripMenuItem;
         private System.Windows.Forms.Panel panel2;
-        private ColoredRadioButton radioMD5;
-        private ColoredRadioButton radioSHA1;
-        private ColoredRadioButton radioSHA256;
-        private ColoredRadioButton radioRIPEMD160;
-        private ColoredRadioButton radioSHA384;
-        private ColoredRadioButton radioSHA512;
+        private MoonRadio radioMD5;
+        private MoonRadio radioSHA1;
+        private MoonRadio radioSHA256;
+        private MoonRadio radioRIPEMD160;
+        private MoonRadio radioSHA384;
+        private MoonRadio radioSHA512;
         private System.Windows.Forms.Panel panel1;
-        private ColoredRadioButton radioCRC32;
+        private MoonRadio radioCRC32;
     }
 }

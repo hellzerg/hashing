@@ -68,7 +68,7 @@ namespace Hashing
                     SetTheme(f, Color.DarkOrange, Color.Chocolate);
                     break;
                 case Theme.Lime:
-                    SetTheme(f, Color.LimeGreen, Color.ForestGreen);
+                    SetTheme(f, Color.ForestGreen, Color.FromArgb(39, 159, 39));
                     break;
                 case Theme.Magma:
                     SetTheme(f, Color.Tomato, Color.Red);

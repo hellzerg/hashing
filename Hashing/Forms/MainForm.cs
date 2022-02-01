@@ -93,6 +93,10 @@ namespace Hashing
                 Utilities.DisableHighPriority();
             }
 
+            // Hash options handling from right-click menu
+            CheckMenuItemsByHashes();
+            EnableHashMenuItemsEvent();
+
             // Translation-related
             if (Options.CurrentOptions.LanguageCode == LanguageCode.EN)
             {
@@ -122,6 +126,62 @@ namespace Hashing
 
             lblversion.Text = Options.TranslationList["lblversion"].ToString().Replace("{VN}", Program.GetCurrentVersionToString());
             trayIcon.Visible = false;
+        }
+
+        private void EnableHashMenuItemsEvent()
+        {
+            itemMD5.Click += HashClickFromMenu;
+            itemSHA1.Click += HashClickFromMenu;
+            itemSHA256.Click += HashClickFromMenu;
+            itemSHA384.Click += HashClickFromMenu;
+            itemSHA512.Click += HashClickFromMenu;
+            itemCRC32.Click += HashClickFromMenu;
+            itemRIPEMD160.Click += HashClickFromMenu;
+        }
+
+        private void HashClickFromMenu(object sender, EventArgs e)
+        {
+            ToolStripMenuItem x = (ToolStripMenuItem)sender;
+
+            if (x.ForeColor == Color.White) x.ForeColor = Options.ForegroundColor;
+            else x.ForeColor = x.ForeColor = Color.White;
+
+            if (x.Tag.ToString() == "md5") Options.CurrentOptions.HashOptions.MD5 = (x.ForeColor == Options.ForegroundColor);
+            if (x.Tag.ToString() == "sha1") Options.CurrentOptions.HashOptions.SHA1 = (x.ForeColor == Options.ForegroundColor);
+            if (x.Tag.ToString() == "sha256") Options.CurrentOptions.HashOptions.SHA256 = (x.ForeColor == Options.ForegroundColor);
+            if (x.Tag.ToString() == "sha384") Options.CurrentOptions.HashOptions.SHA384 = (x.ForeColor == Options.ForegroundColor);
+            if (x.Tag.ToString() == "sha512") Options.CurrentOptions.HashOptions.SHA512 = (x.ForeColor == Options.ForegroundColor);
+            if (x.Tag.ToString() == "crc32") Options.CurrentOptions.HashOptions.CRC32 = (x.ForeColor == Options.ForegroundColor);
+            if (x.Tag.ToString() == "ripemd160") Options.CurrentOptions.HashOptions.RIPEMD160 = (x.ForeColor == Options.ForegroundColor);
+
+            if (SumResult.Sums.Count > 0)
+            {
+                ReCalculateSums();
+            }
+        }
+
+        private void CheckMenuItemsByHashes()
+        {
+            if (Options.CurrentOptions.HashOptions.MD5) itemMD5.ForeColor = Options.ForegroundColor;
+            else itemMD5.ForeColor = Color.White;
+
+            if (Options.CurrentOptions.HashOptions.SHA1) itemSHA1.ForeColor = Options.ForegroundColor;
+            else itemSHA1.ForeColor = Color.White;
+
+            if (Options.CurrentOptions.HashOptions.SHA256) itemSHA256.ForeColor = Options.ForegroundColor;
+            else itemSHA256.ForeColor = Color.White;
+
+            if (Options.CurrentOptions.HashOptions.SHA384) itemSHA384.ForeColor = Options.ForegroundColor;
+            else itemSHA384.ForeColor = Color.White;
+
+            if (Options.CurrentOptions.HashOptions.SHA512) itemSHA512.ForeColor = Options.ForegroundColor;
+            else itemSHA512.ForeColor = Color.White;
+
+            if (Options.CurrentOptions.HashOptions.CRC32) itemCRC32.ForeColor = Options.ForegroundColor;
+            else itemCRC32.ForeColor = Color.White;
+
+            if (Options.CurrentOptions.HashOptions.RIPEMD160) itemRIPEMD160.ForeColor = Options.ForegroundColor;
+            else itemRIPEMD160.ForeColor = Color.White;
         }
 
         internal void Translate(bool skipFull = false)
@@ -1079,6 +1139,8 @@ namespace Hashing
             {
                 this.TopMost = false;
             }
+
+            CheckMenuItemsByHashes();
 
             _allowExit = !Options.CurrentOptions.TrayIcon;
 
