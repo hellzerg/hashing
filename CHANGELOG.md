@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.1] - 2022-02-08
+- New: SHA3-256, SHA3-384, SHA3-512 algorithms support (#18)
+
 ## [3.0] - 2022-02-01
 - New: Quickly change hashing algorithms by right-clicking
 - Improved: Visuals and eye-candies

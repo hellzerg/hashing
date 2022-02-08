@@ -12,7 +12,7 @@ namespace Hashing
 
         // Enter current version here
         internal readonly static float Major = 3;
-        internal readonly static float Minor = 0;
+        internal readonly static float Minor = 1;
 
         /* END OF VERSION PROPERTIES */
 

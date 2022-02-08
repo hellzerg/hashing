@@ -29,12 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.SumView = new MoonTree();
             this.helperMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.SumView = new Hashing.MoonTree();
+            this.radioSHA35 = new Hashing.MoonRadio();
+            this.radioSHA33 = new Hashing.MoonRadio();
+            this.radioSHA32 = new Hashing.MoonRadio();
             this.radioCRC32 = new Hashing.MoonRadio();
             this.radioSHA512 = new Hashing.MoonRadio();
             this.radioSHA384 = new Hashing.MoonRadio();
@@ -46,21 +49,6 @@
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // SumView
-            // 
-            this.SumView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.SumView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SumView.ContextMenuStrip = this.helperMenu;
-            this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SumView.ForeColor = System.Drawing.Color.White;
-            this.SumView.Location = new System.Drawing.Point(0, 0);
-            this.SumView.Margin = new System.Windows.Forms.Padding(2);
-            this.SumView.Name = "SumView";
-            this.SumView.Size = new System.Drawing.Size(713, 459);
-            this.SumView.TabIndex = 1;
-            this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SumView_NodeMouseClick);
             // 
             // helperMenu
             // 
@@ -74,14 +62,14 @@
             this.helperMenu.Name = "helperMenu";
             this.helperMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.helperMenu.ShowImageMargin = false;
-            this.helperMenu.Size = new System.Drawing.Size(156, 74);
+            this.helperMenu.Size = new System.Drawing.Size(141, 52);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.copyToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(155, 24);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(140, 24);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
@@ -90,7 +78,7 @@
             this.saveAsJSONToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.saveAsJSONToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.saveAsJSONToolStripMenuItem.Name = "saveAsJSONToolStripMenuItem";
-            this.saveAsJSONToolStripMenuItem.Size = new System.Drawing.Size(155, 24);
+            this.saveAsJSONToolStripMenuItem.Size = new System.Drawing.Size(140, 24);
             this.saveAsJSONToolStripMenuItem.Text = "Save as JSON";
             this.saveAsJSONToolStripMenuItem.Click += new System.EventHandler(this.saveAsJSONToolStripMenuItem_Click);
             // 
@@ -102,12 +90,15 @@
             this.panel2.Location = new System.Drawing.Point(0, 32);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(715, 461);
+            this.panel2.Size = new System.Drawing.Size(864, 563);
             this.panel2.TabIndex = 4;
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.radioSHA35);
+            this.panel1.Controls.Add(this.radioSHA33);
+            this.panel1.Controls.Add(this.radioSHA32);
             this.panel1.Controls.Add(this.radioCRC32);
             this.panel1.Controls.Add(this.radioSHA512);
             this.panel1.Controls.Add(this.radioSHA384);
@@ -119,8 +110,66 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(715, 32);
+            this.panel1.Size = new System.Drawing.Size(864, 32);
             this.panel1.TabIndex = 3;
+            // 
+            // SumView
+            // 
+            this.SumView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.SumView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SumView.ContextMenuStrip = this.helperMenu;
+            this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SumView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
+            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SumView.ForeColor = System.Drawing.Color.White;
+            this.SumView.Location = new System.Drawing.Point(0, 0);
+            this.SumView.Margin = new System.Windows.Forms.Padding(2);
+            this.SumView.Name = "SumView";
+            this.SumView.Size = new System.Drawing.Size(862, 561);
+            this.SumView.TabIndex = 1;
+            this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SumView_NodeMouseClick);
+            // 
+            // radioSHA35
+            // 
+            this.radioSHA35.AutoSize = true;
+            this.radioSHA35.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioSHA35.Location = new System.Drawing.Point(750, 4);
+            this.radioSHA35.Margin = new System.Windows.Forms.Padding(2);
+            this.radioSHA35.Name = "radioSHA35";
+            this.radioSHA35.Size = new System.Drawing.Size(90, 23);
+            this.radioSHA35.TabIndex = 9;
+            this.radioSHA35.TabStop = true;
+            this.radioSHA35.Text = "SHA3-512";
+            this.radioSHA35.UseVisualStyleBackColor = true;
+            this.radioSHA35.CheckedChanged += new System.EventHandler(this.radioSHA35_CheckedChanged);
+            // 
+            // radioSHA33
+            // 
+            this.radioSHA33.AutoSize = true;
+            this.radioSHA33.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioSHA33.Location = new System.Drawing.Point(654, 4);
+            this.radioSHA33.Margin = new System.Windows.Forms.Padding(2);
+            this.radioSHA33.Name = "radioSHA33";
+            this.radioSHA33.Size = new System.Drawing.Size(92, 23);
+            this.radioSHA33.TabIndex = 8;
+            this.radioSHA33.TabStop = true;
+            this.radioSHA33.Text = "SHA3-384";
+            this.radioSHA33.UseVisualStyleBackColor = true;
+            this.radioSHA33.CheckedChanged += new System.EventHandler(this.radioSHA33_CheckedChanged);
+            // 
+            // radioSHA32
+            // 
+            this.radioSHA32.AutoSize = true;
+            this.radioSHA32.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioSHA32.Location = new System.Drawing.Point(558, 4);
+            this.radioSHA32.Margin = new System.Windows.Forms.Padding(2);
+            this.radioSHA32.Name = "radioSHA32";
+            this.radioSHA32.Size = new System.Drawing.Size(92, 23);
+            this.radioSHA32.TabIndex = 7;
+            this.radioSHA32.TabStop = true;
+            this.radioSHA32.Text = "SHA3-256";
+            this.radioSHA32.UseVisualStyleBackColor = true;
+            this.radioSHA32.CheckedChanged += new System.EventHandler(this.radioSHA32_CheckedChanged);
             // 
             // radioCRC32
             // 
@@ -225,7 +274,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.ClientSize = new System.Drawing.Size(715, 493);
+            this.ClientSize = new System.Drawing.Size(864, 595);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -261,5 +310,8 @@
         private MoonRadio radioSHA512;
         private System.Windows.Forms.Panel panel1;
         private MoonRadio radioCRC32;
+        private MoonRadio radioSHA35;
+        private MoonRadio radioSHA33;
+        private MoonRadio radioSHA32;
     }
 }

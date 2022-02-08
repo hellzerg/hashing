@@ -53,7 +53,6 @@ namespace Hashing
         CancellationTokenSource tokenSource;
 
         readonly string _latestVersionLink = "https://raw.githubusercontent.com/hellzerg/hashing/master/version.txt";
-        readonly string _releasesLink = "https://github.com/hellzerg/hashing/releases";
 
         string _noNewVersionMessage = "You already have the latest version!";
         string _betaVersionMessage = "You are using an experimental version!";
@@ -137,6 +136,9 @@ namespace Hashing
             itemSHA512.Click += HashClickFromMenu;
             itemCRC32.Click += HashClickFromMenu;
             itemRIPEMD160.Click += HashClickFromMenu;
+            itemSHA32.Click += HashClickFromMenu;
+            itemSHA33.Click += HashClickFromMenu;
+            itemSHA35.Click += HashClickFromMenu;
         }
 
         private void HashClickFromMenu(object sender, EventArgs e)
@@ -153,6 +155,9 @@ namespace Hashing
             if (x.Tag.ToString() == "sha512") Options.CurrentOptions.HashOptions.SHA512 = (x.ForeColor == Options.ForegroundColor);
             if (x.Tag.ToString() == "crc32") Options.CurrentOptions.HashOptions.CRC32 = (x.ForeColor == Options.ForegroundColor);
             if (x.Tag.ToString() == "ripemd160") Options.CurrentOptions.HashOptions.RIPEMD160 = (x.ForeColor == Options.ForegroundColor);
+            if (x.Tag.ToString() == "sha32") Options.CurrentOptions.HashOptions.SHA3_256 = (x.ForeColor == Options.ForegroundColor);
+            if (x.Tag.ToString() == "sha33") Options.CurrentOptions.HashOptions.SHA3_384 = (x.ForeColor == Options.ForegroundColor);
+            if (x.Tag.ToString() == "sha35") Options.CurrentOptions.HashOptions.SHA3_512 = (x.ForeColor == Options.ForegroundColor);
 
             if (SumResult.Sums.Count > 0)
             {
@@ -182,6 +187,15 @@ namespace Hashing
 
             if (Options.CurrentOptions.HashOptions.RIPEMD160) itemRIPEMD160.ForeColor = Options.ForegroundColor;
             else itemRIPEMD160.ForeColor = Color.White;
+
+            if (Options.CurrentOptions.HashOptions.SHA3_256) itemSHA32.ForeColor = Options.ForegroundColor;
+            else itemSHA32.ForeColor = Color.White;
+
+            if (Options.CurrentOptions.HashOptions.SHA3_384) itemSHA33.ForeColor = Options.ForegroundColor;
+            else itemSHA33.ForeColor = Color.White;
+
+            if (Options.CurrentOptions.HashOptions.SHA3_512) itemSHA35.ForeColor = Options.ForegroundColor;
+            else itemSHA35.ForeColor = Color.White;
         }
 
         internal void Translate(bool skipFull = false)
@@ -441,6 +455,9 @@ namespace Hashing
                     if (Options.CurrentOptions.HashOptions.SHA512) rootNode.Nodes.Add("SHA512: " + sr.SHA512);
                     if (Options.CurrentOptions.HashOptions.CRC32) rootNode.Nodes.Add("CRC32: " + sr.CRC32);
                     if (Options.CurrentOptions.HashOptions.RIPEMD160) rootNode.Nodes.Add("RIPEMD160: " + sr.RIPEMD160);
+                    if (Options.CurrentOptions.HashOptions.SHA3_256) rootNode.Nodes.Add("SHA3-256: " + sr.SHA3_256);
+                    if (Options.CurrentOptions.HashOptions.SHA3_384) rootNode.Nodes.Add("SHA3-384: " + sr.SHA3_384);
+                    if (Options.CurrentOptions.HashOptions.SHA3_512) rootNode.Nodes.Add("SHA3-512: " + sr.SHA3_512);
 
                     SumView.Nodes.Add(rootNode);
                     SumView.ExpandAll();
@@ -485,6 +502,9 @@ namespace Hashing
             if (Options.CurrentOptions.HashOptions.SHA512) list = FindIdenticalsBySHA512();
             if (Options.CurrentOptions.HashOptions.CRC32) list = FindIdenticalsByCRC32();
             if (Options.CurrentOptions.HashOptions.RIPEMD160) list = FindIdenticalsByRIPEMD160();
+            if (Options.CurrentOptions.HashOptions.SHA3_256) list = FindIdenticalsBySHA3_256();
+            if (Options.CurrentOptions.HashOptions.SHA3_384) list = FindIdenticalsBySHA3_384();
+            if (Options.CurrentOptions.HashOptions.SHA3_512) list = FindIdenticalsBySHA3_512();
 
             if (SumView.Nodes.Count > 0 && list.Count > 0)
             {
@@ -609,9 +629,57 @@ namespace Hashing
             return duplicates;
         }
 
+        private List<SumResult> FindIdenticalsBySHA3_256()
+        {
+            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA3_256 into g where g.Count() > 1 select g.Key;
+            List<SumResult> duplicates = new List<SumResult>();
+
+            foreach (string s in similars)
+            {
+                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA3_256 == s && x.File != s && !string.IsNullOrEmpty(x.SHA3_256) && !string.IsNullOrEmpty(s)))
+                {
+                    duplicates.Add(sr);
+                }
+            }
+
+            return duplicates;
+        }
+
+        private List<SumResult> FindIdenticalsBySHA3_384()
+        {
+            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA3_384 into g where g.Count() > 1 select g.Key;
+            List<SumResult> duplicates = new List<SumResult>();
+
+            foreach (string s in similars)
+            {
+                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA3_384 == s && x.File != s && !string.IsNullOrEmpty(x.SHA3_384) && !string.IsNullOrEmpty(s)))
+                {
+                    duplicates.Add(sr);
+                }
+            }
+
+            return duplicates;
+        }
+
+        private List<SumResult> FindIdenticalsBySHA3_512()
+        {
+            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA3_512 into g where g.Count() > 1 select g.Key;
+            List<SumResult> duplicates = new List<SumResult>();
+
+            foreach (string s in similars)
+            {
+                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA3_512 == s && x.File != s && !string.IsNullOrEmpty(x.SHA3_512) && !string.IsNullOrEmpty(s)))
+                {
+                    duplicates.Add(sr);
+                }
+            }
+
+            return duplicates;
+        }
+
         private void ReCalculateSums()
         {
-            if (!Options.CurrentOptions.HashOptions.MD5 && !Options.CurrentOptions.HashOptions.SHA1 && !Options.CurrentOptions.HashOptions.SHA256 && !Options.CurrentOptions.HashOptions.SHA384 && !Options.CurrentOptions.HashOptions.SHA512 && !Options.CurrentOptions.HashOptions.RIPEMD160 && !Options.CurrentOptions.HashOptions.CRC32)
+            if (!Options.CurrentOptions.HashOptions.MD5 && !Options.CurrentOptions.HashOptions.SHA1 && !Options.CurrentOptions.HashOptions.SHA256 && !Options.CurrentOptions.HashOptions.SHA384 && !Options.CurrentOptions.HashOptions.SHA512 && !Options.CurrentOptions.HashOptions.SHA3_384 && !Options.CurrentOptions.HashOptions.CRC32 && !Options.CurrentOptions.HashOptions.SHA3_256 && !Options.CurrentOptions.HashOptions.SHA3_256 && !Options.CurrentOptions.HashOptions.SHA3_512)
             {
                 Clear();
                 return;
@@ -766,6 +834,9 @@ namespace Hashing
                             if (!string.IsNullOrEmpty(listing[i].SHA512)) rootNode.Nodes.Add("SHA512: " + listing[i].SHA512);
                             if (!string.IsNullOrEmpty(listing[i].CRC32)) rootNode.Nodes.Add("CRC32: " + listing[i].CRC32);
                             if (!string.IsNullOrEmpty(listing[i].RIPEMD160)) rootNode.Nodes.Add("RIPEMD160: " + listing[i].RIPEMD160);
+                            if (!string.IsNullOrEmpty(listing[i].SHA3_256)) rootNode.Nodes.Add("SHA3-256: " + listing[i].SHA3_256);
+                            if (!string.IsNullOrEmpty(listing[i].SHA3_384)) rootNode.Nodes.Add("SHA3-384: " + listing[i].SHA3_384);
+                            if (!string.IsNullOrEmpty(listing[i].SHA3_512)) rootNode.Nodes.Add("SHA3-512: " + listing[i].SHA3_512);
 
                             roots.Add(rootNode);
                         }
@@ -917,6 +988,24 @@ namespace Hashing
                                 if (SumResult.Sums[i].RIPEMD160 == _fileSummaries[i].RIPEMD160) _analyzedFiles.Add(_fileSummaries[i].File);
                             }
 
+                            if (Options.CurrentOptions.HashOptions.SHA3_256)
+                            {
+                                rootNode.Nodes.Add("SHA3-256: " + SumResult.Sums[i].SHA3_256);
+                                if (SumResult.Sums[i].SHA3_256 == _fileSummaries[i].SHA3_256) _analyzedFiles.Add(_fileSummaries[i].File);
+                            }
+
+                            if (Options.CurrentOptions.HashOptions.SHA3_384)
+                            {
+                                rootNode.Nodes.Add("SHA3-384: " + SumResult.Sums[i].SHA3_384);
+                                if (SumResult.Sums[i].SHA3_384 == _fileSummaries[i].SHA3_384) _analyzedFiles.Add(_fileSummaries[i].File);
+                            }
+
+                            if (Options.CurrentOptions.HashOptions.SHA3_512)
+                            {
+                                rootNode.Nodes.Add("SHA3-512: " + SumResult.Sums[i].SHA3_512);
+                                if (SumResult.Sums[i].SHA3_512 == _fileSummaries[i].SHA3_512) _analyzedFiles.Add(_fileSummaries[i].File);
+                            }
+
                             SumView.Invoke((MethodInvoker)delegate
                             {
                                 SumView.Nodes.Add(rootNode);
@@ -939,6 +1028,9 @@ namespace Hashing
                             if (Options.CurrentOptions.HashOptions.SHA512) rootNode.Nodes.Add("SHA512: " + SumResult.Sums[i].SHA512);
                             if (Options.CurrentOptions.HashOptions.CRC32) rootNode.Nodes.Add("CRC32: " + SumResult.Sums[i].CRC32);
                             if (Options.CurrentOptions.HashOptions.RIPEMD160) rootNode.Nodes.Add("RIPEMD160: " + SumResult.Sums[i].RIPEMD160);
+                            if (Options.CurrentOptions.HashOptions.SHA3_256) rootNode.Nodes.Add("SHA3-256: " + SumResult.Sums[i].SHA3_256);
+                            if (Options.CurrentOptions.HashOptions.SHA3_384) rootNode.Nodes.Add("SHA3-384: " + SumResult.Sums[i].SHA3_384);
+                            if (Options.CurrentOptions.HashOptions.SHA3_512) rootNode.Nodes.Add("SHA3-512: " + SumResult.Sums[i].SHA3_512);
 
                             SumView.Invoke((MethodInvoker)delegate
                             {
@@ -1014,7 +1106,7 @@ namespace Hashing
 
         private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
-            if (!Options.CurrentOptions.HashOptions.MD5 && !Options.CurrentOptions.HashOptions.SHA1 && !Options.CurrentOptions.HashOptions.SHA256 && !Options.CurrentOptions.HashOptions.SHA384 && !Options.CurrentOptions.HashOptions.SHA512 && !Options.CurrentOptions.HashOptions.RIPEMD160 && !Options.CurrentOptions.HashOptions.CRC32)
+            if (!Options.CurrentOptions.HashOptions.MD5 && !Options.CurrentOptions.HashOptions.SHA1 && !Options.CurrentOptions.HashOptions.SHA256 && !Options.CurrentOptions.HashOptions.SHA384 && !Options.CurrentOptions.HashOptions.SHA512 && !Options.CurrentOptions.HashOptions.SHA3_512 && !Options.CurrentOptions.HashOptions.CRC32 && !Options.CurrentOptions.HashOptions.SHA3_256 && !Options.CurrentOptions.HashOptions.SHA3_384 && !Options.CurrentOptions.HashOptions.SHA3_512)
             {
                 MessageBox.Show(Options.TranslationList["noActiveHash"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

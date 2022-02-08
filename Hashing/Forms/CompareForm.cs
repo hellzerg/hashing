@@ -74,6 +74,9 @@ namespace Hashing
             //        break;
             //}
 
+            chkSHA35.Checked = Options.CurrentOptions.HashOptions.SHA3_512;
+            chkSHA33.Checked = Options.CurrentOptions.HashOptions.SHA3_384;
+            chkSHA32.Checked = Options.CurrentOptions.HashOptions.SHA3_256;
             chkRIPEMD160.Checked = Options.CurrentOptions.HashOptions.RIPEMD160;
             chkSHA512.Checked = Options.CurrentOptions.HashOptions.SHA512;
             chkSHA384.Checked = Options.CurrentOptions.HashOptions.SHA384;
@@ -125,6 +128,21 @@ namespace Hashing
                     if (chkRIPEMD160.Checked)
                     {
                         if (x.RIPEMD160 == txtExpected.Text) resultBox.Items.Add(x.File);
+                    }
+
+                    if (chkSHA32.Checked) 
+                    {
+                        if (x.SHA3_256 == txtExpected.Text) resultBox.Items.Add(x.File);
+                    }
+
+                    if (chkSHA33.Checked)
+                    {
+                        if (x.SHA3_384 == txtExpected.Text) resultBox.Items.Add(x.File);
+                    }
+
+                    if (chkSHA35.Checked)
+                    {
+                        if (x.SHA3_512 == txtExpected.Text) resultBox.Items.Add(x.File);
                     }
                 }
 
@@ -207,6 +225,21 @@ namespace Hashing
         private void chkRIPEMD160_CheckedChanged(object sender, EventArgs e)
         {
             if (chkRIPEMD160.Checked) Options.CurrentOptions.ActiveHash = 7;
+        }
+
+        private void chkSHA32_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkSHA32.Checked) Options.CurrentOptions.ActiveHash = 8;
+        }
+
+        private void chkSHA33_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkSHA33.Checked) Options.CurrentOptions.ActiveHash = 9;
+        }
+
+        private void chkSHA35_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkSHA35.Checked) Options.CurrentOptions.ActiveHash = 10;
         }
     }
 }

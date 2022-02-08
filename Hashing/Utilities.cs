@@ -100,6 +100,39 @@ namespace Hashing
                             }
                         }
                     }
+
+                    if (Options.CurrentOptions.HashOptions.SHA3_256)
+                    {
+                        using (FileStream fs = File.OpenRead(file))
+                        {
+                            using (var h = Sha3.Sha3256())
+                            {
+                                result.SHA3_256 = BitConverter.ToString(h.ComputeHash(fs)).Replace("-", string.Empty);
+                            }
+                        }
+                    }
+
+                    if (Options.CurrentOptions.HashOptions.SHA3_384)
+                    {
+                        using (FileStream fs = File.OpenRead(file))
+                        {
+                            using (var h = Sha3.Sha3384())
+                            {
+                                result.SHA3_384 = BitConverter.ToString(h.ComputeHash(fs)).Replace("-", string.Empty);
+                            }
+                        }
+                    }
+
+                    if (Options.CurrentOptions.HashOptions.SHA3_512)
+                    {
+                        using (FileStream fs = File.OpenRead(file))
+                        {
+                            using (var h = Sha3.Sha3512())
+                            {
+                                result.SHA3_512 = BitConverter.ToString(h.ComputeHash(fs)).Replace("-", string.Empty);
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -133,6 +166,9 @@ namespace Hashing
                     text = text.Replace("SHA512:", string.Empty);
                     text = text.Replace("CRC32:", string.Empty);
                     text = text.Replace("RIPEMD160:", string.Empty);
+                    text = text.Replace("SHA3-256:", string.Empty);
+                    text = text.Replace("SHA3-384:", string.Empty);
+                    text = text.Replace("SHA3-512:", string.Empty);
                 }
 
                 Clipboard.SetText(text.Trim());
@@ -170,6 +206,9 @@ namespace Hashing
             hash = hash.Replace("SHA512:", string.Empty);
             hash = hash.Replace("CRC32:", string.Empty);
             hash = hash.Replace("RIPEMD160:", string.Empty);
+            hash = hash.Replace("SHA3-256:", string.Empty);
+            hash = hash.Replace("SHA3-384:", string.Empty);
+            hash = hash.Replace("SHA3-512:", string.Empty);
 
             try
             {

@@ -30,6 +30,15 @@ namespace Hashing
 
         private void ConfigureGUI()
         {
+            radioSHA35.Enabled = Options.CurrentOptions.HashOptions.SHA3_512;
+            radioSHA35.Checked = Options.CurrentOptions.HashOptions.SHA3_512;
+
+            radioSHA33.Enabled = Options.CurrentOptions.HashOptions.SHA3_384;
+            radioSHA33.Checked = Options.CurrentOptions.HashOptions.SHA3_384;
+
+            radioSHA32.Enabled = Options.CurrentOptions.HashOptions.SHA3_256;
+            radioSHA32.Checked = Options.CurrentOptions.HashOptions.SHA3_256;
+
             radioRIPEMD160.Enabled = Options.CurrentOptions.HashOptions.RIPEMD160;
             radioRIPEMD160.Checked = Options.CurrentOptions.HashOptions.RIPEMD160;
 
@@ -135,6 +144,24 @@ namespace Hashing
             if (radioRIPEMD160.Checked)
             {
                 ListIdenticalsByRIPEMD160();
+                return;
+            }
+
+            if (radioSHA32.Checked)
+            {
+                ListIdenticalsBySHA3_256();
+                return;
+            }
+
+            if (radioSHA33.Checked)
+            {
+                ListIdenticalsBySHA3_384();
+                return;
+            }
+
+            if (radioSHA35.Checked)
+            {
+                ListIdenticalsBySHA3_512();
                 return;
             }
 
@@ -323,6 +350,84 @@ namespace Hashing
             SumView.ExpandAll();
         }
 
+        private void ListIdenticalsBySHA3_256()
+        {
+            foreach (SumResult sr in _identicals)
+            {
+                if (!_uniqueHashes.Contains(sr.SHA3_256)) _uniqueHashes.Add(sr.SHA3_256);
+            }
+
+            foreach (string x in _uniqueHashes)
+            {
+                TreeNode rootNode = new TreeNode(x);
+                rootNode.ForeColor = Options.ForegroundColor;
+
+                foreach (SumResult y in _identicals)
+                {
+                    if (y.SHA3_256 == x)
+                    {
+                        rootNode.Nodes.Add(y.File);
+                    }
+                }
+
+                SumView.Nodes.Add(rootNode);
+            }
+
+            SumView.ExpandAll();
+        }
+
+        private void ListIdenticalsBySHA3_384()
+        {
+            foreach (SumResult sr in _identicals)
+            {
+                if (!_uniqueHashes.Contains(sr.SHA3_384)) _uniqueHashes.Add(sr.SHA3_384);
+            }
+
+            foreach (string x in _uniqueHashes)
+            {
+                TreeNode rootNode = new TreeNode(x);
+                rootNode.ForeColor = Options.ForegroundColor;
+
+                foreach (SumResult y in _identicals)
+                {
+                    if (y.SHA3_384 == x)
+                    {
+                        rootNode.Nodes.Add(y.File);
+                    }
+                }
+
+                SumView.Nodes.Add(rootNode);
+            }
+
+            SumView.ExpandAll();
+        }
+
+        private void ListIdenticalsBySHA3_512()
+        {
+            foreach (SumResult sr in _identicals)
+            {
+                if (!_uniqueHashes.Contains(sr.SHA3_512)) _uniqueHashes.Add(sr.SHA3_512);
+            }
+
+            foreach (string x in _uniqueHashes)
+            {
+                TreeNode rootNode = new TreeNode(x);
+                rootNode.ForeColor = Options.ForegroundColor;
+
+                foreach (SumResult y in _identicals)
+                {
+                    if (y.SHA3_512 == x)
+                    {
+                        rootNode.Nodes.Add(y.File);
+                    }
+                }
+
+                SumView.Nodes.Add(rootNode);
+            }
+
+            SumView.ExpandAll();
+        }
+
         private void CompareForm_Load(object sender, EventArgs e)
         {
             if (Options.CurrentOptions.StayOnTop)
@@ -469,16 +574,76 @@ namespace Hashing
 
         private void radioCRC32_CheckedChanged(object sender, EventArgs e)
         {
-            _helper = "CRC32: ";
-
-            SumResult tmp;
-            foreach (TreeNode node in SumView.Nodes)
+            if (radioCRC32.Checked)
             {
-                foreach (TreeNode child in node.Nodes)
+                _helper = "CRC32: ";
+
+                SumResult tmp;
+                foreach (TreeNode node in SumView.Nodes)
                 {
-                    tmp = _identicals.Find(x => x.File == child.Text);
-                    node.Text = tmp.CRC32;
-                    break;
+                    foreach (TreeNode child in node.Nodes)
+                    {
+                        tmp = _identicals.Find(x => x.File == child.Text);
+                        node.Text = tmp.CRC32;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void radioSHA32_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioSHA32.Checked)
+            {
+                _helper = "SHA3-256: ";
+
+                SumResult tmp;
+                foreach (TreeNode node in SumView.Nodes)
+                {
+                    foreach (TreeNode child in node.Nodes)
+                    {
+                        tmp = _identicals.Find(x => x.File == child.Text);
+                        node.Text = tmp.SHA3_256;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void radioSHA33_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioSHA33.Checked)
+            {
+                _helper = "SHA3-384: ";
+
+                SumResult tmp;
+                foreach (TreeNode node in SumView.Nodes)
+                {
+                    foreach (TreeNode child in node.Nodes)
+                    {
+                        tmp = _identicals.Find(x => x.File == child.Text);
+                        node.Text = tmp.SHA3_384;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void radioSHA35_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioSHA35.Checked)
+            {
+                _helper = "SHA3-512: ";
+
+                SumResult tmp;
+                foreach (TreeNode node in SumView.Nodes)
+                {
+                    foreach (TreeNode child in node.Nodes)
+                    {
+                        tmp = _identicals.Find(x => x.File == child.Text);
+                        node.Text = tmp.SHA3_512;
+                        break;
+                    }
                 }
             }
         }

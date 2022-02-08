@@ -45,6 +45,9 @@
             this.lblNoMatch = new System.Windows.Forms.Label();
             this.btnPaste = new System.Windows.Forms.Button();
             this.chkRemove = new Hashing.MoonCheck();
+            this.chkSHA32 = new Hashing.MoonCheck();
+            this.chkSHA33 = new Hashing.MoonCheck();
+            this.chkSHA35 = new Hashing.MoonCheck();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -52,6 +55,9 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.chkSHA35);
+            this.panel1.Controls.Add(this.chkSHA33);
+            this.panel1.Controls.Add(this.chkSHA32);
             this.panel1.Controls.Add(this.chkCRC32);
             this.panel1.Controls.Add(this.chkSHA512);
             this.panel1.Controls.Add(this.chkSHA384);
@@ -63,7 +69,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(715, 32);
+            this.panel1.Size = new System.Drawing.Size(864, 32);
             this.panel1.TabIndex = 4;
             // 
             // chkCRC32
@@ -184,7 +190,7 @@
             this.txtExpected.Location = new System.Drawing.Point(10, 61);
             this.txtExpected.Margin = new System.Windows.Forms.Padding(2);
             this.txtExpected.Name = "txtExpected";
-            this.txtExpected.Size = new System.Drawing.Size(696, 27);
+            this.txtExpected.Size = new System.Drawing.Size(845, 27);
             this.txtExpected.TabIndex = 6;
             // 
             // btnCompare
@@ -197,7 +203,7 @@
             this.btnCompare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCompare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCompare.ForeColor = System.Drawing.Color.White;
-            this.btnCompare.Location = new System.Drawing.Point(555, 92);
+            this.btnCompare.Location = new System.Drawing.Point(704, 92);
             this.btnCompare.Margin = new System.Windows.Forms.Padding(2);
             this.btnCompare.Name = "btnCompare";
             this.btnCompare.Size = new System.Drawing.Size(151, 27);
@@ -234,7 +240,7 @@
             this.resultBox.Location = new System.Drawing.Point(0, 0);
             this.resultBox.Margin = new System.Windows.Forms.Padding(2);
             this.resultBox.Name = "resultBox";
-            this.resultBox.Size = new System.Drawing.Size(694, 347);
+            this.resultBox.Size = new System.Drawing.Size(843, 506);
             this.resultBox.TabIndex = 76;
             // 
             // panel2
@@ -248,7 +254,7 @@
             this.panel2.Location = new System.Drawing.Point(10, 135);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(696, 349);
+            this.panel2.Size = new System.Drawing.Size(845, 508);
             this.panel2.TabIndex = 77;
             // 
             // lblNoMatch
@@ -259,7 +265,7 @@
             this.lblNoMatch.Location = new System.Drawing.Point(0, 0);
             this.lblNoMatch.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblNoMatch.Name = "lblNoMatch";
-            this.lblNoMatch.Size = new System.Drawing.Size(694, 347);
+            this.lblNoMatch.Size = new System.Drawing.Size(843, 506);
             this.lblNoMatch.TabIndex = 77;
             this.lblNoMatch.Tag = "themeable";
             this.lblNoMatch.Text = "No files matching";
@@ -275,7 +281,7 @@
             this.btnPaste.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnPaste.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPaste.ForeColor = System.Drawing.Color.White;
-            this.btnPaste.Location = new System.Drawing.Point(400, 92);
+            this.btnPaste.Location = new System.Drawing.Point(549, 92);
             this.btnPaste.Margin = new System.Windows.Forms.Padding(2);
             this.btnPaste.Name = "btnPaste";
             this.btnPaste.Size = new System.Drawing.Size(151, 27);
@@ -298,13 +304,52 @@
             this.chkRemove.UseVisualStyleBackColor = true;
             this.chkRemove.CheckedChanged += new System.EventHandler(this.chkRemove_CheckedChanged);
             // 
+            // chkSHA32
+            // 
+            this.chkSHA32.AutoSize = true;
+            this.chkSHA32.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkSHA32.Location = new System.Drawing.Point(558, 4);
+            this.chkSHA32.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSHA32.Name = "chkSHA32";
+            this.chkSHA32.Size = new System.Drawing.Size(93, 23);
+            this.chkSHA32.TabIndex = 7;
+            this.chkSHA32.Text = "SHA3-256";
+            this.chkSHA32.UseVisualStyleBackColor = true;
+            this.chkSHA32.CheckedChanged += new System.EventHandler(this.chkSHA32_CheckedChanged);
+            // 
+            // chkSHA33
+            // 
+            this.chkSHA33.AutoSize = true;
+            this.chkSHA33.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkSHA33.Location = new System.Drawing.Point(655, 4);
+            this.chkSHA33.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSHA33.Name = "chkSHA33";
+            this.chkSHA33.Size = new System.Drawing.Size(93, 23);
+            this.chkSHA33.TabIndex = 8;
+            this.chkSHA33.Text = "SHA3-384";
+            this.chkSHA33.UseVisualStyleBackColor = true;
+            this.chkSHA33.CheckedChanged += new System.EventHandler(this.chkSHA33_CheckedChanged);
+            // 
+            // chkSHA35
+            // 
+            this.chkSHA35.AutoSize = true;
+            this.chkSHA35.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkSHA35.Location = new System.Drawing.Point(752, 4);
+            this.chkSHA35.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSHA35.Name = "chkSHA35";
+            this.chkSHA35.Size = new System.Drawing.Size(91, 23);
+            this.chkSHA35.TabIndex = 9;
+            this.chkSHA35.Text = "SHA3-512";
+            this.chkSHA35.UseVisualStyleBackColor = true;
+            this.chkSHA35.CheckedChanged += new System.EventHandler(this.chkSHA35_CheckedChanged);
+            // 
             // CompareForm
             // 
             this.AcceptButton = this.btnCompare;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.ClientSize = new System.Drawing.Size(715, 493);
+            this.ClientSize = new System.Drawing.Size(864, 652);
             this.Controls.Add(this.btnPaste);
             this.Controls.Add(this.chkRemove);
             this.Controls.Add(this.panel2);
@@ -352,5 +397,8 @@
         private MoonCheck chkCRC32;
         private System.Windows.Forms.Button btnPaste;
         private System.Windows.Forms.Label lblNoMatch;
+        private MoonCheck chkSHA35;
+        private MoonCheck chkSHA33;
+        private MoonCheck chkSHA32;
     }
 }

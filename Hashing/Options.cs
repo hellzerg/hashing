@@ -160,6 +160,9 @@ namespace Hashing
                 CurrentOptions.HashOptions.SHA512 = false;
                 CurrentOptions.HashOptions.CRC32 = false;
                 CurrentOptions.HashOptions.RIPEMD160 = false;
+                CurrentOptions.HashOptions.SHA3_256 = false;
+                CurrentOptions.HashOptions.SHA3_384 = false;
+                CurrentOptions.HashOptions.SHA3_512 = false;
 
                 CurrentOptions.WindowLocation = null;
                 CurrentOptions.WindowSize = new Size(820, 632);

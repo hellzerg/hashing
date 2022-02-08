@@ -6,15 +6,25 @@
 
 Simple utility to calculate and compare hashes of multiple files
 <p align="center">
-	<a href="https://github.com/hellzerg/hashing/releases/download/3.0/Hashing-3.0.exe" target="_blank">
+	<a href="https://github.com/hellzerg/hashing/releases/download/3.1/Hashing-3.1.exe" target="_blank">
 		<img src="download-button.png">
 	</a>
 </p> 
 
 ## Features: ##
 
-* Multilingual support
-* MD5, SHA1, SHA256, SHA384, SHA512, CRC32 and RIPEMD160 algorithms supported
+* Multilingual support (3 languages available)
+* Algorithms supported:
+	- MD5
+	- SHA1
+	- SHA256
+	- SHA384
+	- SHA512
+	- CRC32
+	- RIPEMD160
+	- SHA3-256
+	- SHA3-384
+	- SHA3-512
 * Choose which hashes you want to calculate
 * Compare and group identical files together
 * Compare multiple files against hash sums
@@ -42,8 +52,11 @@ https://github.com/hellzerg/hashing/blob/master/IMAGES.md
 * Compatible with Windows 7, 8, 8.1, 10, 11
 * Does not work with Windows XP or Vista
 
+## Credits: ##
+* Much appreciation to https://github.com/dariogriffo/sha3.net for SHA3 algorithms library
+
 ## Details: ##
 
-* Latest version: 3.0
-* Released: February 1, 2022
-* SHA256: DD469218107392732AB97C2E59689515A665102E746F8D270530C20C7D2CF274
+* Latest version: 3.1
+* Released: February 8, 2022
+* SHA256: 1F2DCCDEF6CBAF2780320BA326E06A835CBD3DB71310F724FDF1ABDF8243CE16

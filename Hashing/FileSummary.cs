@@ -10,5 +10,8 @@
         public string SHA512 { get; set; }
         public string CRC32 { get; set; }
         public string RIPEMD160 { get; set; }
+        public string SHA3_256 { get; set; }
+        public string SHA3_384 { get; set; }
+        public string SHA3_512 { get; set; }
     }
 }

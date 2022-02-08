@@ -122,6 +122,13 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SHA3\Arrays.cs" />
+    <Compile Include="SHA3\IDigest.cs" />
+    <Compile Include="SHA3\IMemoable.cs" />
+    <Compile Include="SHA3\KeccakDigest.cs" />
+    <Compile Include="SHA3\Pack.cs" />
+    <Compile Include="SHA3\Sha3.cs" />
+    <Compile Include="SHA3\Sha3Digest.cs" />
     <Compile Include="SumResult.cs" />
     <Compile Include="Controls\MoonMenuRenderer.cs" />
     <Compile Include="TopMostMessageBox.cs" />

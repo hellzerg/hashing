@@ -73,6 +73,9 @@ namespace Hashing
             chkSHA256.Checked = Options.CurrentOptions.HashOptions.SHA256;
             chkSHA384.Checked = Options.CurrentOptions.HashOptions.SHA384;
             chkSHA512.Checked = Options.CurrentOptions.HashOptions.SHA512;
+            chkSHA32.Checked = Options.CurrentOptions.HashOptions.SHA3_256;
+            chkSHA33.Checked = Options.CurrentOptions.HashOptions.SHA3_384;
+            chkSHA35.Checked = Options.CurrentOptions.HashOptions.SHA3_512;
 
             chkLower.Checked = Options.CurrentOptions.LowerCasing;
             chkTray.Checked = Options.CurrentOptions.TrayIcon;
@@ -281,6 +284,24 @@ namespace Hashing
         private void pictureBox7_Click(object sender, EventArgs e)
         {
             radioChinese.PerformClick();
+        }
+
+        private void chkSHA32_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.HashOptions.SHA3_256 = chkSHA32.Checked;
+            HashesChanged = true;
+        }
+
+        private void chkSHA33_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.HashOptions.SHA3_384 = chkSHA33.Checked;
+            HashesChanged = true;
+        }
+
+        private void chkSHA35_CheckedChanged(object sender, EventArgs e)
+        {
+            Options.CurrentOptions.HashOptions.SHA3_512 = chkSHA35.Checked;
+            HashesChanged = true;
         }
     }
 }
