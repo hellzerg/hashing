@@ -14,7 +14,7 @@ Simple utility to calculate and compare hashes of multiple files
 ## Features: ##
 
 * Multilingual support (3 languages available)
-* Algorithms supported:
+* 10 algorithms supported:
 	- MD5
 	- SHA1
 	- SHA256
