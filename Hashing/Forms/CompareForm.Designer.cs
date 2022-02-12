@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.chkSHA35 = new Hashing.MoonCheck();
+            this.chkSHA33 = new Hashing.MoonCheck();
+            this.chkSHA32 = new Hashing.MoonCheck();
             this.chkCRC32 = new Hashing.MoonCheck();
             this.chkSHA512 = new Hashing.MoonCheck();
             this.chkSHA384 = new Hashing.MoonCheck();
@@ -45,9 +48,6 @@
             this.lblNoMatch = new System.Windows.Forms.Label();
             this.btnPaste = new System.Windows.Forms.Button();
             this.chkRemove = new Hashing.MoonCheck();
-            this.chkSHA32 = new Hashing.MoonCheck();
-            this.chkSHA33 = new Hashing.MoonCheck();
-            this.chkSHA35 = new Hashing.MoonCheck();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -71,6 +71,45 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(864, 32);
             this.panel1.TabIndex = 4;
+            // 
+            // chkSHA35
+            // 
+            this.chkSHA35.AutoSize = true;
+            this.chkSHA35.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkSHA35.Location = new System.Drawing.Point(752, 4);
+            this.chkSHA35.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSHA35.Name = "chkSHA35";
+            this.chkSHA35.Size = new System.Drawing.Size(91, 23);
+            this.chkSHA35.TabIndex = 9;
+            this.chkSHA35.Text = "SHA3-512";
+            this.chkSHA35.UseVisualStyleBackColor = true;
+            this.chkSHA35.CheckedChanged += new System.EventHandler(this.chkSHA35_CheckedChanged);
+            // 
+            // chkSHA33
+            // 
+            this.chkSHA33.AutoSize = true;
+            this.chkSHA33.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkSHA33.Location = new System.Drawing.Point(655, 4);
+            this.chkSHA33.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSHA33.Name = "chkSHA33";
+            this.chkSHA33.Size = new System.Drawing.Size(93, 23);
+            this.chkSHA33.TabIndex = 8;
+            this.chkSHA33.Text = "SHA3-384";
+            this.chkSHA33.UseVisualStyleBackColor = true;
+            this.chkSHA33.CheckedChanged += new System.EventHandler(this.chkSHA33_CheckedChanged);
+            // 
+            // chkSHA32
+            // 
+            this.chkSHA32.AutoSize = true;
+            this.chkSHA32.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkSHA32.Location = new System.Drawing.Point(558, 4);
+            this.chkSHA32.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSHA32.Name = "chkSHA32";
+            this.chkSHA32.Size = new System.Drawing.Size(93, 23);
+            this.chkSHA32.TabIndex = 7;
+            this.chkSHA32.Text = "SHA3-256";
+            this.chkSHA32.UseVisualStyleBackColor = true;
+            this.chkSHA32.CheckedChanged += new System.EventHandler(this.chkSHA32_CheckedChanged);
             // 
             // chkCRC32
             // 
@@ -242,6 +281,7 @@
             this.resultBox.Name = "resultBox";
             this.resultBox.Size = new System.Drawing.Size(843, 506);
             this.resultBox.TabIndex = 76;
+            this.resultBox.DoubleClick += new System.EventHandler(this.resultBox_DoubleClick);
             // 
             // panel2
             // 
@@ -303,45 +343,6 @@
             this.chkRemove.Text = "Remove dashes";
             this.chkRemove.UseVisualStyleBackColor = true;
             this.chkRemove.CheckedChanged += new System.EventHandler(this.chkRemove_CheckedChanged);
-            // 
-            // chkSHA32
-            // 
-            this.chkSHA32.AutoSize = true;
-            this.chkSHA32.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkSHA32.Location = new System.Drawing.Point(558, 4);
-            this.chkSHA32.Margin = new System.Windows.Forms.Padding(2);
-            this.chkSHA32.Name = "chkSHA32";
-            this.chkSHA32.Size = new System.Drawing.Size(93, 23);
-            this.chkSHA32.TabIndex = 7;
-            this.chkSHA32.Text = "SHA3-256";
-            this.chkSHA32.UseVisualStyleBackColor = true;
-            this.chkSHA32.CheckedChanged += new System.EventHandler(this.chkSHA32_CheckedChanged);
-            // 
-            // chkSHA33
-            // 
-            this.chkSHA33.AutoSize = true;
-            this.chkSHA33.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkSHA33.Location = new System.Drawing.Point(655, 4);
-            this.chkSHA33.Margin = new System.Windows.Forms.Padding(2);
-            this.chkSHA33.Name = "chkSHA33";
-            this.chkSHA33.Size = new System.Drawing.Size(93, 23);
-            this.chkSHA33.TabIndex = 8;
-            this.chkSHA33.Text = "SHA3-384";
-            this.chkSHA33.UseVisualStyleBackColor = true;
-            this.chkSHA33.CheckedChanged += new System.EventHandler(this.chkSHA33_CheckedChanged);
-            // 
-            // chkSHA35
-            // 
-            this.chkSHA35.AutoSize = true;
-            this.chkSHA35.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkSHA35.Location = new System.Drawing.Point(752, 4);
-            this.chkSHA35.Margin = new System.Windows.Forms.Padding(2);
-            this.chkSHA35.Name = "chkSHA35";
-            this.chkSHA35.Size = new System.Drawing.Size(91, 23);
-            this.chkSHA35.TabIndex = 9;
-            this.chkSHA35.Text = "SHA3-512";
-            this.chkSHA35.UseVisualStyleBackColor = true;
-            this.chkSHA35.CheckedChanged += new System.EventHandler(this.chkSHA35_CheckedChanged);
             // 
             // CompareForm
             // 

@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2] - 2022-02-12
+- Hotfix: Some issues rendering chinese/korean characters properly (#19)
+
 ## [3.1] - 2022-02-08
 - New: SHA3-256, SHA3-384, SHA3-512 algorithms support (#18)
 

@@ -241,5 +241,13 @@ namespace Hashing
         {
             if (chkSHA35.Checked) Options.CurrentOptions.ActiveHash = 10;
         }
+
+        private void resultBox_DoubleClick(object sender, EventArgs e)
+        {
+            if (resultBox.SelectedIndex > -1)
+            {
+                Utilities.FindFile(resultBox.SelectedItem.ToString());
+            }
+        }
     }
 }

@@ -460,8 +460,9 @@ namespace Hashing
                     if (Options.CurrentOptions.HashOptions.SHA3_512) rootNode.Nodes.Add("SHA3-512: " + sr.SHA3_512);
 
                     SumView.Nodes.Add(rootNode);
-                    SumView.ExpandAll();
+
                 }
+                SumView.ExpandAll();
             }
         }
 
@@ -1386,11 +1387,11 @@ namespace Hashing
             {
                 if (SumView.SelectedNode.Nodes.Count > 0)
                 {
-                    if (File.Exists(SumView.SelectedNode.Text)) Process.Start("explorer.exe", "/select, " + SumView.SelectedNode.Text);
+                    Utilities.FindFile(SumView.SelectedNode.Text);
                 }
                 else
                 {
-                    if (File.Exists(SumView.SelectedNode.Parent.Text)) Process.Start("explorer.exe", "/select, " + SumView.SelectedNode.Parent.Text);
+                    Utilities.FindFile(SumView.SelectedNode.Parent.Text);
                 }
             }
         }

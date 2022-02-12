@@ -120,7 +120,7 @@
             this.SumView.ContextMenuStrip = this.helperMenu;
             this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SumView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
-            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SumView.ForeColor = System.Drawing.Color.White;
             this.SumView.Location = new System.Drawing.Point(0, 0);
             this.SumView.Margin = new System.Windows.Forms.Padding(2);

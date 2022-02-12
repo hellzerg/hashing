@@ -47,6 +47,9 @@
             this.itemSHA512 = new System.Windows.Forms.ToolStripMenuItem();
             this.itemCRC32 = new System.Windows.Forms.ToolStripMenuItem();
             this.itemRIPEMD160 = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemSHA32 = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemSHA33 = new System.Windows.Forms.ToolStripMenuItem();
+            this.itemSHA35 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topPanel = new System.Windows.Forms.Panel();
@@ -70,9 +73,6 @@
             this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
-            this.itemSHA32 = new System.Windows.Forms.ToolStripMenuItem();
-            this.itemSHA33 = new System.Windows.Forms.ToolStripMenuItem();
-            this.itemSHA35 = new System.Windows.Forms.ToolStripMenuItem();
             this.helperMenu.SuspendLayout();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -100,7 +100,7 @@
             this.clearToolStripMenuItem});
             this.helperMenu.Name = "helperMenu";
             this.helperMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.helperMenu.Size = new System.Drawing.Size(252, 252);
+            this.helperMenu.Size = new System.Drawing.Size(252, 230);
             // 
             // copyToolStripMenuItem
             // 
@@ -197,7 +197,7 @@
             this.itemMD5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.itemMD5.ForeColor = System.Drawing.Color.White;
             this.itemMD5.Name = "itemMD5";
-            this.itemMD5.Size = new System.Drawing.Size(180, 24);
+            this.itemMD5.Size = new System.Drawing.Size(151, 24);
             this.itemMD5.Tag = "md5";
             this.itemMD5.Text = "MD5";
             // 
@@ -207,7 +207,7 @@
             this.itemSHA1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.itemSHA1.ForeColor = System.Drawing.Color.White;
             this.itemSHA1.Name = "itemSHA1";
-            this.itemSHA1.Size = new System.Drawing.Size(180, 24);
+            this.itemSHA1.Size = new System.Drawing.Size(151, 24);
             this.itemSHA1.Tag = "sha1";
             this.itemSHA1.Text = "SHA1";
             // 
@@ -217,7 +217,7 @@
             this.itemSHA256.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.itemSHA256.ForeColor = System.Drawing.Color.White;
             this.itemSHA256.Name = "itemSHA256";
-            this.itemSHA256.Size = new System.Drawing.Size(180, 24);
+            this.itemSHA256.Size = new System.Drawing.Size(151, 24);
             this.itemSHA256.Tag = "sha256";
             this.itemSHA256.Text = "SHA256";
             // 
@@ -227,7 +227,7 @@
             this.itemSHA384.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.itemSHA384.ForeColor = System.Drawing.Color.White;
             this.itemSHA384.Name = "itemSHA384";
-            this.itemSHA384.Size = new System.Drawing.Size(180, 24);
+            this.itemSHA384.Size = new System.Drawing.Size(151, 24);
             this.itemSHA384.Tag = "sha384";
             this.itemSHA384.Text = "SHA384";
             // 
@@ -237,7 +237,7 @@
             this.itemSHA512.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.itemSHA512.ForeColor = System.Drawing.Color.White;
             this.itemSHA512.Name = "itemSHA512";
-            this.itemSHA512.Size = new System.Drawing.Size(180, 24);
+            this.itemSHA512.Size = new System.Drawing.Size(151, 24);
             this.itemSHA512.Tag = "sha512";
             this.itemSHA512.Text = "SHA512";
             // 
@@ -247,7 +247,7 @@
             this.itemCRC32.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.itemCRC32.ForeColor = System.Drawing.Color.White;
             this.itemCRC32.Name = "itemCRC32";
-            this.itemCRC32.Size = new System.Drawing.Size(180, 24);
+            this.itemCRC32.Size = new System.Drawing.Size(151, 24);
             this.itemCRC32.Tag = "crc32";
             this.itemCRC32.Text = "CRC32";
             // 
@@ -257,9 +257,39 @@
             this.itemRIPEMD160.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.itemRIPEMD160.ForeColor = System.Drawing.Color.White;
             this.itemRIPEMD160.Name = "itemRIPEMD160";
-            this.itemRIPEMD160.Size = new System.Drawing.Size(180, 24);
+            this.itemRIPEMD160.Size = new System.Drawing.Size(151, 24);
             this.itemRIPEMD160.Tag = "ripemd160";
             this.itemRIPEMD160.Text = "RIPEMD160";
+            // 
+            // itemSHA32
+            // 
+            this.itemSHA32.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.itemSHA32.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.itemSHA32.ForeColor = System.Drawing.Color.White;
+            this.itemSHA32.Name = "itemSHA32";
+            this.itemSHA32.Size = new System.Drawing.Size(151, 24);
+            this.itemSHA32.Tag = "sha32";
+            this.itemSHA32.Text = "SHA3-256";
+            // 
+            // itemSHA33
+            // 
+            this.itemSHA33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.itemSHA33.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.itemSHA33.ForeColor = System.Drawing.Color.White;
+            this.itemSHA33.Name = "itemSHA33";
+            this.itemSHA33.Size = new System.Drawing.Size(151, 24);
+            this.itemSHA33.Tag = "sha33";
+            this.itemSHA33.Text = "SHA3-384";
+            // 
+            // itemSHA35
+            // 
+            this.itemSHA35.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.itemSHA35.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.itemSHA35.ForeColor = System.Drawing.Color.White;
+            this.itemSHA35.Name = "itemSHA35";
+            this.itemSHA35.Size = new System.Drawing.Size(151, 24);
+            this.itemSHA35.Tag = "sha35";
+            this.itemSHA35.Text = "SHA3-512";
             // 
             // toolStripSeparator3
             // 
@@ -550,7 +580,7 @@
             this.SumView.ContextMenuStrip = this.helperMenu;
             this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SumView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
-            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SumView.ForeColor = System.Drawing.Color.White;
             this.SumView.Location = new System.Drawing.Point(0, 0);
             this.SumView.Margin = new System.Windows.Forms.Padding(2);
@@ -604,36 +634,6 @@
             this.toolStripMenuItem11.Name = "toolStripMenuItem11";
             this.toolStripMenuItem11.Size = new System.Drawing.Size(211, 24);
             this.toolStripMenuItem11.Text = "RIPEMD160";
-            // 
-            // itemSHA32
-            // 
-            this.itemSHA32.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.itemSHA32.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.itemSHA32.ForeColor = System.Drawing.Color.White;
-            this.itemSHA32.Name = "itemSHA32";
-            this.itemSHA32.Size = new System.Drawing.Size(180, 24);
-            this.itemSHA32.Tag = "sha32";
-            this.itemSHA32.Text = "SHA3-256";
-            // 
-            // itemSHA33
-            // 
-            this.itemSHA33.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.itemSHA33.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.itemSHA33.ForeColor = System.Drawing.Color.White;
-            this.itemSHA33.Name = "itemSHA33";
-            this.itemSHA33.Size = new System.Drawing.Size(180, 24);
-            this.itemSHA33.Tag = "sha33";
-            this.itemSHA33.Text = "SHA3-384";
-            // 
-            // itemSHA35
-            // 
-            this.itemSHA35.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.itemSHA35.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.itemSHA35.ForeColor = System.Drawing.Color.White;
-            this.itemSHA35.Name = "itemSHA35";
-            this.itemSHA35.Size = new System.Drawing.Size(180, 24);
-            this.itemSHA35.Tag = "sha35";
-            this.itemSHA35.Text = "SHA3-512";
             // 
             // MainForm
             // 

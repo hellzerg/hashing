@@ -217,5 +217,10 @@ namespace Hashing
             }
             catch { }
         }
+
+        internal static void FindFile(string file)
+        {
+            if (File.Exists(file)) Process.Start("explorer.exe", "/select, " + file);
+        }
     }
 }
