@@ -67,12 +67,12 @@
             this.botPanel = new System.Windows.Forms.Panel();
             this.btnCancelHashing = new System.Windows.Forms.Button();
             this.lblCalculating = new System.Windows.Forms.Label();
+            this.SumView = new Hashing.MoonTree();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
-            this.SumView = new Hashing.MoonTree();
             this.helperMenu.SuspendLayout();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -565,6 +565,22 @@
             this.lblCalculating.Text = "Drag and drop files here...";
             this.lblCalculating.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // SumView
+            // 
+            this.SumView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.SumView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SumView.ContextMenuStrip = this.helperMenu;
+            this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SumView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
+            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SumView.ForeColor = System.Drawing.Color.White;
+            this.SumView.Location = new System.Drawing.Point(0, 0);
+            this.SumView.Margin = new System.Windows.Forms.Padding(2);
+            this.SumView.Name = "SumView";
+            this.SumView.Size = new System.Drawing.Size(835, 555);
+            this.SumView.TabIndex = 0;
+            this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.sumView_NodeMouseClick);
+            // 
             // trayIcon
             // 
             this.trayIcon.ContextMenuStrip = this.trayMenu;
@@ -610,22 +626,6 @@
             this.toolStripMenuItem11.Name = "toolStripMenuItem11";
             this.toolStripMenuItem11.Size = new System.Drawing.Size(211, 24);
             this.toolStripMenuItem11.Text = "RIPEMD160";
-            // 
-            // SumView
-            // 
-            this.SumView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.SumView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SumView.ContextMenuStrip = this.helperMenu;
-            this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SumView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
-            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SumView.ForeColor = System.Drawing.Color.White;
-            this.SumView.Location = new System.Drawing.Point(0, 0);
-            this.SumView.Margin = new System.Windows.Forms.Padding(2);
-            this.SumView.Name = "SumView";
-            this.SumView.Size = new System.Drawing.Size(835, 555);
-            this.SumView.TabIndex = 0;
-            this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.sumView_NodeMouseClick);
             // 
             // MainForm
             // 
