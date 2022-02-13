@@ -33,8 +33,8 @@
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsJSONToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.SumView = new Hashing.MoonTree();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.radioSHA35 = new Hashing.MoonRadio();
             this.radioSHA33 = new Hashing.MoonRadio();
             this.radioSHA32 = new Hashing.MoonRadio();
@@ -93,6 +93,22 @@
             this.panel2.Size = new System.Drawing.Size(864, 563);
             this.panel2.TabIndex = 4;
             // 
+            // SumView
+            // 
+            this.SumView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.SumView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SumView.ContextMenuStrip = this.helperMenu;
+            this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SumView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
+            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SumView.ForeColor = System.Drawing.Color.White;
+            this.SumView.Location = new System.Drawing.Point(0, 0);
+            this.SumView.Margin = new System.Windows.Forms.Padding(2);
+            this.SumView.Name = "SumView";
+            this.SumView.Size = new System.Drawing.Size(862, 561);
+            this.SumView.TabIndex = 1;
+            this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SumView_NodeMouseClick);
+            // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -112,22 +128,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(864, 32);
             this.panel1.TabIndex = 3;
-            // 
-            // SumView
-            // 
-            this.SumView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.SumView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SumView.ContextMenuStrip = this.helperMenu;
-            this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SumView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
-            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SumView.ForeColor = System.Drawing.Color.White;
-            this.SumView.Location = new System.Drawing.Point(0, 0);
-            this.SumView.Margin = new System.Windows.Forms.Padding(2);
-            this.SumView.Name = "SumView";
-            this.SumView.Size = new System.Drawing.Size(862, 561);
-            this.SumView.TabIndex = 1;
-            this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SumView_NodeMouseClick);
             // 
             // radioSHA35
             // 
@@ -285,7 +285,6 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Identical files";
             this.Load += new System.EventHandler(this.CompareForm_Load);
             this.helperMenu.ResumeLayout(false);
             this.panel2.ResumeLayout(false);

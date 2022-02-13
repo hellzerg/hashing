@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.3] - 2022-02-13
+- Hotfix: Horizontal scrolling not working in main form
+
 ## [3.2] - 2022-02-12
 - Hotfix: Some issues rendering chinese/korean characters properly (#19)
 

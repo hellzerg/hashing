@@ -53,8 +53,8 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topPanel = new System.Windows.Forms.Panel();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.btnUpdate = new System.Windows.Forms.Button();
-            this.btnCalculate = new System.Windows.Forms.Button();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.btnCompare = new System.Windows.Forms.Button();
@@ -67,14 +67,15 @@
             this.botPanel = new System.Windows.Forms.Panel();
             this.btnCancelHashing = new System.Windows.Forms.Button();
             this.lblCalculating = new System.Windows.Forms.Label();
-            this.SumView = new Hashing.MoonTree();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
+            this.SumView = new Hashing.MoonTree();
             this.helperMenu.SuspendLayout();
             this.topPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.botPanel.SuspendLayout();
             this.trayMenu.SuspendLayout();
@@ -309,8 +310,8 @@
             // topPanel
             // 
             this.topPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.topPanel.Controls.Add(this.pictureBox2);
             this.topPanel.Controls.Add(this.btnUpdate);
-            this.topPanel.Controls.Add(this.btnCalculate);
             this.topPanel.Controls.Add(this.btnBrowse);
             this.topPanel.Controls.Add(this.txtPath);
             this.topPanel.Controls.Add(this.btnCompare);
@@ -324,8 +325,19 @@
             this.topPanel.Location = new System.Drawing.Point(0, 0);
             this.topPanel.Margin = new System.Windows.Forms.Padding(2);
             this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(987, 72);
+            this.topPanel.Size = new System.Drawing.Size(837, 72);
             this.topPanel.TabIndex = 7;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(195, 39);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(20, 20);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 82;
+            this.pictureBox2.TabStop = false;
             // 
             // btnUpdate
             // 
@@ -338,7 +350,7 @@
             this.btnUpdate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnUpdate.ForeColor = System.Drawing.Color.White;
-            this.btnUpdate.Location = new System.Drawing.Point(824, 5);
+            this.btnUpdate.Location = new System.Drawing.Point(673, 6);
             this.btnUpdate.Margin = new System.Windows.Forms.Padding(2);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(156, 27);
@@ -347,27 +359,6 @@
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = false;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
-            // 
-            // btnCalculate
-            // 
-            this.btnCalculate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCalculate.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnCalculate.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCalculate.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
-            this.btnCalculate.FlatAppearance.BorderSize = 0;
-            this.btnCalculate.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnCalculate.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnCalculate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCalculate.ForeColor = System.Drawing.Color.White;
-            this.btnCalculate.Location = new System.Drawing.Point(824, 36);
-            this.btnCalculate.Margin = new System.Windows.Forms.Padding(2);
-            this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(156, 27);
-            this.btnCalculate.TabIndex = 80;
-            this.btnCalculate.Tag = "themeable";
-            this.btnCalculate.Text = "Calculate";
-            this.btnCalculate.UseVisualStyleBackColor = false;
-            this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
             // 
             // btnBrowse
             // 
@@ -380,7 +371,7 @@
             this.btnBrowse.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnBrowse.ForeColor = System.Drawing.Color.White;
-            this.btnBrowse.Location = new System.Drawing.Point(782, 36);
+            this.btnBrowse.Location = new System.Drawing.Point(631, 37);
             this.btnBrowse.Margin = new System.Windows.Forms.Padding(2);
             this.btnBrowse.Name = "btnBrowse";
             this.btnBrowse.Size = new System.Drawing.Size(38, 27);
@@ -395,13 +386,14 @@
             this.txtPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPath.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.txtPath.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtPath.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPath.ForeColor = System.Drawing.Color.Silver;
-            this.txtPath.Location = new System.Drawing.Point(184, 37);
+            this.txtPath.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPath.ForeColor = System.Drawing.Color.Gainsboro;
+            this.txtPath.Location = new System.Drawing.Point(225, 37);
             this.txtPath.Margin = new System.Windows.Forms.Padding(2);
             this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(594, 25);
+            this.txtPath.Size = new System.Drawing.Size(402, 27);
             this.txtPath.TabIndex = 78;
+            this.txtPath.TextChanged += new System.EventHandler(this.txtPath_TextChanged);
             // 
             // btnCompare
             // 
@@ -414,7 +406,7 @@
             this.btnCompare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCompare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCompare.ForeColor = System.Drawing.Color.White;
-            this.btnCompare.Location = new System.Drawing.Point(344, 5);
+            this.btnCompare.Location = new System.Drawing.Point(353, 6);
             this.btnCompare.Margin = new System.Windows.Forms.Padding(2);
             this.btnCompare.Name = "btnCompare";
             this.btnCompare.Size = new System.Drawing.Size(156, 27);
@@ -436,7 +428,7 @@
             this.btnOptions.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnOptions.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnOptions.ForeColor = System.Drawing.Color.White;
-            this.btnOptions.Location = new System.Drawing.Point(664, 5);
+            this.btnOptions.Location = new System.Drawing.Point(673, 37);
             this.btnOptions.Margin = new System.Windows.Forms.Padding(2);
             this.btnOptions.Name = "btnOptions";
             this.btnOptions.Size = new System.Drawing.Size(156, 27);
@@ -457,7 +449,7 @@
             this.btnFindIdenticals.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnFindIdenticals.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFindIdenticals.ForeColor = System.Drawing.Color.White;
-            this.btnFindIdenticals.Location = new System.Drawing.Point(184, 5);
+            this.btnFindIdenticals.Location = new System.Drawing.Point(193, 6);
             this.btnFindIdenticals.Margin = new System.Windows.Forms.Padding(2);
             this.btnFindIdenticals.Name = "btnFindIdenticals";
             this.btnFindIdenticals.Size = new System.Drawing.Size(156, 27);
@@ -478,7 +470,7 @@
             this.btnSaveJson.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnSaveJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSaveJson.ForeColor = System.Drawing.Color.White;
-            this.btnSaveJson.Location = new System.Drawing.Point(504, 5);
+            this.btnSaveJson.Location = new System.Drawing.Point(513, 6);
             this.btnSaveJson.Margin = new System.Windows.Forms.Padding(2);
             this.btnSaveJson.Name = "btnSaveJson";
             this.btnSaveJson.Size = new System.Drawing.Size(156, 27);
@@ -491,7 +483,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Image = global::Hashing.Properties.Resources.hashing;
             this.pictureBox1.Location = new System.Drawing.Point(8, 8);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
@@ -534,7 +526,7 @@
             this.botPanel.Location = new System.Drawing.Point(0, 72);
             this.botPanel.Margin = new System.Windows.Forms.Padding(2);
             this.botPanel.Name = "botPanel";
-            this.botPanel.Size = new System.Drawing.Size(987, 557);
+            this.botPanel.Size = new System.Drawing.Size(837, 557);
             this.botPanel.TabIndex = 8;
             this.botPanel.Resize += new System.EventHandler(this.botPanel_Resize);
             // 
@@ -548,7 +540,7 @@
             this.btnCancelHashing.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
             this.btnCancelHashing.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancelHashing.ForeColor = System.Drawing.Color.White;
-            this.btnCancelHashing.Location = new System.Drawing.Point(416, 301);
+            this.btnCancelHashing.Location = new System.Drawing.Point(341, 302);
             this.btnCancelHashing.Margin = new System.Windows.Forms.Padding(2);
             this.btnCancelHashing.Name = "btnCancelHashing";
             this.btnCancelHashing.Size = new System.Drawing.Size(153, 27);
@@ -567,27 +559,11 @@
             this.lblCalculating.Location = new System.Drawing.Point(0, 0);
             this.lblCalculating.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblCalculating.Name = "lblCalculating";
-            this.lblCalculating.Size = new System.Drawing.Size(985, 555);
+            this.lblCalculating.Size = new System.Drawing.Size(835, 555);
             this.lblCalculating.TabIndex = 1;
             this.lblCalculating.Tag = "themeable";
             this.lblCalculating.Text = "Drag and drop files here...";
             this.lblCalculating.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // SumView
-            // 
-            this.SumView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.SumView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SumView.ContextMenuStrip = this.helperMenu;
-            this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SumView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
-            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SumView.ForeColor = System.Drawing.Color.White;
-            this.SumView.Location = new System.Drawing.Point(0, 0);
-            this.SumView.Margin = new System.Windows.Forms.Padding(2);
-            this.SumView.Name = "SumView";
-            this.SumView.Size = new System.Drawing.Size(985, 555);
-            this.SumView.TabIndex = 0;
-            this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.sumView_NodeMouseClick);
             // 
             // trayIcon
             // 
@@ -635,13 +611,29 @@
             this.toolStripMenuItem11.Size = new System.Drawing.Size(211, 24);
             this.toolStripMenuItem11.Text = "RIPEMD160";
             // 
+            // SumView
+            // 
+            this.SumView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.SumView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SumView.ContextMenuStrip = this.helperMenu;
+            this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SumView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
+            this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SumView.ForeColor = System.Drawing.Color.White;
+            this.SumView.Location = new System.Drawing.Point(0, 0);
+            this.SumView.Margin = new System.Windows.Forms.Padding(2);
+            this.SumView.Name = "SumView";
+            this.SumView.Size = new System.Drawing.Size(835, 555);
+            this.SumView.TabIndex = 0;
+            this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.sumView_NodeMouseClick);
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.ClientSize = new System.Drawing.Size(987, 629);
+            this.ClientSize = new System.Drawing.Size(837, 629);
             this.Controls.Add(this.botPanel);
             this.Controls.Add(this.topPanel);
             this.DoubleBuffered = true;
@@ -649,7 +641,7 @@
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MinimumSize = new System.Drawing.Size(1003, 668);
+            this.MinimumSize = new System.Drawing.Size(853, 668);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hashing";
@@ -660,6 +652,7 @@
             this.helperMenu.ResumeLayout(false);
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.botPanel.ResumeLayout(false);
             this.trayMenu.ResumeLayout(false);
@@ -687,7 +680,6 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.Button btnCompare;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.Button btnCalculate;
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.Label lblversion;
@@ -712,6 +704,7 @@
         private System.Windows.Forms.ToolStripMenuItem itemSHA32;
         private System.Windows.Forms.ToolStripMenuItem itemSHA33;
         private System.Windows.Forms.ToolStripMenuItem itemSHA35;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }
 

@@ -26,10 +26,10 @@ namespace Hashing
         protected override void OnDrawNode(DrawTreeNodeEventArgs e)
         {
             Rectangle r = new Rectangle();
-            r.X = 0;
+            r.X = e.Bounds.X;
             r.Y = e.Bounds.Y;
             r.Height = e.Bounds.Height;
-            r.Width = 100000;
+            r.Width = e.Bounds.Width; //100000
 
             if (e.Node.IsSelected)
             {
@@ -42,13 +42,13 @@ namespace Hashing
 
             if (e.Node.Nodes.Count > 0)
             {
-                r.X = 0;
+                //r.X = 0;
                 e.Graphics.DrawString(e.Node.Text, this.Font, new SolidBrush(Options.ForegroundColor), r);
                // TextRenderer.DrawText(e.Graphics, e.Node.Text, this.Font, e.Node.Bounds, Options.ForegroundColor);
             }
             else
             {
-                r.X = 20;
+                r.X += 20;
                 e.Graphics.DrawString(e.Node.Text, this.Font, new SolidBrush(Color.White), r);
                // TextRenderer.DrawText(e.Graphics, e.Node.Text, this.Font, e.Node.Bounds, Color.White);
             }

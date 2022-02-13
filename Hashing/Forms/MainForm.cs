@@ -49,6 +49,9 @@ namespace Hashing
         string _tempFileName = string.Empty;
         string _tempFileExtension = string.Empty;
 
+        // used for filtering sum table
+        TreeNode[] _allSums = null;
+
         // used for cancelling hashing procedure
         CancellationTokenSource tokenSource;
 
@@ -462,7 +465,9 @@ namespace Hashing
                     SumView.Nodes.Add(rootNode);
 
                 }
+
                 SumView.ExpandAll();
+                _allSums = SumView.Nodes.Cast<TreeNode>().ToArray();
             }
         }
 
@@ -844,6 +849,7 @@ namespace Hashing
 
                         SumView.Nodes.AddRange(roots.ToArray());
                         SumView.ExpandAll();
+                        _allSums = SumView.Nodes.Cast<TreeNode>().ToArray();
                     }
                 }
             }
@@ -872,7 +878,6 @@ namespace Hashing
                     btnFindIdenticals.Enabled = false;
                     btnCompare.Enabled = false;
                     btnBrowse.Enabled = false;
-                    btnCalculate.Enabled = false;
                     txtPath.Enabled = false;
                     lblCalculating.Text = Options.TranslationList["lblCalculatingNow"].ToString();
                     lblCalculating.Visible = true;
@@ -1040,9 +1045,11 @@ namespace Hashing
                         }
                     }
 
+                    _allSums = SumView.Nodes.Cast<TreeNode>().ToArray();
                     SumView.Invoke((MethodInvoker)delegate
                     {
                         SumView.ExpandAll();
+                        
                     });
 
                     lblCalculating.Invoke((MethodInvoker)delegate
@@ -1056,17 +1063,12 @@ namespace Hashing
                         btnFindIdenticals.Enabled = true;
                         btnCompare.Enabled = true;
                         btnBrowse.Enabled = true;
-                        btnCalculate.Enabled = true;
                         txtPath.Enabled = true;
 
                         this.Text = string.Format("Hashing - {0}m : {1}s / {2} {3} ({4})", _timer.Elapsed.Minutes, _timer.Elapsed.Seconds, _fileCounter, Options.TranslationList["filesWord"].ToString(), ByteSize.FromBytes(_totalSize));
                     });
 
-                    try
-                    {
-                        SumView.Nodes[0].EnsureVisible();
-                    }
-                    catch { }
+                    if (SumView.Nodes.Count > 0) SumView.Nodes[0].EnsureVisible();
 
                     // opening VirusTotal, after enabling SHA256 hash
                     if (_tempIndex > -1)
@@ -1338,25 +1340,7 @@ namespace Hashing
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                txtPath.Text = dialog.FileName;
-            }
-        }
-
-        private void btnCalculate_Click(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(txtPath.Text))
-            {
-                if (File.Exists(txtPath.Text))
-                {
-                    DetectFiles(new string[] { txtPath.Text });
-                    txtPath.Clear();
-                }
-
-                if (Directory.Exists(txtPath.Text))
-                {
-                    DetectFiles(new string[] { txtPath.Text });
-                    txtPath.Clear();
-                }
+                DetectFiles(new string[] { dialog.FileName });
             }
         }
 
@@ -1418,6 +1402,34 @@ namespace Hashing
         private void toolStripMenuItem4_Click(object sender, EventArgs e)
         {
             FindFile();
+        }
+
+        private void txtPath_TextChanged(object sender, EventArgs e)
+        {
+            FilterTable();
+        }
+
+        private void FilterTable()
+        {
+            if (SumView.Nodes.Count == 0 && _allSums == null) return;
+
+            List<TreeNode> filteredNodes = new List<TreeNode>();
+
+            if (string.IsNullOrEmpty(txtPath.Text) && _allSums != null)
+            {
+                SumView.Nodes.Clear();
+                SumView.Nodes.AddRange(_allSums);
+            }
+            else
+            {
+                SumView.Nodes.Clear();
+                string term = txtPath.Text.Trim().ToLowerInvariant();
+                foreach (TreeNode x in _allSums)
+                {
+                    if (x.Text.ToLowerInvariant().Contains(term)) filteredNodes.Add(x);
+                }
+                SumView.Nodes.AddRange(filteredNodes.ToArray());
+            }
         }
     }
 }

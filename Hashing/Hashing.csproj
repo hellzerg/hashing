@@ -185,6 +185,7 @@
     <EmbeddedResource Include="Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\hashing.png" />
     <EmbeddedResource Include="Crc32.NET.dll" />
     <Content Include="hashing.ico" />
   </ItemGroup>
