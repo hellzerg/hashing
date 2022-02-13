@@ -29,6 +29,15 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtExpected = new System.Windows.Forms.TextBox();
+            this.btnCompare = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.lblNoMatch = new System.Windows.Forms.Label();
+            this.btnPaste = new System.Windows.Forms.Button();
+            this.chkRemove = new Hashing.MoonCheck();
+            this.resultBox = new Hashing.MoonList();
             this.chkSHA35 = new Hashing.MoonCheck();
             this.chkSHA33 = new Hashing.MoonCheck();
             this.chkSHA32 = new Hashing.MoonCheck();
@@ -39,15 +48,6 @@
             this.chkSHA256 = new Hashing.MoonCheck();
             this.chkSHA1 = new Hashing.MoonCheck();
             this.chkMD5 = new Hashing.MoonCheck();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtExpected = new System.Windows.Forms.TextBox();
-            this.btnCompare = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.resultBox = new Hashing.MoonList();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.lblNoMatch = new System.Windows.Forms.Label();
-            this.btnPaste = new System.Windows.Forms.Button();
-            this.chkRemove = new Hashing.MoonCheck();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -71,6 +71,147 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(864, 32);
             this.panel1.TabIndex = 4;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.label1.Location = new System.Drawing.Point(6, 38);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(119, 21);
+            this.label1.TabIndex = 5;
+            this.label1.Tag = "themeable";
+            this.label1.Text = "Expected hash:";
+            // 
+            // txtExpected
+            // 
+            this.txtExpected.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExpected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.txtExpected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtExpected.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.txtExpected.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtExpected.ForeColor = System.Drawing.Color.White;
+            this.txtExpected.Location = new System.Drawing.Point(10, 61);
+            this.txtExpected.Margin = new System.Windows.Forms.Padding(2);
+            this.txtExpected.Name = "txtExpected";
+            this.txtExpected.Size = new System.Drawing.Size(845, 27);
+            this.txtExpected.TabIndex = 6;
+            this.txtExpected.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtExpected_KeyDown);
+            // 
+            // btnCompare
+            // 
+            this.btnCompare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCompare.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnCompare.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
+            this.btnCompare.FlatAppearance.BorderSize = 0;
+            this.btnCompare.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnCompare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnCompare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCompare.ForeColor = System.Drawing.Color.White;
+            this.btnCompare.Location = new System.Drawing.Point(704, 92);
+            this.btnCompare.Margin = new System.Windows.Forms.Padding(2);
+            this.btnCompare.Name = "btnCompare";
+            this.btnCompare.Size = new System.Drawing.Size(151, 27);
+            this.btnCompare.TabIndex = 74;
+            this.btnCompare.Tag = "themeable";
+            this.btnCompare.Text = "Compare";
+            this.btnCompare.UseVisualStyleBackColor = false;
+            this.btnCompare.Click += new System.EventHandler(this.btnCompare_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.label2.Location = new System.Drawing.Point(6, 110);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(66, 21);
+            this.label2.TabIndex = 75;
+            this.label2.Tag = "themeable";
+            this.label2.Text = "Results:";
+            // 
+            // panel2
+            // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.lblNoMatch);
+            this.panel2.Controls.Add(this.resultBox);
+            this.panel2.Location = new System.Drawing.Point(10, 135);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(845, 391);
+            this.panel2.TabIndex = 77;
+            // 
+            // lblNoMatch
+            // 
+            this.lblNoMatch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblNoMatch.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNoMatch.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.lblNoMatch.Location = new System.Drawing.Point(0, 0);
+            this.lblNoMatch.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblNoMatch.Name = "lblNoMatch";
+            this.lblNoMatch.Size = new System.Drawing.Size(843, 389);
+            this.lblNoMatch.TabIndex = 77;
+            this.lblNoMatch.Tag = "themeable";
+            this.lblNoMatch.Text = "No files matching";
+            this.lblNoMatch.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnPaste
+            // 
+            this.btnPaste.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPaste.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnPaste.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
+            this.btnPaste.FlatAppearance.BorderSize = 0;
+            this.btnPaste.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnPaste.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
+            this.btnPaste.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPaste.ForeColor = System.Drawing.Color.White;
+            this.btnPaste.Location = new System.Drawing.Point(549, 92);
+            this.btnPaste.Margin = new System.Windows.Forms.Padding(2);
+            this.btnPaste.Name = "btnPaste";
+            this.btnPaste.Size = new System.Drawing.Size(151, 27);
+            this.btnPaste.TabIndex = 79;
+            this.btnPaste.Tag = "themeable";
+            this.btnPaste.Text = "Paste";
+            this.btnPaste.UseVisualStyleBackColor = false;
+            this.btnPaste.Click += new System.EventHandler(this.btnPaste_Click);
+            // 
+            // chkRemove
+            // 
+            this.chkRemove.AutoSize = true;
+            this.chkRemove.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkRemove.Location = new System.Drawing.Point(10, 89);
+            this.chkRemove.Margin = new System.Windows.Forms.Padding(2);
+            this.chkRemove.Name = "chkRemove";
+            this.chkRemove.Size = new System.Drawing.Size(124, 23);
+            this.chkRemove.TabIndex = 78;
+            this.chkRemove.Text = "Remove dashes";
+            this.chkRemove.UseVisualStyleBackColor = true;
+            this.chkRemove.CheckedChanged += new System.EventHandler(this.chkRemove_CheckedChanged);
+            // 
+            // resultBox
+            // 
+            this.resultBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.resultBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.resultBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.resultBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.resultBox.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resultBox.ForeColor = System.Drawing.Color.White;
+            this.resultBox.FormattingEnabled = true;
+            this.resultBox.HorizontalScrollbar = true;
+            this.resultBox.ItemHeight = 21;
+            this.resultBox.Location = new System.Drawing.Point(0, 0);
+            this.resultBox.Margin = new System.Windows.Forms.Padding(2);
+            this.resultBox.Name = "resultBox";
+            this.resultBox.Size = new System.Drawing.Size(843, 389);
+            this.resultBox.TabIndex = 76;
+            this.resultBox.DoubleClick += new System.EventHandler(this.resultBox_DoubleClick);
             // 
             // chkSHA35
             // 
@@ -204,153 +345,13 @@
             this.chkMD5.UseVisualStyleBackColor = true;
             this.chkMD5.CheckedChanged += new System.EventHandler(this.chkMD5_CheckedChanged);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.label1.Location = new System.Drawing.Point(6, 38);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(119, 21);
-            this.label1.TabIndex = 5;
-            this.label1.Tag = "themeable";
-            this.label1.Text = "Expected hash:";
-            // 
-            // txtExpected
-            // 
-            this.txtExpected.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtExpected.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.txtExpected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtExpected.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txtExpected.Font = new System.Drawing.Font("Segoe UI Semibold", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtExpected.ForeColor = System.Drawing.Color.White;
-            this.txtExpected.Location = new System.Drawing.Point(10, 61);
-            this.txtExpected.Margin = new System.Windows.Forms.Padding(2);
-            this.txtExpected.Name = "txtExpected";
-            this.txtExpected.Size = new System.Drawing.Size(845, 27);
-            this.txtExpected.TabIndex = 6;
-            // 
-            // btnCompare
-            // 
-            this.btnCompare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCompare.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnCompare.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
-            this.btnCompare.FlatAppearance.BorderSize = 0;
-            this.btnCompare.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnCompare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnCompare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCompare.ForeColor = System.Drawing.Color.White;
-            this.btnCompare.Location = new System.Drawing.Point(704, 92);
-            this.btnCompare.Margin = new System.Windows.Forms.Padding(2);
-            this.btnCompare.Name = "btnCompare";
-            this.btnCompare.Size = new System.Drawing.Size(151, 27);
-            this.btnCompare.TabIndex = 74;
-            this.btnCompare.Tag = "themeable";
-            this.btnCompare.Text = "Compare";
-            this.btnCompare.UseVisualStyleBackColor = false;
-            this.btnCompare.Click += new System.EventHandler(this.btnCompare_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.label2.Location = new System.Drawing.Point(6, 110);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(66, 21);
-            this.label2.TabIndex = 75;
-            this.label2.Tag = "themeable";
-            this.label2.Text = "Results:";
-            // 
-            // resultBox
-            // 
-            this.resultBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.resultBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.resultBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resultBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.resultBox.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.resultBox.ForeColor = System.Drawing.Color.White;
-            this.resultBox.FormattingEnabled = true;
-            this.resultBox.HorizontalScrollbar = true;
-            this.resultBox.ItemHeight = 21;
-            this.resultBox.Location = new System.Drawing.Point(0, 0);
-            this.resultBox.Margin = new System.Windows.Forms.Padding(2);
-            this.resultBox.Name = "resultBox";
-            this.resultBox.Size = new System.Drawing.Size(843, 506);
-            this.resultBox.TabIndex = 76;
-            this.resultBox.DoubleClick += new System.EventHandler(this.resultBox_DoubleClick);
-            // 
-            // panel2
-            // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.lblNoMatch);
-            this.panel2.Controls.Add(this.resultBox);
-            this.panel2.Location = new System.Drawing.Point(10, 135);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(845, 508);
-            this.panel2.TabIndex = 77;
-            // 
-            // lblNoMatch
-            // 
-            this.lblNoMatch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblNoMatch.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNoMatch.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.lblNoMatch.Location = new System.Drawing.Point(0, 0);
-            this.lblNoMatch.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblNoMatch.Name = "lblNoMatch";
-            this.lblNoMatch.Size = new System.Drawing.Size(843, 506);
-            this.lblNoMatch.TabIndex = 77;
-            this.lblNoMatch.Tag = "themeable";
-            this.lblNoMatch.Text = "No files matching";
-            this.lblNoMatch.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // btnPaste
-            // 
-            this.btnPaste.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPaste.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnPaste.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
-            this.btnPaste.FlatAppearance.BorderSize = 0;
-            this.btnPaste.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnPaste.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnPaste.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPaste.ForeColor = System.Drawing.Color.White;
-            this.btnPaste.Location = new System.Drawing.Point(549, 92);
-            this.btnPaste.Margin = new System.Windows.Forms.Padding(2);
-            this.btnPaste.Name = "btnPaste";
-            this.btnPaste.Size = new System.Drawing.Size(151, 27);
-            this.btnPaste.TabIndex = 79;
-            this.btnPaste.Tag = "themeable";
-            this.btnPaste.Text = "Paste";
-            this.btnPaste.UseVisualStyleBackColor = false;
-            this.btnPaste.Click += new System.EventHandler(this.btnPaste_Click);
-            // 
-            // chkRemove
-            // 
-            this.chkRemove.AutoSize = true;
-            this.chkRemove.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkRemove.Location = new System.Drawing.Point(10, 89);
-            this.chkRemove.Margin = new System.Windows.Forms.Padding(2);
-            this.chkRemove.Name = "chkRemove";
-            this.chkRemove.Size = new System.Drawing.Size(124, 23);
-            this.chkRemove.TabIndex = 78;
-            this.chkRemove.Text = "Remove dashes";
-            this.chkRemove.UseVisualStyleBackColor = true;
-            this.chkRemove.CheckedChanged += new System.EventHandler(this.chkRemove_CheckedChanged);
-            // 
             // CompareForm
             // 
             this.AcceptButton = this.btnCompare;
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.ClientSize = new System.Drawing.Size(864, 652);
+            this.ClientSize = new System.Drawing.Size(864, 535);
             this.Controls.Add(this.btnPaste);
             this.Controls.Add(this.chkRemove);
             this.Controls.Add(this.panel2);

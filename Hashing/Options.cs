@@ -38,7 +38,7 @@ namespace Hashing
         internal static Color ForegroundColor = Color.FromArgb(153, 102, 204);
         internal static Color ForegroundAccentColor = Color.FromArgb(134, 89, 179);
 
-        internal static Color BackgroundColor = Color.FromArgb(20,20,20);
+        internal static Color BackgroundColor = Color.FromArgb(20, 20, 20);
 
         internal readonly static string ThemeFlag = "themeable";
         readonly static string SettingsFile = Application.StartupPath + "\\Hashing.json";

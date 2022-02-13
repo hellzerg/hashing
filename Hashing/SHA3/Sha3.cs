@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace Hashing
 {

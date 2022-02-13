@@ -11,7 +11,7 @@ namespace Hashing
             this.BackColor = Color.FromArgb(20, 20, 20);
             this.ForeColor = Color.White;
             this.BorderStyle = BorderStyle.None;
-            
+
             this.NodeMouseClick += MoonTree_NodeMouseClick;
         }
 
@@ -44,13 +44,13 @@ namespace Hashing
             {
                 //r.X = 0;
                 e.Graphics.DrawString(e.Node.Text, this.Font, new SolidBrush(Options.ForegroundColor), r);
-               // TextRenderer.DrawText(e.Graphics, e.Node.Text, this.Font, e.Node.Bounds, Options.ForegroundColor);
+                // TextRenderer.DrawText(e.Graphics, e.Node.Text, this.Font, e.Node.Bounds, Options.ForegroundColor);
             }
             else
             {
                 r.X += 20;
                 e.Graphics.DrawString(e.Node.Text, this.Font, new SolidBrush(Color.White), r);
-               // TextRenderer.DrawText(e.Graphics, e.Node.Text, this.Font, e.Node.Bounds, Color.White);
+                // TextRenderer.DrawText(e.Graphics, e.Node.Text, this.Font, e.Node.Bounds, Color.White);
             }
 
             if (this.ImageList != null && this.ImageList.Images.Count > 0 && e.Node.SelectedImageIndex > -1)

@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [3.3] - 2022-02-13
+- New: Filter sums list
 - Hotfix: Horizontal scrolling not working in main form
 
 ## [3.2] - 2022-02-12

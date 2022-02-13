@@ -220,7 +220,7 @@ namespace Hashing
 
         internal static void FindFile(string file)
         {
-            if (File.Exists(file)) Process.Start("explorer.exe", "/select, " + file);
+            if (File.Exists(file)) Process.Start("explorer.exe", $"/select, \"{file}\"");
         }
     }
 }

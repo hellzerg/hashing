@@ -130,7 +130,7 @@ namespace Hashing
                         if (x.RIPEMD160 == txtExpected.Text) resultBox.Items.Add(x.File);
                     }
 
-                    if (chkSHA32.Checked) 
+                    if (chkSHA32.Checked)
                     {
                         if (x.SHA3_256 == txtExpected.Text) resultBox.Items.Add(x.File);
                     }
@@ -247,6 +247,14 @@ namespace Hashing
             if (resultBox.SelectedIndex > -1)
             {
                 Utilities.FindFile(resultBox.SelectedItem.ToString());
+            }
+        }
+
+        private void txtExpected_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnCompare.PerformClick();
             }
         }
     }

@@ -1049,7 +1049,7 @@ namespace Hashing
                     SumView.Invoke((MethodInvoker)delegate
                     {
                         SumView.ExpandAll();
-                        
+
                     });
 
                     lblCalculating.Invoke((MethodInvoker)delegate
@@ -1152,7 +1152,7 @@ namespace Hashing
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void MainForm_DragEnter(object sender, DragEventArgs e)
