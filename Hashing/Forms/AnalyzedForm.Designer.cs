@@ -44,7 +44,7 @@
             this.listFiles.Location = new System.Drawing.Point(0, 0);
             this.listFiles.Margin = new System.Windows.Forms.Padding(2);
             this.listFiles.Name = "listFiles";
-            this.listFiles.Size = new System.Drawing.Size(590, 404);
+            this.listFiles.Size = new System.Drawing.Size(628, 431);
             this.listFiles.TabIndex = 0;
             // 
             // AnalyzedForm
@@ -52,11 +52,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
-            this.ClientSize = new System.Drawing.Size(590, 404);
+            this.ClientSize = new System.Drawing.Size(628, 431);
             this.Controls.Add(this.listFiles);
             this.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.White;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "AnalyzedForm";
             this.ShowIcon = false;
