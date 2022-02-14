@@ -1334,13 +1334,13 @@ namespace Hashing
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "All files|*.*";
-            dialog.Multiselect = false;
+            dialog.Multiselect = true;
             dialog.CheckFileExists = true;
             dialog.CheckPathExists = true;
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                DetectFiles(new string[] { dialog.FileName });
+                DetectFiles(dialog.FileNames);
             }
         }
 
