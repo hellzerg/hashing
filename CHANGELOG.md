@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.4] - 2022-02-15
+- Hotfix: Propely show files (#20)
+- Hotfix: Stuck on calculating when dropping an empty folder
+
 ## [3.3] - 2022-02-13
 - New: Filter sums list
 - Hotfix: Horizontal scrolling not working in main form

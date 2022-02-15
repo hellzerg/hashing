@@ -768,6 +768,8 @@ namespace Hashing
                 }
             }
 
+            if (_fileList.Count == 0) return;
+
             // check if all files are JSON files
             _allFilesAreJson = true;
 
