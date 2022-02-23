@@ -1433,5 +1433,10 @@ namespace Hashing
                 SumView.Nodes.AddRange(filteredNodes.ToArray());
             }
         }
+
+        private void SumView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+         
+        }
     }
 }

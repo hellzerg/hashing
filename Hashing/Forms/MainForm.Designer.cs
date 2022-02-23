@@ -580,6 +580,7 @@
             this.SumView.Size = new System.Drawing.Size(835, 555);
             this.SumView.TabIndex = 0;
             this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.sumView_NodeMouseClick);
+            this.SumView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SumView_NodeMouseDoubleClick);
             // 
             // trayIcon
             // 
