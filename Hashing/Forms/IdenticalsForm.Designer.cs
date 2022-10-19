@@ -36,6 +36,7 @@
             this.SumView = new Hashing.MoonTree();
             this.panel1 = new System.Windows.Forms.Panel();
             this.boxSelectHash = new Hashing.MoonSelect();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.helperMenu.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -49,18 +50,19 @@
             this.helperMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.helperMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.copyToolStripMenuItem,
+            this.toolStripMenuItem1,
             this.saveAsJSONToolStripMenuItem});
             this.helperMenu.Name = "helperMenu";
             this.helperMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.helperMenu.ShowImageMargin = false;
-            this.helperMenu.Size = new System.Drawing.Size(141, 52);
+            this.helperMenu.Size = new System.Drawing.Size(156, 98);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.copyToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(140, 24);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(155, 24);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
@@ -69,7 +71,7 @@
             this.saveAsJSONToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.saveAsJSONToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.saveAsJSONToolStripMenuItem.Name = "saveAsJSONToolStripMenuItem";
-            this.saveAsJSONToolStripMenuItem.Size = new System.Drawing.Size(140, 24);
+            this.saveAsJSONToolStripMenuItem.Size = new System.Drawing.Size(155, 24);
             this.saveAsJSONToolStripMenuItem.Text = "Save as JSON";
             this.saveAsJSONToolStripMenuItem.Click += new System.EventHandler(this.saveAsJSONToolStripMenuItem_Click);
             // 
@@ -125,6 +127,15 @@
             this.boxSelectHash.TabIndex = 10;
             this.boxSelectHash.SelectedIndexChanged += new System.EventHandler(this.boxSelectHash_SelectedIndexChanged);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripMenuItem1.ForeColor = System.Drawing.Color.White;
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(155, 24);
+            this.toolStripMenuItem1.Text = "Show file";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
             // IdenticalsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -159,5 +170,6 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel1;
         private MoonSelect boxSelectHash;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
     }
 }

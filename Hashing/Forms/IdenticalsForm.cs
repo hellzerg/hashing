@@ -83,7 +83,7 @@ namespace Hashing
                         File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(_identicals, Formatting.Indented, new JsonSerializerSettings
                         {
                             NullValueHandling = NullValueHandling.Ignore
-                        })) ;
+                        }));
                     }
                     catch (Exception ex)
                     {
@@ -144,7 +144,7 @@ namespace Hashing
 
                     _identicals.FindAll(z => z.SHA256 == x).ForEach(y =>
                     {
-                        fileNode.Nodes.Add(y.File);                        
+                        fileNode.Nodes.Add(y.File);
                     });
 
                     nodes.Add(fileNode);
@@ -373,6 +373,26 @@ namespace Hashing
                 X = panel1.Width / 2 - boxSelectHash.Width / 2,
                 Y = panel1.Height / 2 - boxSelectHash.Height / 2
             };
+        }
+
+        private void FindFile()
+        {
+            if (SumView.Nodes.Count > 0)
+            {
+                if (SumView.SelectedNode.Nodes.Count > 0)
+                {
+                    Utilities.FindFile(SumView.SelectedNode.Nodes[0].Text);
+                }
+                else
+                {
+                    Utilities.FindFile(SumView.SelectedNode.Text);
+                }
+            }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FindFile();
         }
     }
 }

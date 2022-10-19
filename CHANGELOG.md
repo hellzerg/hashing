@@ -1,6 +1,9 @@
 # Hashing Changelog
 
-All notable changes to this project will be documented in this file.
+## [3.5] - 2022-10-19
+- New: Show File request in Find Identicals (#24)
+- Security: Newtonsoft.JSON and CRC32.NET updated to latest version
+- Hotfix: Much faster list rendering after hash calculation (#23)
 
 ## [3.4] - 2022-02-15
 - Hotfix: Propely show files (#20)

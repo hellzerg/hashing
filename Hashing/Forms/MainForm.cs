@@ -443,6 +443,7 @@ namespace Hashing
             if ((SumResult.Sums != null) && (SumResult.Sums.Count > 0))
             {
                 SumView.Nodes.Clear();
+                List<TreeNode> tmpNodes = new List<TreeNode>();
 
                 foreach (SumResult sr in SumResult.Sums)
                 {
@@ -462,10 +463,10 @@ namespace Hashing
                     if (Options.CurrentOptions.HashOptions.SHA3_384) rootNode.Nodes.Add("SHA3-384: " + sr.SHA3_384);
                     if (Options.CurrentOptions.HashOptions.SHA3_512) rootNode.Nodes.Add("SHA3-512: " + sr.SHA3_512);
 
-                    SumView.Nodes.Add(rootNode);
-
+                    tmpNodes.Add(rootNode);
                 }
 
+                SumView.Nodes.AddRange(tmpNodes.ToArray());
                 SumView.ExpandAll();
                 _allSums = SumView.Nodes.Cast<TreeNode>().ToArray();
             }
@@ -943,6 +944,7 @@ namespace Hashing
 
                     TreeNode rootNode = null;
                     _analyzedFiles = new List<string>();
+                    List<TreeNode> tmpNodes = new List<TreeNode>();
 
                     if (analyzeJson)
                     {
@@ -1014,10 +1016,7 @@ namespace Hashing
                                 if (SumResult.Sums[i].SHA3_512 == _fileSummaries[i].SHA3_512) _analyzedFiles.Add(_fileSummaries[i].File);
                             }
 
-                            SumView.Invoke((MethodInvoker)delegate
-                            {
-                                SumView.Nodes.Add(rootNode);
-                            });
+                            tmpNodes.Add(rootNode);
                         }
                     }
                     else
@@ -1040,19 +1039,17 @@ namespace Hashing
                             if (Options.CurrentOptions.HashOptions.SHA3_384) rootNode.Nodes.Add("SHA3-384: " + SumResult.Sums[i].SHA3_384);
                             if (Options.CurrentOptions.HashOptions.SHA3_512) rootNode.Nodes.Add("SHA3-512: " + SumResult.Sums[i].SHA3_512);
 
-                            SumView.Invoke((MethodInvoker)delegate
-                            {
-                                SumView.Nodes.Add(rootNode);
-                            });
+                            tmpNodes.Add(rootNode);
                         }
                     }
 
-                    _allSums = SumView.Nodes.Cast<TreeNode>().ToArray();
                     SumView.Invoke((MethodInvoker)delegate
                     {
+                        SumView.Nodes.AddRange(tmpNodes.ToArray());
                         SumView.ExpandAll();
 
                     });
+                    _allSums = SumView.Nodes.Cast<TreeNode>().ToArray();
 
                     lblCalculating.Invoke((MethodInvoker)delegate
                     {
@@ -1436,7 +1433,7 @@ namespace Hashing
 
         private void SumView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-         
+
         }
     }
 }

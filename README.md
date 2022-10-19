@@ -6,7 +6,7 @@
 
 Simple utility to calculate and compare hashes of multiple files
 <p align="center">
-	<a href="https://github.com/hellzerg/hashing/releases/download/3.4/Hashing-3.4.exe" target="_blank">
+	<a href="https://github.com/hellzerg/hashing/releases/download/3.5/Hashing-3.5.exe" target="_blank">
 		<img src="download-button.png">
 	</a>
 </p> 
@@ -57,6 +57,6 @@ https://github.com/hellzerg/hashing/blob/master/IMAGES.md
 
 ## Details: ##
 
-* Latest version: 3.4
-* Released: February 15, 2022
-* SHA256: 066D3090044D5D77D4B2454C013E56648363EC329D13750B416B4C69B0AAE4AA
+* Latest version: 3.5
+* Released: October 19, 2022
+* SHA256: 70934C870A61F5BA60A2C0934B5523C52FEA81180F76B7868727E97EF46AB584
