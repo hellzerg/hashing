@@ -35,6 +35,7 @@
     {
         EN, // english
         EL, // hellenic
-        CN // chinese
+        CN, // chinese
+        DE // german
     }
 }

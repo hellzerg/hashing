@@ -44,6 +44,11 @@
             this.pictureBox86 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.chkSHA33 = new Hashing.MoonCheck();
+            this.chkSHA35 = new Hashing.MoonCheck();
+            this.chkSHA32 = new Hashing.MoonCheck();
+            this.radioGerman = new Hashing.MoonRadio();
             this.radioChinese = new Hashing.MoonRadio();
             this.radioHellenic = new Hashing.MoonRadio();
             this.radioEnglish = new Hashing.MoonRadio();
@@ -60,14 +65,12 @@
             this.chkSHA256 = new Hashing.MoonCheck();
             this.chkSHA1 = new Hashing.MoonCheck();
             this.chkMD5 = new Hashing.MoonCheck();
-            this.chkSHA33 = new Hashing.MoonCheck();
-            this.chkSHA35 = new Hashing.MoonCheck();
-            this.chkSHA32 = new Hashing.MoonCheck();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox88)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox86)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // okbtn
@@ -82,7 +85,7 @@
             this.okbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.okbtn.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.okbtn.ForeColor = System.Drawing.Color.White;
-            this.okbtn.Location = new System.Drawing.Point(426, 387);
+            this.okbtn.Location = new System.Drawing.Point(486, 422);
             this.okbtn.Margin = new System.Windows.Forms.Padding(2);
             this.okbtn.Name = "okbtn";
             this.okbtn.Size = new System.Drawing.Size(147, 31);
@@ -196,7 +199,7 @@
             this.lbl88.AutoSize = true;
             this.lbl88.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl88.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.lbl88.Location = new System.Drawing.Point(10, 167);
+            this.lbl88.Location = new System.Drawing.Point(11, 180);
             this.lbl88.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl88.Name = "lbl88";
             this.lbl88.Size = new System.Drawing.Size(214, 21);
@@ -267,6 +270,8 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.radioGerman);
+            this.panel2.Controls.Add(this.pictureBox1);
             this.panel2.Controls.Add(this.label3);
             this.panel2.Controls.Add(this.pictureBox86);
             this.panel2.Controls.Add(this.radioChinese);
@@ -276,8 +281,74 @@
             this.panel2.Controls.Add(this.radioEnglish);
             this.panel2.Location = new System.Drawing.Point(294, 8);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(181, 150);
+            this.panel2.Size = new System.Drawing.Size(181, 184);
             this.panel2.TabIndex = 109;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(27, 144);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(36, 22);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 108;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
+            // chkSHA33
+            // 
+            this.chkSHA33.AutoSize = true;
+            this.chkSHA33.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkSHA33.ForeColor = System.Drawing.Color.White;
+            this.chkSHA33.Location = new System.Drawing.Point(150, 308);
+            this.chkSHA33.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSHA33.Name = "chkSHA33";
+            this.chkSHA33.Size = new System.Drawing.Size(103, 25);
+            this.chkSHA33.TabIndex = 112;
+            this.chkSHA33.Text = "SHA3-384";
+            this.chkSHA33.UseVisualStyleBackColor = true;
+            this.chkSHA33.CheckedChanged += new System.EventHandler(this.chkSHA33_CheckedChanged);
+            // 
+            // chkSHA35
+            // 
+            this.chkSHA35.AutoSize = true;
+            this.chkSHA35.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkSHA35.ForeColor = System.Drawing.Color.White;
+            this.chkSHA35.Location = new System.Drawing.Point(31, 337);
+            this.chkSHA35.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSHA35.Name = "chkSHA35";
+            this.chkSHA35.Size = new System.Drawing.Size(100, 25);
+            this.chkSHA35.TabIndex = 111;
+            this.chkSHA35.Text = "SHA3-512";
+            this.chkSHA35.UseVisualStyleBackColor = true;
+            this.chkSHA35.CheckedChanged += new System.EventHandler(this.chkSHA35_CheckedChanged);
+            // 
+            // chkSHA32
+            // 
+            this.chkSHA32.AutoSize = true;
+            this.chkSHA32.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkSHA32.ForeColor = System.Drawing.Color.White;
+            this.chkSHA32.Location = new System.Drawing.Point(31, 308);
+            this.chkSHA32.Margin = new System.Windows.Forms.Padding(2);
+            this.chkSHA32.Name = "chkSHA32";
+            this.chkSHA32.Size = new System.Drawing.Size(103, 25);
+            this.chkSHA32.TabIndex = 110;
+            this.chkSHA32.Text = "SHA3-256";
+            this.chkSHA32.UseVisualStyleBackColor = true;
+            this.chkSHA32.CheckedChanged += new System.EventHandler(this.chkSHA32_CheckedChanged);
+            // 
+            // radioGerman
+            // 
+            this.radioGerman.AutoSize = true;
+            this.radioGerman.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioGerman.Location = new System.Drawing.Point(68, 142);
+            this.radioGerman.Name = "radioGerman";
+            this.radioGerman.Size = new System.Drawing.Size(87, 25);
+            this.radioGerman.TabIndex = 109;
+            this.radioGerman.TabStop = true;
+            this.radioGerman.Text = "Deutsch";
+            this.radioGerman.UseVisualStyleBackColor = true;
+            this.radioGerman.Click += new System.EventHandler(this.radioGerman_Click);
             // 
             // radioChinese
             // 
@@ -323,7 +394,7 @@
             this.chkStayOnTop.AutoSize = true;
             this.chkStayOnTop.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkStayOnTop.ForeColor = System.Drawing.Color.White;
-            this.chkStayOnTop.Location = new System.Drawing.Point(306, 253);
+            this.chkStayOnTop.Location = new System.Drawing.Point(294, 304);
             this.chkStayOnTop.Margin = new System.Windows.Forms.Padding(2);
             this.chkStayOnTop.Name = "chkStayOnTop";
             this.chkStayOnTop.Size = new System.Drawing.Size(113, 25);
@@ -337,7 +408,7 @@
             this.chkSingleInstance.AutoSize = true;
             this.chkSingleInstance.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkSingleInstance.ForeColor = System.Drawing.Color.White;
-            this.chkSingleInstance.Location = new System.Drawing.Point(306, 225);
+            this.chkSingleInstance.Location = new System.Drawing.Point(294, 276);
             this.chkSingleInstance.Margin = new System.Windows.Forms.Padding(2);
             this.chkSingleInstance.Name = "chkSingleInstance";
             this.chkSingleInstance.Size = new System.Drawing.Size(188, 25);
@@ -351,7 +422,7 @@
             this.chkCRCFormat.AutoSize = true;
             this.chkCRCFormat.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkCRCFormat.ForeColor = System.Drawing.Color.White;
-            this.chkCRCFormat.Location = new System.Drawing.Point(306, 196);
+            this.chkCRCFormat.Location = new System.Drawing.Point(294, 247);
             this.chkCRCFormat.Margin = new System.Windows.Forms.Padding(2);
             this.chkCRCFormat.Name = "chkCRCFormat";
             this.chkCRCFormat.Size = new System.Drawing.Size(207, 25);
@@ -365,7 +436,7 @@
             this.chkLower.AutoSize = true;
             this.chkLower.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkLower.ForeColor = System.Drawing.Color.White;
-            this.chkLower.Location = new System.Drawing.Point(306, 167);
+            this.chkLower.Location = new System.Drawing.Point(294, 218);
             this.chkLower.Margin = new System.Windows.Forms.Padding(2);
             this.chkLower.Name = "chkLower";
             this.chkLower.Size = new System.Drawing.Size(169, 25);
@@ -379,7 +450,7 @@
             this.chkCRC32.AutoSize = true;
             this.chkCRC32.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkCRC32.ForeColor = System.Drawing.Color.White;
-            this.chkCRC32.Location = new System.Drawing.Point(149, 205);
+            this.chkCRC32.Location = new System.Drawing.Point(150, 218);
             this.chkCRC32.Margin = new System.Windows.Forms.Padding(2);
             this.chkCRC32.Name = "chkCRC32";
             this.chkCRC32.Size = new System.Drawing.Size(77, 25);
@@ -393,7 +464,7 @@
             this.chkHigh.AutoSize = true;
             this.chkHigh.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkHigh.ForeColor = System.Drawing.Color.White;
-            this.chkHigh.Location = new System.Drawing.Point(306, 311);
+            this.chkHigh.Location = new System.Drawing.Point(294, 362);
             this.chkHigh.Margin = new System.Windows.Forms.Padding(2);
             this.chkHigh.Name = "chkHigh";
             this.chkHigh.Size = new System.Drawing.Size(171, 25);
@@ -407,7 +478,7 @@
             this.chkTray.AutoSize = true;
             this.chkTray.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkTray.ForeColor = System.Drawing.Color.White;
-            this.chkTray.Location = new System.Drawing.Point(306, 282);
+            this.chkTray.Location = new System.Drawing.Point(294, 333);
             this.chkTray.Margin = new System.Windows.Forms.Padding(2);
             this.chkTray.Name = "chkTray";
             this.chkTray.Size = new System.Drawing.Size(156, 25);
@@ -421,7 +492,7 @@
             this.chkSHA384.AutoSize = true;
             this.chkSHA384.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkSHA384.ForeColor = System.Drawing.Color.White;
-            this.chkSHA384.Location = new System.Drawing.Point(30, 266);
+            this.chkSHA384.Location = new System.Drawing.Point(31, 279);
             this.chkSHA384.Margin = new System.Windows.Forms.Padding(2);
             this.chkSHA384.Name = "chkSHA384";
             this.chkSHA384.Size = new System.Drawing.Size(88, 25);
@@ -435,7 +506,7 @@
             this.chkRIPEMD160.AutoSize = true;
             this.chkRIPEMD160.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkRIPEMD160.ForeColor = System.Drawing.Color.White;
-            this.chkRIPEMD160.Location = new System.Drawing.Point(149, 324);
+            this.chkRIPEMD160.Location = new System.Drawing.Point(150, 337);
             this.chkRIPEMD160.Margin = new System.Windows.Forms.Padding(2);
             this.chkRIPEMD160.Name = "chkRIPEMD160";
             this.chkRIPEMD160.Size = new System.Drawing.Size(111, 25);
@@ -449,7 +520,7 @@
             this.chkSHA512.AutoSize = true;
             this.chkSHA512.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkSHA512.ForeColor = System.Drawing.Color.White;
-            this.chkSHA512.Location = new System.Drawing.Point(149, 266);
+            this.chkSHA512.Location = new System.Drawing.Point(150, 279);
             this.chkSHA512.Margin = new System.Windows.Forms.Padding(2);
             this.chkSHA512.Name = "chkSHA512";
             this.chkSHA512.Size = new System.Drawing.Size(85, 25);
@@ -463,7 +534,7 @@
             this.chkSHA256.AutoSize = true;
             this.chkSHA256.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkSHA256.ForeColor = System.Drawing.Color.White;
-            this.chkSHA256.Location = new System.Drawing.Point(149, 236);
+            this.chkSHA256.Location = new System.Drawing.Point(150, 249);
             this.chkSHA256.Margin = new System.Windows.Forms.Padding(2);
             this.chkSHA256.Name = "chkSHA256";
             this.chkSHA256.Size = new System.Drawing.Size(88, 25);
@@ -477,7 +548,7 @@
             this.chkSHA1.AutoSize = true;
             this.chkSHA1.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkSHA1.ForeColor = System.Drawing.Color.White;
-            this.chkSHA1.Location = new System.Drawing.Point(30, 236);
+            this.chkSHA1.Location = new System.Drawing.Point(31, 249);
             this.chkSHA1.Margin = new System.Windows.Forms.Padding(2);
             this.chkSHA1.Name = "chkSHA1";
             this.chkSHA1.Size = new System.Drawing.Size(67, 25);
@@ -491,7 +562,7 @@
             this.chkMD5.AutoSize = true;
             this.chkMD5.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chkMD5.ForeColor = System.Drawing.Color.White;
-            this.chkMD5.Location = new System.Drawing.Point(30, 205);
+            this.chkMD5.Location = new System.Drawing.Point(31, 218);
             this.chkMD5.Margin = new System.Windows.Forms.Padding(2);
             this.chkMD5.Name = "chkMD5";
             this.chkMD5.Size = new System.Drawing.Size(64, 25);
@@ -500,48 +571,6 @@
             this.chkMD5.UseVisualStyleBackColor = true;
             this.chkMD5.CheckedChanged += new System.EventHandler(this.chkMD5_CheckedChanged);
             // 
-            // chkSHA33
-            // 
-            this.chkSHA33.AutoSize = true;
-            this.chkSHA33.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkSHA33.ForeColor = System.Drawing.Color.White;
-            this.chkSHA33.Location = new System.Drawing.Point(149, 295);
-            this.chkSHA33.Margin = new System.Windows.Forms.Padding(2);
-            this.chkSHA33.Name = "chkSHA33";
-            this.chkSHA33.Size = new System.Drawing.Size(103, 25);
-            this.chkSHA33.TabIndex = 112;
-            this.chkSHA33.Text = "SHA3-384";
-            this.chkSHA33.UseVisualStyleBackColor = true;
-            this.chkSHA33.CheckedChanged += new System.EventHandler(this.chkSHA33_CheckedChanged);
-            // 
-            // chkSHA35
-            // 
-            this.chkSHA35.AutoSize = true;
-            this.chkSHA35.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkSHA35.ForeColor = System.Drawing.Color.White;
-            this.chkSHA35.Location = new System.Drawing.Point(30, 324);
-            this.chkSHA35.Margin = new System.Windows.Forms.Padding(2);
-            this.chkSHA35.Name = "chkSHA35";
-            this.chkSHA35.Size = new System.Drawing.Size(100, 25);
-            this.chkSHA35.TabIndex = 111;
-            this.chkSHA35.Text = "SHA3-512";
-            this.chkSHA35.UseVisualStyleBackColor = true;
-            this.chkSHA35.CheckedChanged += new System.EventHandler(this.chkSHA35_CheckedChanged);
-            // 
-            // chkSHA32
-            // 
-            this.chkSHA32.AutoSize = true;
-            this.chkSHA32.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkSHA32.ForeColor = System.Drawing.Color.White;
-            this.chkSHA32.Location = new System.Drawing.Point(30, 295);
-            this.chkSHA32.Margin = new System.Windows.Forms.Padding(2);
-            this.chkSHA32.Name = "chkSHA32";
-            this.chkSHA32.Size = new System.Drawing.Size(103, 25);
-            this.chkSHA32.TabIndex = 110;
-            this.chkSHA32.Text = "SHA3-256";
-            this.chkSHA32.UseVisualStyleBackColor = true;
-            this.chkSHA32.CheckedChanged += new System.EventHandler(this.chkSHA32_CheckedChanged);
-            // 
             // OptionsForm
             // 
             this.AcceptButton = this.okbtn;
@@ -549,7 +578,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.CancelButton = this.okbtn;
-            this.ClientSize = new System.Drawing.Size(584, 429);
+            this.ClientSize = new System.Drawing.Size(644, 464);
             this.Controls.Add(this.chkSHA33);
             this.Controls.Add(this.chkSHA35);
             this.Controls.Add(this.chkSHA32);
@@ -589,6 +618,7 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -630,5 +660,7 @@
         private MoonCheck chkSHA33;
         private MoonCheck chkSHA35;
         private MoonCheck chkSHA32;
+        private MoonRadio radioGerman;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

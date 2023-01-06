@@ -303,5 +303,20 @@ namespace Hashing
             Options.CurrentOptions.HashOptions.SHA3_512 = chkSHA35.Checked;
             HashesChanged = true;
         }
+
+        private void radioGerman_Click(object sender, EventArgs e)
+        {
+            radioChinese.Checked = true;
+            Options.CurrentOptions.LanguageCode = LanguageCode.DE;
+            Options.SaveSettings();
+            Options.LoadTranslation();
+            _main.Translate();
+            Translate();
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            radioGerman.PerformClick();
+        }
     }
 }

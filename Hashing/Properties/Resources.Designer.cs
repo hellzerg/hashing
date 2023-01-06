@@ -19,7 +19,7 @@ namespace Hashing.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -86,6 +86,30 @@ namespace Hashing.Properties {
         internal static string CN {
             get {
                 return ResourceManager.GetString("CN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///	&quot;lblversion&quot;: &quot;Version: {VN}&quot;,
+        ///	&quot;btnFindIdenticals&quot;: &quot;Identische finden&quot;,
+        ///	&quot;btnCompare&quot;: &quot;Vergleichen&quot;,
+        ///	&quot;btnSaveJson&quot;: &quot;Als JSON speichern&quot;,
+        ///	&quot;btnOptions&quot;: &quot;Optionen&quot;,
+        ///	&quot;btnUpdate&quot;: &quot;Aktualisieren&quot;,
+        ///	&quot;btnCalculate&quot;: &quot;Berechnen&quot;,
+        ///	&quot;lblCalculating&quot;: &quot;Dateien hierhin ziehen und ablegen...&quot;,
+        ///	&quot;lblCalculatingNow&quot;: &quot;Berechne...&quot;,
+        ///	&quot;btnCancelHashing&quot;: &quot;Abbrechen&quot;,
+        ///	&quot;btnCancelHashingPressed&quot;: &quot;Breche ab...&quot;,
+        ///	&quot;button7&quot;: &quot;OK&quot;,
+        ///	&quot;label1&quot;: &quot;erwarteter Hashwert:&quot;,
+        ///	&quot;btnPaste&quot;: &quot;Einfügen&quot;,
+        ///	&quot;chkRemove [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DE {
+            get {
+                return ResourceManager.GetString("DE", resourceCulture);
             }
         }
         

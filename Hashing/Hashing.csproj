@@ -177,6 +177,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="Resources\CN.json" />
+    <None Include="Resources\DE.json" />
     <None Include="Resources\EL.json" />
     <None Include="Resources\EN.json" />
   </ItemGroup>

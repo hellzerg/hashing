@@ -6,14 +6,14 @@
 
 Simple utility to calculate and compare hashes of multiple files
 <p align="center">
-	<a href="https://github.com/hellzerg/hashing/releases/download/3.6/Hashing-3.6.exe" target="_blank">
+	<a href="https://github.com/hellzerg/hashing/releases/download/3.7/Hashing-3.7.exe" target="_blank">
 		<img src="download-button.png">
 	</a>
 </p> 
 
 ## Features: ##
 
-* Multilingual support (3 languages available)
+* Multilingual support (4 languages available)
 * 10 algorithms supported:
 	- MD5
 	- SHA1
@@ -58,6 +58,6 @@ https://github.com/hellzerg/hashing/blob/master/IMAGES.md
 
 ## Details: ##
 
-* Latest version: 3.6
+* Latest version: 3.7
 * Released: January 6, 2023
-* SHA256: 972212768C431632852CC85661D7E7782CD9458769FE35A812F8C8B749BC9B6B
+* SHA256: 9EE98E4F619B785BE96766E67CD4D7BB55D55AE2095D579DF34C40FE9E59EE73

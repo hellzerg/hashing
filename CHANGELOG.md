@@ -1,3 +1,6 @@
+## [3.7] - 2023-01-06
+- New: German full localization
+
 ## [3.6] - 2023-01-06
 - Hotfix: DPI scaling now works properly
 - Security: Newtonsoft.JSON updated to latest version
