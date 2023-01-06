@@ -87,6 +87,7 @@ namespace Hashing
             if (Options.CurrentOptions.LanguageCode == LanguageCode.EN) radioEnglish.Checked = true;
             if (Options.CurrentOptions.LanguageCode == LanguageCode.EL) radioHellenic.Checked = true;
             if (Options.CurrentOptions.LanguageCode == LanguageCode.CN) radioChinese.Checked = true;
+            if (Options.CurrentOptions.LanguageCode == LanguageCode.DE) radioGerman.Checked = true;
         }
 
         private void OptionsForm_Load(object sender, EventArgs e)
@@ -306,7 +307,7 @@ namespace Hashing
 
         private void radioGerman_Click(object sender, EventArgs e)
         {
-            radioChinese.Checked = true;
+            radioGerman.Checked = true;
             Options.CurrentOptions.LanguageCode = LanguageCode.DE;
             Options.SaveSettings();
             Options.LoadTranslation();
