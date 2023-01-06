@@ -1,4 +1,6 @@
-# Hashing Changelog
+## [3.6] - 2023-01-06
+- Hotfix: DPI scaling now works properly
+- Security: Newtonsoft.JSON updated to latest version
 
 ## [3.5] - 2022-10-19
 - New: Show File request in Find Identicals (#24)

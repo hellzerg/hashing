@@ -12,7 +12,7 @@ namespace Hashing
 
         // Enter current version here
         internal readonly static float Major = 3;
-        internal readonly static float Minor = 5;
+        internal readonly static float Minor = 6;
 
         /* END OF VERSION PROPERTIES */
 
@@ -30,9 +30,14 @@ namespace Hashing
         internal static Mutex MUTEX;
         static bool _notRunning;
 
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool SetProcessDPIAware();
+
         [STAThread]
         static void Main(string[] args)
         {
+            if (Environment.OSVersion.Version.Major >= 6) SetProcessDPIAware();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

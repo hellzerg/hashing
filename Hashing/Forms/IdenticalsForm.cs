@@ -316,7 +316,6 @@ namespace Hashing
             SumView.Nodes.Clear();
 
             _helper = $"{boxSelectHash.SelectedItem}: ";
-            SumResult tmp;
 
             switch (boxSelectHash.SelectedItem.ToString())
             {
