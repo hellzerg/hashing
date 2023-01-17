@@ -32,6 +32,8 @@ namespace Hashing
             SumView.Select();
             SumView.Focus();
             if (SumView.Nodes.Count > 0) SumView.Nodes[0].EnsureVisible();
+
+            toolStripMenuItem1.Text = Options.TranslationList["toolStripMenuItem4"].ToString();
         }
 
         private void ConfigureGUI()
