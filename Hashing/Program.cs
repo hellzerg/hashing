@@ -2,35 +2,23 @@
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace Hashing
 {
     static class Program
     {
-        /* VERSION PROPERTIES */
-        /* DO NOT LEAVE THEM EMPTY */
+        internal static readonly float Major = 3;
+        internal static readonly float Minor = 7;
 
-        // Enter current version here
-        internal readonly static float Major = 3;
-        internal readonly static float Minor = 7;
+        internal static string GetCurrentVersionToString() => $"{Major}.{Minor}";
+        internal static float GetCurrentVersion() => float.Parse(GetCurrentVersionToString());
 
-        /* END OF VERSION PROPERTIES */
-
-        internal static string GetCurrentVersionToString()
-        {
-            return Major.ToString() + "." + Minor.ToString();
-        }
-
-        internal static float GetCurrentVersion()
-        {
-            return float.Parse(GetCurrentVersionToString());
-        }
-
-        const string _mutexGuid = @"{DEADMOON-0EFC7B9A-D7FC-437F-B4B3-0118C643FE19-HASHING}";
+        private const string MutexGuid = @"{DEADMOON-0EFC7B9A-D7FC-437F-B4B3-0118C643FE19-HASHING}";
         internal static Mutex MUTEX;
-        static bool _notRunning;
+        private static bool notRunning;
 
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        [DllImport("user32.dll")]
         private static extern bool SetProcessDPIAware();
 
         [STAThread]
@@ -41,21 +29,16 @@ namespace Hashing
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            string resource = "Hashing.Newtonsoft.Json.dll";
-            string resource2 = "Hashing.Crc32.NET.dll";
+            LoadEmbeddedAssemblies();
 
-            EmbeddedAssembly.Load(resource, "Newtonsoft.Json.dll");
-            EmbeddedAssembly.Load(resource2, "Crc32.NET.dll");
-
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
-
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, e) => EmbeddedAssembly.Get(e.Name);
             Options.LoadSettings();
 
             if (Options.CurrentOptions.SingleInstance)
             {
-                using (MUTEX = new Mutex(true, _mutexGuid, out _notRunning))
+                using (MUTEX = new Mutex(true, MutexGuid, out notRunning))
                 {
-                    if (_notRunning)
+                    if (notRunning)
                     {
                         Application.Run(new MainForm(args));
                     }
@@ -72,9 +55,10 @@ namespace Hashing
             }
         }
 
-        static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        private static void LoadEmbeddedAssemblies()
         {
-            return EmbeddedAssembly.Get(args.Name);
+            EmbeddedAssembly.Load("Hashing.Newtonsoft.Json.dll", "Newtonsoft.Json.dll");
+            EmbeddedAssembly.Load("Hashing.Crc32.NET.dll", "Crc32.NET.dll");
         }
     }
 }
