@@ -3,7 +3,7 @@
 namespace Hashing
 {
     [Serializable]
-    public class HashOptions
+    public sealed class HashOptions
     {
         public bool MD5 { get; set; }
         public bool SHA1 { get; set; }

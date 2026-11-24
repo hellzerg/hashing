@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.button7 = new System.Windows.Forms.Button();
+            this.button7 = new Hashing.ModernButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.t1 = new System.Windows.Forms.Timer(this.components);
             this.t2 = new System.Windows.Forms.Timer(this.components);
             this.l2 = new System.Windows.Forms.LinkLabel();
-            this.l1 = new System.Windows.Forms.Label();
+            this.l1 = new Hashing.FluentLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -138,11 +138,11 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button7;
+        private Hashing.ModernButton button7;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Timer t1;
         private System.Windows.Forms.Timer t2;
         private System.Windows.Forms.LinkLabel l2;
-        private System.Windows.Forms.Label l1;
+        private Hashing.FluentLabel l1;
     }
 }

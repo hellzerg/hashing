@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Hashing
 {
-    public class SumResult
+    public sealed class SumResult
     {
-        public static List<SumResult> Sums = new List<SumResult>();
+        public static readonly List<SumResult> Sums = new List<SumResult>();
 
         public string File { get; set; }
         public string MD5 { get; set; }
@@ -26,40 +27,43 @@ namespace Hashing
 
         public void ConvertToLowerCasing()
         {
-            if (!string.IsNullOrEmpty(MD5)) MD5 = MD5.ToLower();
-            if (!string.IsNullOrEmpty(SHA1)) SHA1 = SHA1.ToLower();
-            if (!string.IsNullOrEmpty(SHA256)) SHA256 = SHA256.ToLower();
-            if (!string.IsNullOrEmpty(SHA384)) SHA384 = SHA384.ToLower();
-            if (!string.IsNullOrEmpty(SHA512)) SHA512 = SHA512.ToLower();
-            if (!string.IsNullOrEmpty(CRC32)) CRC32 = CRC32.ToLower();
-            if (!string.IsNullOrEmpty(RIPEMD160)) RIPEMD160 = RIPEMD160.ToLower();
-            if (!string.IsNullOrEmpty(SHA3_256)) SHA3_256 = SHA3_256.ToLower();
-            if (!string.IsNullOrEmpty(SHA3_384)) SHA3_384 = SHA3_384.ToLower();
-            if (!string.IsNullOrEmpty(SHA3_512)) SHA3_512 = SHA3_512.ToLower();
+            if (!string.IsNullOrEmpty(MD5)) MD5 = MD5.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(SHA1)) SHA1 = SHA1.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(SHA256)) SHA256 = SHA256.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(SHA384)) SHA384 = SHA384.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(SHA512)) SHA512 = SHA512.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(CRC32)) CRC32 = CRC32.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(RIPEMD160)) RIPEMD160 = RIPEMD160.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(SHA3_256)) SHA3_256 = SHA3_256.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(SHA3_384)) SHA3_384 = SHA3_384.ToLowerInvariant();
+            if (!string.IsNullOrEmpty(SHA3_512)) SHA3_512 = SHA3_512.ToLowerInvariant();
         }
 
         public void ConvertToUpperCasing()
         {
-            if (!string.IsNullOrEmpty(MD5)) MD5 = MD5.ToUpper();
-            if (!string.IsNullOrEmpty(SHA1)) SHA1 = SHA1.ToUpper();
-            if (!string.IsNullOrEmpty(SHA256)) SHA256 = SHA256.ToUpper();
-            if (!string.IsNullOrEmpty(SHA384)) SHA384 = SHA384.ToUpper();
-            if (!string.IsNullOrEmpty(SHA512)) SHA512 = SHA512.ToUpper();
-            if (!string.IsNullOrEmpty(CRC32)) CRC32 = CRC32.ToUpper();
-            if (!string.IsNullOrEmpty(RIPEMD160)) RIPEMD160 = RIPEMD160.ToUpper();
-            if (!string.IsNullOrEmpty(SHA3_256)) SHA3_256 = SHA3_256.ToUpper();
-            if (!string.IsNullOrEmpty(SHA3_384)) SHA3_384 = SHA3_384.ToUpper();
-            if (!string.IsNullOrEmpty(SHA3_512)) SHA3_512 = SHA3_512.ToUpper();
+            if (!string.IsNullOrEmpty(MD5)) MD5 = MD5.ToUpperInvariant();
+            if (!string.IsNullOrEmpty(SHA1)) SHA1 = SHA1.ToUpperInvariant();
+            if (!string.IsNullOrEmpty(SHA256)) SHA256 = SHA256.ToUpperInvariant();
+            if (!string.IsNullOrEmpty(SHA384)) SHA384 = SHA384.ToUpperInvariant();
+            if (!string.IsNullOrEmpty(SHA512)) SHA512 = SHA512.ToUpperInvariant();
+            if (!string.IsNullOrEmpty(CRC32)) CRC32 = CRC32.ToUpperInvariant();
+            if (!string.IsNullOrEmpty(RIPEMD160)) RIPEMD160 = RIPEMD160.ToUpperInvariant();
+            if (!string.IsNullOrEmpty(SHA3_256)) SHA3_256 = SHA3_256.ToUpperInvariant();
+            if (!string.IsNullOrEmpty(SHA3_384)) SHA3_384 = SHA3_384.ToUpperInvariant();
+            if (!string.IsNullOrEmpty(SHA3_512)) SHA3_512 = SHA3_512.ToUpperInvariant();
         }
 
         public void ConvertCRC32ToDecimal()
         {
-            if (!string.IsNullOrEmpty(CRC32)) CRC32 = Convert.ToInt64(CRC32, 16).ToString();
+            if (!string.IsNullOrEmpty(CRC32))
+                CRC32 = Convert.ToUInt32(CRC32, 16).ToString(CultureInfo.InvariantCulture);
         }
 
         public void ConvertCRC32ToHexadecimal()
         {
-            if (!string.IsNullOrEmpty(CRC32)) CRC32 = string.Format("{0:x}", CRC32);
+            uint value;
+            if (uint.TryParse(CRC32, NumberStyles.None, CultureInfo.InvariantCulture, out value))
+                CRC32 = value.ToString("X8", CultureInfo.InvariantCulture);
         }
     }
 }

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Hashing</RootNamespace>
     <AssemblyName>Hashing</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
@@ -36,13 +36,14 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>hashing.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Crc32.NET, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dc0b95cf99bf4e99, processorArchitecture=MSIL">
-      <HintPath>..\packages\Crc32.NET.1.2.0\lib\net20\Crc32.NET.dll</HintPath>
+      <HintPath>..\packages\Crc32.NET.2.1.0\lib\net40\Crc32.NET.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,6 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Fluent.cs" />
+    <Compile Include="Controls\FluentMessageBox.cs" />
     <Compile Include="Controls\MoonList.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -78,18 +81,8 @@
     <Compile Include="ByteSize\BinaryByteSize.cs" />
     <Compile Include="ByteSize\ByteSize.cs" />
     <Compile Include="ByteSize\DecimalByteSize.cs" />
-    <Compile Include="Forms\CompareForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\CompareForm.Designer.cs">
-      <DependentUpon>CompareForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\MoonCheck.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\MoonRadio.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Controls\MoonCheck.cs" />
+    <Compile Include="Controls\MoonRadio.cs" />
     <Compile Include="Controls\MoonTree.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -100,12 +93,7 @@
       <DependentUpon>FeatureBox.cs</DependentUpon>
     </Compile>
     <Compile Include="FileSummary.cs" />
-    <Compile Include="Forms\IdenticalsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\IdenticalsForm.Designer.cs">
-      <DependentUpon>IdenticalsForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="DuplicateGroupInfo.cs" />
     <Compile Include="EmbeddedAssembly.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="HashOptions.cs" />
@@ -122,7 +110,18 @@
     <Compile Include="Forms\OptionsForm.Designer.cs">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MainForm.SecurityTools.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm.Export.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Security\ToolForms.cs" />
+    <Compile Include="Security\ChecksumManifestService.cs" />
+    <Compile Include="Security\AuthenticodeService.cs" />
+    <Compile Include="Security\CertificateService.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ShellIntegration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SHA3\Arrays.cs" />
     <Compile Include="SHA3\IDigest.cs" />
@@ -141,14 +140,8 @@
     <EmbeddedResource Include="Forms\AnalyzedForm.resx">
       <DependentUpon>AnalyzedForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\CompareForm.resx">
-      <DependentUpon>CompareForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FeatureBox.resx">
       <DependentUpon>FeatureBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\IdenticalsForm.resx">
-      <DependentUpon>IdenticalsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -183,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Newtonsoft.Json.dll" />

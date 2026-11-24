@@ -10,6 +10,13 @@
         Silver
     }
 
+    public enum AppearanceMode
+    {
+        Dark,
+        Light,
+        System
+    }
+
     public enum FeatureAction
     {
         Calculate,

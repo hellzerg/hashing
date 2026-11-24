@@ -2,7 +2,7 @@
 
 namespace Hashing
 {
-    public class Sha3 : HashAlgorithm
+    public sealed class Sha3 : HashAlgorithm
     {
         private readonly Sha3Digest _digest;
         private readonly int _hashBitLength;

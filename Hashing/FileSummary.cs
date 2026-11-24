@@ -1,6 +1,6 @@
 ﻿namespace Hashing
 {
-    public class FileSummary
+    public sealed class FileSummary
     {
         public string File { get; set; }
         public string MD5 { get; set; }

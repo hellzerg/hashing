@@ -1,4 +1,4 @@
-<p align="center">
+﻿<p align="center">
    <img src="banner.png">
 </p> 
 
@@ -6,7 +6,7 @@
 
 Simple utility to calculate and compare hashes of multiple files
 <p align="center">
-	<a href="https://github.com/hellzerg/hashing/releases/download/3.7/Hashing-3.7.exe" target="_blank">
+	<a href="https://github.com/hellzerg/hashing/releases/download/4.0/Hashing-4.0.exe" target="_blank">
 		<img src="download-button.png">
 	</a>
 </p> 
@@ -39,25 +39,28 @@ Simple utility to calculate and compare hashes of multiple files
 * Tray icon support
 * Option to stay always on top
 * Single-instance support
+* Fluent-inspired light, dark and system appearance modes
+* Updated WinForms layout, typography, menus and high-DPI scaling
+* Multi-hash processing from a single sequential file read
+* Certificate inspector & generator
+* Authenticode check support
+
+<center>
+<h2> ☕ Buy me a delicious espresso</h2>
+</center>
+
+If you find this tool useful, consider showing your support by [donating through PayPal](https://www.paypal.com/paypalme/supportoptimizer).
 
 ## Downloads: ##
 https://github.com/hellzerg/hashing/releases
 
-## Screenshots: ##
-https://github.com/hellzerg/hashing/blob/master/IMAGES.md
-
 ## Compatibility: ##
 
-* .NET Framework 4.5.2
-* Compatible with Windows 7, 8, 8.1, 10, 11
+* .NET Framework 4.8
+* Compatible with Windows 7 SP1, 8.1, 10 and 11
+* Per-Monitor V2 DPI support on Windows 10 Creators Update and newer
 * Works with Windows Server 2012 and newer
 * Does not work with Windows XP or Vista
 
 ## Credits: ##
 * Much appreciation to https://github.com/dariogriffo/sha3.net for SHA3 algorithms library
-
-## Details: ##
-
-* Latest version: 3.7
-* Released: January 6, 2023
-* SHA256: D9E800BB4E33635CE2E778404C78C01DB46082F1E746360EFB0B1A28F7036237

@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtExpected = new System.Windows.Forms.TextBox();
-            this.btnCompare = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.lblNoMatch = new System.Windows.Forms.Label();
-            this.btnPaste = new System.Windows.Forms.Button();
+            this.panel1 = new Hashing.Card();
+            this.label1 = new Hashing.FluentLabel();
+            this.txtExpected = new Hashing.FluentTextBox();
+            this.btnCompare = new Hashing.ModernButton();
+            this.label2 = new Hashing.FluentLabel();
+            this.panel2 = new Hashing.Card();
+            this.lblNoMatch = new Hashing.FluentLabel();
+            this.btnPaste = new Hashing.ModernButton();
             this.chkRemove = new Hashing.MoonCheck();
             this.resultBox = new Hashing.MoonList();
             this.chkSHA35 = new Hashing.MoonCheck();
@@ -382,23 +382,23 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
+        private Hashing.Card panel1;
         private MoonCheck chkSHA512;
         private MoonCheck chkSHA384;
         private MoonCheck chkRIPEMD160;
         private MoonCheck chkSHA256;
         private MoonCheck chkSHA1;
         private MoonCheck chkMD5;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtExpected;
-        private System.Windows.Forms.Button btnCompare;
-        private System.Windows.Forms.Label label2;
+        private Hashing.FluentLabel label1;
+        private Hashing.FluentTextBox txtExpected;
+        private Hashing.ModernButton btnCompare;
+        private Hashing.FluentLabel label2;
         private MoonList resultBox;
-        private System.Windows.Forms.Panel panel2;
+        private Hashing.Card panel2;
         private MoonCheck chkRemove;
         private MoonCheck chkCRC32;
-        private System.Windows.Forms.Button btnPaste;
-        private System.Windows.Forms.Label lblNoMatch;
+        private Hashing.ModernButton btnPaste;
+        private Hashing.FluentLabel lblNoMatch;
         private MoonCheck chkSHA35;
         private MoonCheck chkSHA33;
         private MoonCheck chkSHA32;

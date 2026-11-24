@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Hashing
 {
-    public partial class FeatureBox : Form
+    public sealed partial class FeatureBox : Form
     {
         [DllImport("user32")]
         static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
@@ -20,11 +20,11 @@ namespace Hashing
         public FeatureBox()
         {
             InitializeComponent();
-
+            btnCalc.Tag = "primary";
             Options.ApplyTheme(this);
-            CheckForIllegalCrossThreadCalls = false;
 
             label77.Text = Options.TranslationList["label77"].ToString();
+            label77.Font = Fluent.Ui(11f);
             btnCalc.Text = Options.TranslationList["btnCalc"].ToString();
             btnAnalyze.Text = Options.TranslationList["btnAnalyze"].ToString();
             btnList.Text = Options.TranslationList["btnList"].ToString();

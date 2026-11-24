@@ -29,21 +29,21 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionsForm));
-            this.okbtn = new System.Windows.Forms.Button();
-            this.rSilver = new System.Windows.Forms.RadioButton();
-            this.rAmber = new System.Windows.Forms.RadioButton();
-            this.rJade = new System.Windows.Forms.RadioButton();
-            this.rRuby = new System.Windows.Forms.RadioButton();
-            this.rAzurite = new System.Windows.Forms.RadioButton();
-            this.rAmethyst = new System.Windows.Forms.RadioButton();
-            this.label27 = new System.Windows.Forms.Label();
-            this.lbl88 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.okbtn = new Hashing.ModernButton();
+            this.rSilver = new Hashing.MoonRadio();
+            this.rAmber = new Hashing.MoonRadio();
+            this.rJade = new Hashing.MoonRadio();
+            this.rRuby = new Hashing.MoonRadio();
+            this.rAzurite = new Hashing.MoonRadio();
+            this.rAmethyst = new Hashing.MoonRadio();
+            this.label27 = new Hashing.FluentLabel();
+            this.lbl88 = new Hashing.FluentLabel();
+            this.label3 = new Hashing.FluentLabel();
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
             this.pictureBox88 = new System.Windows.Forms.PictureBox();
             this.pictureBox86 = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel1 = new Hashing.Card();
+            this.panel2 = new Hashing.Card();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.chkSHA33 = new Hashing.MoonCheck();
             this.chkSHA35 = new Hashing.MoonCheck();
@@ -609,7 +609,6 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OptionsForm_FormClosing);
             this.Load += new System.EventHandler(this.OptionsForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox88)).EndInit();
@@ -626,20 +625,20 @@
 
         #endregion
 
-        private System.Windows.Forms.Button okbtn;
-        private System.Windows.Forms.RadioButton rSilver;
-        private System.Windows.Forms.RadioButton rAmber;
-        private System.Windows.Forms.RadioButton rJade;
-        private System.Windows.Forms.RadioButton rRuby;
-        private System.Windows.Forms.RadioButton rAzurite;
-        private System.Windows.Forms.RadioButton rAmethyst;
-        private System.Windows.Forms.Label label27;
+        private Hashing.ModernButton okbtn;
+        private Hashing.MoonRadio rSilver;
+        private Hashing.MoonRadio rAmber;
+        private Hashing.MoonRadio rJade;
+        private Hashing.MoonRadio rRuby;
+        private Hashing.MoonRadio rAzurite;
+        private Hashing.MoonRadio rAmethyst;
+        private Hashing.FluentLabel label27;
         private MoonCheck chkRIPEMD160;
         private MoonCheck chkSHA512;
         private MoonCheck chkSHA256;
         private MoonCheck chkSHA1;
         private MoonCheck chkMD5;
-        private System.Windows.Forms.Label lbl88;
+        private Hashing.FluentLabel lbl88;
         private MoonCheck chkSHA384;
         private MoonCheck chkTray;
         private MoonCheck chkHigh;
@@ -648,15 +647,15 @@
         private MoonCheck chkCRCFormat;
         private MoonCheck chkSingleInstance;
         private MoonCheck chkStayOnTop;
-        private System.Windows.Forms.Label label3;
+        private Hashing.FluentLabel label3;
         private System.Windows.Forms.PictureBox pictureBox7;
         private System.Windows.Forms.PictureBox pictureBox88;
         private System.Windows.Forms.PictureBox pictureBox86;
         private MoonRadio radioEnglish;
         private MoonRadio radioHellenic;
         private MoonRadio radioChinese;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private Hashing.Card panel1;
+        private Hashing.Card panel2;
         private MoonCheck chkSHA33;
         private MoonCheck chkSHA35;
         private MoonCheck chkSHA32;

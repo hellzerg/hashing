@@ -29,10 +29,10 @@ namespace Hashing
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnCalc = new System.Windows.Forms.Button();
-            this.btnAnalyze = new System.Windows.Forms.Button();
-            this.btnList = new System.Windows.Forms.Button();
-            this.label77 = new System.Windows.Forms.Label();
+            this.btnCalc = new Hashing.ModernButton();
+            this.btnAnalyze = new Hashing.ModernButton();
+            this.btnList = new Hashing.ModernButton();
+            this.label77 = new Hashing.FluentLabel();
             this.SuspendLayout();
             // 
             // btnCalc
@@ -142,9 +142,9 @@ namespace Hashing
 
         #endregion
 
-        private System.Windows.Forms.Button btnCalc;
-        private System.Windows.Forms.Button btnAnalyze;
-        private System.Windows.Forms.Button btnList;
-        private System.Windows.Forms.Label label77;
+        private Hashing.ModernButton btnCalc;
+        private Hashing.ModernButton btnAnalyze;
+        private Hashing.ModernButton btnList;
+        private Hashing.FluentLabel label77;
     }
 }

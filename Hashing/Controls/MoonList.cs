@@ -3,44 +3,35 @@ using System.Windows.Forms;
 
 namespace Hashing
 {
-    public class MoonList : ListBox
+    public sealed class MoonList : ListBox
     {
         public MoonList()
         {
-            this.DrawMode = DrawMode.OwnerDrawVariable;
-            this.BorderStyle = BorderStyle.None;
-
-            this.MeasureItem += MoonListBox_MeasureItem;
-            this.DrawItem += MoonListBox_DrawItem;
+            DrawMode = DrawMode.OwnerDrawFixed;
+            BorderStyle = BorderStyle.None;
+            ItemHeight = 28;
+            IntegralHeight = false;
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
         }
 
-        private void MoonListBox_DrawItem(object sender, DrawItemEventArgs e)
+        protected override void OnDrawItem(DrawItemEventArgs e)
         {
-            if (e.Index < 0) return;
-            if (this.Items.Count <= 0) return;
+            if (e.Index < 0 || e.Index >= Items.Count)
+                return;
 
-            e.DrawBackground();
+            bool selected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
+            Color background = selected ? Fluent.SelectionColor : Fluent.Surface;
+            Color foreground = Enabled ? Fluent.Text : Fluent.TextDisabled;
 
-            Brush myBrush = new SolidBrush(Color.White);
+            using (SolidBrush brush = new SolidBrush(background))
+                e.Graphics.FillRectangle(brush, e.Bounds);
 
-            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
-            {
-                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(50, 50, 50)), e.Bounds);
-            }
+            Rectangle textBounds = new Rectangle(e.Bounds.Left + 10, e.Bounds.Top, e.Bounds.Width - 18, e.Bounds.Height);
+            Fluent.DrawText(e.Graphics, Items[e.Index].ToString(), Font, textBounds, foreground,
+                TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix);
 
-            else
-            {
-                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(20, 20, 20)), e.Bounds);
-
-            }
-
-            e.Graphics.DrawString(this.Items[e.Index].ToString(), this.Font, myBrush, e.Bounds);
-            e.DrawFocusRectangle();
-        }
-
-        private void MoonListBox_MeasureItem(object sender, MeasureItemEventArgs e)
-        {
-            e.ItemHeight = this.Font.Height;
+            if ((e.State & DrawItemState.Focus) == DrawItemState.Focus)
+                e.DrawFocusRectangle();
         }
     }
 }

@@ -7,16 +7,16 @@ using System.Windows.Forms;
 
 namespace Hashing
 {
-    public partial class IdenticalsForm : Form
+    public sealed partial class IdenticalsForm : Form
     {
-        List<SumResult> _identicals;
-        IEnumerable<string> _uniqueHashes = new List<string>();
+        readonly List<SumResult> _identicals;
 
         string _helper = string.Empty;
 
         public IdenticalsForm(List<SumResult> list)
         {
             InitializeComponent();
+            BuildModernLayout();
             Options.ApplyTheme(this);
             helperMenu.Renderer = new MoonMenuRenderer();
 
@@ -36,6 +36,20 @@ namespace Hashing
             toolStripMenuItem1.Text = Options.TranslationList["toolStripMenuItem4"].ToString();
         }
 
+
+        private void BuildModernLayout()
+        {
+            ClientSize = new System.Drawing.Size(920, 590);
+            MinimumSize = new System.Drawing.Size(820, 560);
+            panel1.Height = 48;
+            panel1.BorderStyle = BorderStyle.None;
+            boxSelectHash.SetBounds((panel1.ClientSize.Width - 220) / 2, 7, 220, 32);
+            boxSelectHash.Anchor = AnchorStyles.Top;
+            panel2.Padding = new Padding(12);
+            panel2.BorderStyle = BorderStyle.None;
+            SumView.BorderStyle = BorderStyle.None;
+        }
+
         private void ConfigureGUI()
         {
             if (Options.CurrentOptions.HashOptions.MD5) boxSelectHash.Items.Add("MD5");
@@ -52,235 +66,99 @@ namespace Hashing
 
         private void Copy()
         {
-            string total = string.Empty;
+            TreeNode selectedNode = SumView.SelectedNode;
+            if (selectedNode == null)
+                return;
 
-            if (SumView.SelectedNode.Nodes.Count > 0)
+            if (selectedNode.Nodes.Count == 0)
             {
-                total = _helper + SumView.SelectedNode.Text + Environment.NewLine + Environment.NewLine;
-
-                foreach (TreeNode node in SumView.SelectedNode.Nodes)
-                {
-                    total += node.Text + Environment.NewLine;
-                }
-            }
-            else
-            {
-                total = SumView.SelectedNode.Text;
+                Utilities.CopyToClipboard(selectedNode.Text, true);
+                return;
             }
 
-            Utilities.CopyToClipboard(total, true);
+            System.Text.StringBuilder text = new System.Text.StringBuilder();
+            text.Append(_helper).Append(selectedNode.Text).AppendLine().AppendLine();
+            foreach (TreeNode node in selectedNode.Nodes)
+                text.AppendLine(node.Text);
+
+            Utilities.CopyToClipboard(text.ToString(), true);
         }
 
         private void SaveJson()
         {
-            if (SumView.Nodes.Count > 0)
-            {
-                SaveFileDialog dialog = new SaveFileDialog();
-                dialog.Filter = "JSON file|*.json";
+            if (SumView.Nodes.Count == 0)
+                return;
 
-                if (dialog.ShowDialog() == DialogResult.OK)
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Filter = "JSON file|*.json";
+                if (dialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                try
                 {
-                    try
+                    File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(_identicals, Formatting.Indented, new JsonSerializerSettings
                     {
-                        File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(_identicals, Formatting.Indented, new JsonSerializerSettings
-                        {
-                            NullValueHandling = NullValueHandling.Ignore
-                        }));
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                        NullValueHandling = NullValueHandling.Ignore
+                    }));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
 
         private void ListIdenticals(HashCode algo)
         {
+            Func<SumResult, string> getHash = GetHashSelector(algo);
+            if (getHash == null)
+                return;
+
             List<TreeNode> nodes = new List<TreeNode>();
-
-            if (algo == HashCode.MD5)
+            foreach (IGrouping<string, SumResult> group in _identicals
+                .Where(item => !string.IsNullOrEmpty(getHash(item)))
+                .GroupBy(getHash, StringComparer.OrdinalIgnoreCase)
+                .Where(group => group.Skip(1).Any()))
             {
-                _uniqueHashes = _identicals.Select(x => x.MD5).Distinct();
+                TreeNode hashNode = new TreeNode(group.Key);
+                hashNode.ForeColor = Options.ForegroundColor;
 
-                foreach (string x in _uniqueHashes)
-                {
-                    TreeNode fileNode = new TreeNode(x);
-                    fileNode.ForeColor = Options.ForegroundColor;
+                foreach (SumResult item in group)
+                    hashNode.Nodes.Add(item.File);
 
-                    _identicals.FindAll(z => z.MD5 == x).ForEach(y =>
-                    {
-                        fileNode.Nodes.Add(y.File);
-                    });
-
-                    nodes.Add(fileNode);
-                }
+                nodes.Add(hashNode);
             }
 
-            if (algo == HashCode.SHA1)
+            SumView.BeginUpdate();
+            try
             {
-                _uniqueHashes = _identicals.Select(x => x.SHA1).Distinct();
-
-                foreach (string x in _uniqueHashes)
-                {
-                    TreeNode fileNode = new TreeNode(x);
-                    fileNode.ForeColor = Options.ForegroundColor;
-
-                    _identicals.FindAll(z => z.SHA1 == x).ForEach(y =>
-                    {
-                        fileNode.Nodes.Add(y.File);
-                    });
-
-                    nodes.Add(fileNode);
-                }
+                SumView.Nodes.Clear();
+                SumView.Nodes.AddRange(nodes.ToArray());
+                SumView.ExpandAll();
             }
-
-            if (algo == HashCode.SHA256)
+            finally
             {
-                _uniqueHashes = _identicals.Select(x => x.SHA256).Distinct();
-
-                foreach (string x in _uniqueHashes)
-                {
-                    TreeNode fileNode = new TreeNode(x);
-                    fileNode.ForeColor = Options.ForegroundColor;
-
-                    _identicals.FindAll(z => z.SHA256 == x).ForEach(y =>
-                    {
-                        fileNode.Nodes.Add(y.File);
-                    });
-
-                    nodes.Add(fileNode);
-                }
+                SumView.EndUpdate();
             }
+        }
 
-            if (algo == HashCode.SHA384)
+        private static Func<SumResult, string> GetHashSelector(HashCode algorithm)
+        {
+            switch (algorithm)
             {
-                _uniqueHashes = _identicals.Select(x => x.SHA384).Distinct();
-
-                foreach (string x in _uniqueHashes)
-                {
-                    TreeNode fileNode = new TreeNode(x);
-                    fileNode.ForeColor = Options.ForegroundColor;
-
-                    _identicals.FindAll(z => z.SHA384 == x).ForEach(y =>
-                    {
-                        fileNode.Nodes.Add(y.File);
-                    });
-
-                    nodes.Add(fileNode);
-                }
+                case HashCode.MD5: return item => item.MD5;
+                case HashCode.SHA1: return item => item.SHA1;
+                case HashCode.SHA256: return item => item.SHA256;
+                case HashCode.SHA384: return item => item.SHA384;
+                case HashCode.SHA512: return item => item.SHA512;
+                case HashCode.RIPEMD160: return item => item.RIPEMD160;
+                case HashCode.CRC32: return item => item.CRC32;
+                case HashCode.SHA3_256: return item => item.SHA3_256;
+                case HashCode.SHA3_384: return item => item.SHA3_384;
+                case HashCode.SHA3_512: return item => item.SHA3_512;
+                default: return null;
             }
-
-            if (algo == HashCode.SHA512)
-            {
-                _uniqueHashes = _identicals.Select(x => x.SHA512).Distinct();
-
-                foreach (string x in _uniqueHashes)
-                {
-                    TreeNode fileNode = new TreeNode(x);
-                    fileNode.ForeColor = Options.ForegroundColor;
-
-                    _identicals.FindAll(z => z.SHA512 == x).ForEach(y =>
-                    {
-                        fileNode.Nodes.Add(y.File);
-                    });
-
-                    nodes.Add(fileNode);
-                }
-            }
-
-            if (algo == HashCode.RIPEMD160)
-            {
-                _uniqueHashes = _identicals.Select(x => x.RIPEMD160).Distinct();
-
-                foreach (string x in _uniqueHashes)
-                {
-                    TreeNode fileNode = new TreeNode(x);
-                    fileNode.ForeColor = Options.ForegroundColor;
-
-                    _identicals.FindAll(z => z.RIPEMD160 == x).ForEach(y =>
-                    {
-                        fileNode.Nodes.Add(y.File);
-                    });
-
-                    nodes.Add(fileNode);
-                }
-            }
-
-            if (algo == HashCode.CRC32)
-            {
-                _uniqueHashes = _identicals.Select(x => x.CRC32).Distinct();
-
-                foreach (string x in _uniqueHashes)
-                {
-                    TreeNode fileNode = new TreeNode(x);
-                    fileNode.ForeColor = Options.ForegroundColor;
-
-                    _identicals.FindAll(z => z.CRC32 == x).ForEach(y =>
-                    {
-                        fileNode.Nodes.Add(y.File);
-                    });
-
-                    nodes.Add(fileNode);
-                }
-            }
-
-            if (algo == HashCode.SHA3_256)
-            {
-                _uniqueHashes = _identicals.Select(x => x.SHA3_256).Distinct();
-
-                foreach (string x in _uniqueHashes)
-                {
-                    TreeNode fileNode = new TreeNode(x);
-                    fileNode.ForeColor = Options.ForegroundColor;
-
-                    _identicals.FindAll(z => z.SHA3_256 == x).ForEach(y =>
-                    {
-                        fileNode.Nodes.Add(y.File);
-                    });
-
-                    nodes.Add(fileNode);
-                }
-            }
-
-            if (algo == HashCode.SHA3_384)
-            {
-                _uniqueHashes = _identicals.Select(x => x.SHA3_384).Distinct();
-
-                foreach (string x in _uniqueHashes)
-                {
-                    TreeNode fileNode = new TreeNode(x);
-                    fileNode.ForeColor = Options.ForegroundColor;
-
-                    _identicals.FindAll(z => z.SHA3_384 == x).ForEach(y =>
-                    {
-                        fileNode.Nodes.Add(y.File);
-                    });
-
-                    nodes.Add(fileNode);
-                }
-            }
-
-            if (algo == HashCode.SHA3_512)
-            {
-                _uniqueHashes = _identicals.Select(x => x.SHA3_512).Distinct();
-
-                foreach (string x in _uniqueHashes)
-                {
-                    TreeNode fileNode = new TreeNode(x);
-                    fileNode.ForeColor = Options.ForegroundColor;
-
-                    _identicals.FindAll(z => z.SHA3_512 == x).ForEach(y =>
-                    {
-                        fileNode.Nodes.Add(y.File);
-                    });
-
-                    nodes.Add(fileNode);
-                }
-            }
-
-            SumView.Nodes.AddRange(nodes.ToArray());
-            SumView.ExpandAll();
         }
 
         private void CompareForm_Load(object sender, EventArgs e)

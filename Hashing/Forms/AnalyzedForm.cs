@@ -4,14 +4,14 @@ using System.Windows.Forms;
 
 namespace Hashing
 {
-    public partial class AnalyzedForm : Form
+    public sealed partial class AnalyzedForm : Form
     {
         public AnalyzedForm(IEnumerable<string> files)
         {
             InitializeComponent();
-            CheckForIllegalCrossThreadCalls = false;
 
             Options.ApplyTheme(this);
+            listFiles.Font = Fluent.Ui(10f);
 
             foreach (string x in files) listFiles.Items.Add("[✓] " + x);
         }

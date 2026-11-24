@@ -6,15 +6,12 @@ using System.Security.Cryptography;
 
 namespace Hashing
 {
-    public class EmbeddedAssembly
+    internal static class EmbeddedAssembly
     {
-        private static Dictionary<string, Assembly> dic;
+        private static readonly Dictionary<string, Assembly> dic = new Dictionary<string, Assembly>();
 
         public static void Load(string embeddedResource, string fileName)
         {
-            if (dic == null)
-                dic = new Dictionary<string, Assembly>();
-
             byte[] ba = null;
             Assembly asm = null;
             var curAsm = Assembly.GetExecutingAssembly();
@@ -74,13 +71,8 @@ namespace Hashing
 
         public static Assembly Get(string assemblyFullName)
         {
-            if (dic == null || dic.Count == 0)
-                return null;
-
-            if (dic.ContainsKey(assemblyFullName))
-                return dic[assemblyFullName];
-
-            return null;
+            Assembly assembly;
+            return dic.TryGetValue(assemblyFullName, out assembly) ? assembly : null;
         }
     }
 }

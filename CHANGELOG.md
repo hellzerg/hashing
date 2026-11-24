@@ -1,3 +1,11 @@
+## [4.0] - 2026-11-24
+- New: Complete visual overhaul
+- New: Certificate inspector
+- New: Certificate generator
+- New: Authenticode signature check
+- Improved: Checksum export results
+- Improved: Boost performance when calculating in parallel
+
 ## [3.7] - 2023-01-06
 - New: German full localization
 

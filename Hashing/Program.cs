@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace Hashing
 {
-    static class Program
+    internal static class Program
     {
         /* VERSION PROPERTIES */
         /* DO NOT LEAVE THEM EMPTY */
 
         // Enter current version here
-        internal readonly static float Major = 3;
-        internal readonly static float Minor = 7;
+        internal readonly static float Major = 4;
+        internal readonly static float Minor = 0;
 
         /* END OF VERSION PROPERTIES */
 
@@ -30,16 +31,29 @@ namespace Hashing
         internal static Mutex MUTEX;
         static bool _notRunning;
 
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        private static extern bool SetProcessDPIAware();
-
         [STAThread]
         static void Main(string[] args)
         {
-            if (Environment.OSVersion.Version.Major >= 6) SetProcessDPIAware();
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            bool calculateFromShell = false;
+            List<string> startupFiles = new List<string>();
+            string[] arguments = args ?? new string[0];
+            for (int i = 0; i < arguments.Length; i++)
+            {
+                string argument = arguments[i];
+                if (i == 0 && string.Equals(argument, "--calculate", StringComparison.OrdinalIgnoreCase))
+                    calculateFromShell = true;
+                else if (!string.IsNullOrWhiteSpace(argument))
+                    startupFiles.Add(argument);
+            }
+
+            if (calculateFromShell && startupFiles.Count > 1)
+            {
+                HashSet<string> uniqueFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                startupFiles = startupFiles.FindAll(uniqueFiles.Add);
+            }
 
             string resource = "Hashing.Newtonsoft.Json.dll";
             string resource2 = "Hashing.Crc32.NET.dll";
@@ -50,6 +64,17 @@ namespace Hashing
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
 
             Options.LoadSettings();
+            if (!calculateFromShell && ShellIntegration.IsRegistered())
+            {
+                try
+                {
+                    ShellIntegration.RegisterContextMenu(Options.TranslationList["shellContextMenuVerb"].ToString());
+                }
+                catch (Exception ex)
+                {
+                    Options.StartupWarnings.Add(Options.TranslationList["shellContextMenuFailed"].ToString().Replace("{ERROR}", ex.Message));
+                }
+            }
 
             if (Options.CurrentOptions.SingleInstance)
             {
@@ -57,18 +82,24 @@ namespace Hashing
                 {
                     if (_notRunning)
                     {
-                        Application.Run(new MainForm(args));
+                        Application.Run(new MainForm(startupFiles.ToArray(), calculateFromShell, true));
+                    }
+                    else if (calculateFromShell && startupFiles.Count > 0)
+                    {
+                        if (ShellRequestPipe.TrySend(startupFiles.ToArray()))
+                            return;
+
+                        Application.Run(new MainForm(startupFiles.ToArray(), true, false));
                     }
                     else
                     {
-                        MessageBox.Show("Hashing is already running in the background!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        Environment.Exit(0);
+                        FluentMessageBox.ShowTopMost("Hashing is already running in the background!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
             else
             {
-                Application.Run(new MainForm(args));
+                Application.Run(new MainForm(startupFiles.ToArray(), calculateFromShell, false));
             }
         }
 

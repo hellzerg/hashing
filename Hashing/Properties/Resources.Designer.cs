@@ -63,8 +63,6 @@ namespace Hashing.Properties {
         /// <summary>
         ///   Looks up a localized string similar to {
         ///	&quot;lblversion&quot;: &quot;版本: {VN}&quot;,
-        ///	&quot;btnFindIdenticals&quot;: &quot;查找相同的&quot;,
-        ///	&quot;btnCompare&quot;: &quot;比较&quot;,
         ///	&quot;btnSaveJson&quot;: &quot;另存为JSON&quot;,
         ///	&quot;btnOptions&quot;: &quot;选项&quot;,
         ///	&quot;btnUpdate&quot;: &quot;更新&quot;,
@@ -92,8 +90,6 @@ namespace Hashing.Properties {
         /// <summary>
         ///   Looks up a localized string similar to {
         ///	&quot;lblversion&quot;: &quot;Version: {VN}&quot;,
-        ///	&quot;btnFindIdenticals&quot;: &quot;Identische finden&quot;,
-        ///	&quot;btnCompare&quot;: &quot;Vergleichen&quot;,
         ///	&quot;btnSaveJson&quot;: &quot;Als JSON speichern&quot;,
         ///	&quot;btnOptions&quot;: &quot;Optionen&quot;,
         ///	&quot;btnUpdate&quot;: &quot;Aktualisieren&quot;,
@@ -116,8 +112,6 @@ namespace Hashing.Properties {
         /// <summary>
         ///   Looks up a localized string similar to {
         ///	&quot;lblversion&quot;: &quot;Έκδοση: {VN}&quot;,
-        ///	&quot;btnFindIdenticals&quot;: &quot;Έυρεση ίδιων αρχείων&quot;,
-        ///	&quot;btnCompare&quot;: &quot;Σύγκριση&quot;,
         ///	&quot;btnSaveJson&quot;: &quot;Αποθήκευση JSON&quot;,
         ///	&quot;btnOptions&quot;: &quot;Ρυθμίσεις&quot;,
         ///	&quot;btnUpdate&quot;: &quot;Ενημέρωση&quot;,
@@ -140,8 +134,6 @@ namespace Hashing.Properties {
         /// <summary>
         ///   Looks up a localized string similar to {
         ///	&quot;lblversion&quot;: &quot;Version: {VN}&quot;,
-        ///	&quot;btnFindIdenticals&quot;: &quot;Find Identicals&quot;,
-        ///	&quot;btnCompare&quot;: &quot;Compare&quot;,
         ///	&quot;btnSaveJson&quot;: &quot;Save as JSON&quot;,
         ///	&quot;btnOptions&quot;: &quot;Options&quot;,
         ///	&quot;btnUpdate&quot;: &quot;Update&quot;,

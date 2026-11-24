@@ -33,7 +33,7 @@ namespace Hashing
     /// <remarks>
     ///     Following the naming conventions used in the C source code to enable easy review of the implementation.
     /// </remarks>
-    internal class Sha3Digest
+    internal sealed class Sha3Digest
         : KeccakDigest
     {
         public Sha3Digest()

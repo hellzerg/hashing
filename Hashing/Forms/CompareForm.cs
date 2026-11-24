@@ -1,14 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Hashing
 {
-    public partial class CompareForm : Form
+    public sealed partial class CompareForm : Form
     {
+        InputBox _expectedInput;
         public CompareForm()
         {
             InitializeComponent();
-            CheckForIllegalCrossThreadCalls = false;
+            BuildModernLayout();
+            lblNoMatch.Tag = "secondary";
+            WrapExpectedInput();
+            btnCompare.Tag = "primary";
             Options.ApplyTheme(this);
 
             label1.Text = Options.TranslationList["label1"].ToString();
@@ -30,6 +36,81 @@ namespace Hashing
             else
             {
                 txtExpected.CharacterCasing = CharacterCasing.Upper;
+            }
+        }
+
+
+        private void BuildModernLayout()
+        {
+            ClientSize = new System.Drawing.Size(920, 590);
+            MinimumSize = new System.Drawing.Size(800, 560);
+            panel1.Height = 66;
+            panel1.BorderStyle = BorderStyle.None;
+
+            Control[] firstRow = { chkMD5, chkSHA1, chkSHA256, chkSHA384, chkSHA512 };
+            Control[] secondRow = { chkCRC32, chkRIPEMD160, chkSHA32, chkSHA33, chkSHA35 };
+            LayoutAlgorithmRow(firstRow, 7);
+            LayoutAlgorithmRow(secondRow, 35);
+
+            label1.Location = new System.Drawing.Point(16, 80);
+            txtExpected.SetBounds(16, 106, ClientSize.Width - 32, 34);
+            txtExpected.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtExpected.Font = Fluent.Ui(11f);
+            chkRemove.Location = new System.Drawing.Point(16, 151);
+            btnCompare.SetBounds(ClientSize.Width - 168, 146, 152, 36);
+            btnPaste.SetBounds(ClientSize.Width - 328, 146, 152, 36);
+            btnCompare.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnPaste.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            label2.Location = new System.Drawing.Point(16, 192);
+            panel2.SetBounds(16, 218, ClientSize.Width - 32, ClientSize.Height - 234);
+            panel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel2.BorderStyle = BorderStyle.None;
+            panel2.Padding = new Padding(4);
+            resultBox.Font = Fluent.Mono(9.5f);
+            lblNoMatch.Font = Fluent.Ui(12f);
+            lblNoMatch.Visible = false;
+        }
+
+
+        private void WrapExpectedInput()
+        {
+            Control parent = txtExpected.Parent;
+            if (parent == null) return;
+
+            Rectangle bounds = txtExpected.Bounds;
+            AnchorStyles anchor = txtExpected.Anchor;
+            parent.Controls.Remove(txtExpected);
+            _expectedInput = new InputBox
+            {
+                Name = "expectedHashInput",
+                Location = bounds.Location,
+                Size = bounds.Size,
+                Anchor = anchor
+            };
+            _expectedInput.SetEditor(txtExpected);
+            txtExpected.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            parent.Controls.Add(_expectedInput);
+            _expectedInput.BringToFront();
+            txtExpected.Font = Fluent.Mono(10f);
+        }
+
+        private void LayoutAlgorithmRow(Control[] controls, int y)
+        {
+            const int gap = 20;
+            int totalWidth = gap * (controls.Length - 1);
+
+            for (int i = 0; i < controls.Length; i++)
+            {
+                controls[i].Font = Fluent.Ui(9f);
+                totalWidth += controls[i].GetPreferredSize(System.Drawing.Size.Empty).Width;
+            }
+
+            int x = Math.Max(12, (panel1.ClientSize.Width - totalWidth) / 2);
+            for (int i = 0; i < controls.Length; i++)
+            {
+                int width = controls[i].GetPreferredSize(System.Drawing.Size.Empty).Width;
+                controls[i].SetBounds(x, y, width, 24);
+                x += width + gap;
             }
         }
 
@@ -88,72 +169,40 @@ namespace Hashing
 
         private void Compare()
         {
-            if (!string.IsNullOrEmpty(txtExpected.Text))
+            string expected = txtExpected.Text.Trim();
+            resultBox.Items.Clear();
+            if (expected.Length == 0)
             {
-                txtExpected.Text.Trim();
-                resultBox.Items.Clear();
+                lblNoMatch.Visible = false;
+                return;
+            }
 
-                foreach (SumResult x in SumResult.Sums)
-                {
-                    if (chkMD5.Checked)
-                    {
-                        if (x.MD5 == txtExpected.Text) resultBox.Items.Add(x.File);
-                    }
+            HashSet<string> addedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (SumResult x in SumResult.Sums)
+            {
+                bool match =
+                    (chkMD5.Checked && string.Equals(x.MD5, expected, StringComparison.OrdinalIgnoreCase)) ||
+                    (chkSHA1.Checked && string.Equals(x.SHA1, expected, StringComparison.OrdinalIgnoreCase)) ||
+                    (chkSHA256.Checked && string.Equals(x.SHA256, expected, StringComparison.OrdinalIgnoreCase)) ||
+                    (chkSHA384.Checked && string.Equals(x.SHA384, expected, StringComparison.OrdinalIgnoreCase)) ||
+                    (chkSHA512.Checked && string.Equals(x.SHA512, expected, StringComparison.OrdinalIgnoreCase)) ||
+                    (chkCRC32.Checked && string.Equals(x.CRC32, expected, StringComparison.OrdinalIgnoreCase)) ||
+                    (chkRIPEMD160.Checked && string.Equals(x.RIPEMD160, expected, StringComparison.OrdinalIgnoreCase)) ||
+                    (chkSHA32.Checked && string.Equals(x.SHA3_256, expected, StringComparison.OrdinalIgnoreCase)) ||
+                    (chkSHA33.Checked && string.Equals(x.SHA3_384, expected, StringComparison.OrdinalIgnoreCase)) ||
+                    (chkSHA35.Checked && string.Equals(x.SHA3_512, expected, StringComparison.OrdinalIgnoreCase));
 
-                    if (chkSHA1.Checked)
-                    {
-                        if (x.SHA1 == txtExpected.Text) resultBox.Items.Add(x.File);
-                    }
+                if (match && addedFiles.Add(x.File))
+                    resultBox.Items.Add(x.File);
+            }
 
-                    if (chkSHA256.Checked)
-                    {
-                        if (x.SHA256 == txtExpected.Text) resultBox.Items.Add(x.File);
-                    }
-
-                    if (chkSHA384.Checked)
-                    {
-                        if (x.SHA384 == txtExpected.Text) resultBox.Items.Add(x.File);
-                    }
-
-                    if (chkSHA512.Checked)
-                    {
-                        if (x.SHA512 == txtExpected.Text) resultBox.Items.Add(x.File);
-                    }
-
-                    if (chkCRC32.Checked)
-                    {
-                        if (x.CRC32 == txtExpected.Text) resultBox.Items.Add(x.File);
-                    }
-
-                    if (chkRIPEMD160.Checked)
-                    {
-                        if (x.RIPEMD160 == txtExpected.Text) resultBox.Items.Add(x.File);
-                    }
-
-                    if (chkSHA32.Checked)
-                    {
-                        if (x.SHA3_256 == txtExpected.Text) resultBox.Items.Add(x.File);
-                    }
-
-                    if (chkSHA33.Checked)
-                    {
-                        if (x.SHA3_384 == txtExpected.Text) resultBox.Items.Add(x.File);
-                    }
-
-                    if (chkSHA35.Checked)
-                    {
-                        if (x.SHA3_512 == txtExpected.Text) resultBox.Items.Add(x.File);
-                    }
-                }
-
-                if (resultBox.Items.Count > 0)
-                {
-                    lblNoMatch.Visible = false;
-                }
-                else
-                {
-                    lblNoMatch.Visible = true;
-                }
+            if (resultBox.Items.Count > 0)
+            {
+                lblNoMatch.Visible = false;
+            }
+            else
+            {
+                lblNoMatch.Visible = true;
             }
         }
 

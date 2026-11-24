@@ -52,21 +52,19 @@
             this.itemSHA35 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.topPanel = new System.Windows.Forms.Panel();
+            this.topPanel = new Hashing.Card();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.btnUpdate = new System.Windows.Forms.Button();
-            this.btnBrowse = new System.Windows.Forms.Button();
-            this.txtPath = new System.Windows.Forms.TextBox();
-            this.btnCompare = new System.Windows.Forms.Button();
-            this.btnOptions = new System.Windows.Forms.Button();
-            this.btnFindIdenticals = new System.Windows.Forms.Button();
-            this.btnSaveJson = new System.Windows.Forms.Button();
+            this.btnUpdate = new Hashing.ModernButton();
+            this.btnBrowse = new Hashing.ModernButton();
+            this.txtPath = new Hashing.FluentTextBox();
+            this.btnOptions = new Hashing.ModernButton();
+            this.btnSaveJson = new Hashing.ModernButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.lblversion = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
-            this.botPanel = new System.Windows.Forms.Panel();
-            this.btnCancelHashing = new System.Windows.Forms.Button();
-            this.lblCalculating = new System.Windows.Forms.Label();
+            this.lblversion = new Hashing.FluentLabel();
+            this.label24 = new Hashing.FluentLabel();
+            this.botPanel = new Hashing.Card();
+            this.btnCancelHashing = new Hashing.ModernButton();
+            this.lblCalculating = new Hashing.DropHintLabel();
             this.SumView = new Hashing.MoonTree();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.trayMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -320,9 +318,7 @@
             this.topPanel.Controls.Add(this.btnUpdate);
             this.topPanel.Controls.Add(this.btnBrowse);
             this.topPanel.Controls.Add(this.txtPath);
-            this.topPanel.Controls.Add(this.btnCompare);
             this.topPanel.Controls.Add(this.btnOptions);
-            this.topPanel.Controls.Add(this.btnFindIdenticals);
             this.topPanel.Controls.Add(this.btnSaveJson);
             this.topPanel.Controls.Add(this.pictureBox1);
             this.topPanel.Controls.Add(this.lblversion);
@@ -401,27 +397,6 @@
             this.txtPath.TabIndex = 78;
             this.txtPath.TextChanged += new System.EventHandler(this.txtPath_TextChanged);
             // 
-            // btnCompare
-            // 
-            this.btnCompare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCompare.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnCompare.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCompare.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
-            this.btnCompare.FlatAppearance.BorderSize = 0;
-            this.btnCompare.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnCompare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnCompare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCompare.ForeColor = System.Drawing.Color.White;
-            this.btnCompare.Location = new System.Drawing.Point(353, 6);
-            this.btnCompare.Margin = new System.Windows.Forms.Padding(2);
-            this.btnCompare.Name = "btnCompare";
-            this.btnCompare.Size = new System.Drawing.Size(156, 27);
-            this.btnCompare.TabIndex = 77;
-            this.btnCompare.Tag = "themeable";
-            this.btnCompare.Text = "Compare";
-            this.btnCompare.UseVisualStyleBackColor = false;
-            this.btnCompare.Click += new System.EventHandler(this.btnCompare_Click);
-            // 
             // btnOptions
             // 
             this.btnOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -444,32 +419,11 @@
             this.btnOptions.UseVisualStyleBackColor = false;
             this.btnOptions.Click += new System.EventHandler(this.btnOptions_Click);
             // 
-            // btnFindIdenticals
-            // 
-            this.btnFindIdenticals.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFindIdenticals.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnFindIdenticals.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnFindIdenticals.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
-            this.btnFindIdenticals.FlatAppearance.BorderSize = 0;
-            this.btnFindIdenticals.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnFindIdenticals.FlatAppearance.MouseOverBackColor = System.Drawing.Color.RoyalBlue;
-            this.btnFindIdenticals.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFindIdenticals.ForeColor = System.Drawing.Color.White;
-            this.btnFindIdenticals.Location = new System.Drawing.Point(193, 6);
-            this.btnFindIdenticals.Margin = new System.Windows.Forms.Padding(2);
-            this.btnFindIdenticals.Name = "btnFindIdenticals";
-            this.btnFindIdenticals.Size = new System.Drawing.Size(156, 27);
-            this.btnFindIdenticals.TabIndex = 74;
-            this.btnFindIdenticals.Tag = "themeable";
-            this.btnFindIdenticals.Text = "Find Identicals";
-            this.btnFindIdenticals.UseVisualStyleBackColor = false;
-            this.btnFindIdenticals.Click += new System.EventHandler(this.btnFindIdenticals_Click);
-            // 
             // btnSaveJson
             // 
             this.btnSaveJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveJson.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnSaveJson.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnSaveJson.DialogResult = System.Windows.Forms.DialogResult.None;
             this.btnSaveJson.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.btnSaveJson.FlatAppearance.BorderSize = 0;
             this.btnSaveJson.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
@@ -482,7 +436,7 @@
             this.btnSaveJson.Size = new System.Drawing.Size(156, 27);
             this.btnSaveJson.TabIndex = 71;
             this.btnSaveJson.Tag = "themeable";
-            this.btnSaveJson.Text = "Save as JSON";
+            this.btnSaveJson.Text = "Export";
             this.btnSaveJson.UseVisualStyleBackColor = false;
             this.btnSaveJson.Click += new System.EventHandler(this.btnSaveJson_Click);
             // 
@@ -568,7 +522,7 @@
             this.lblCalculating.Size = new System.Drawing.Size(835, 555);
             this.lblCalculating.TabIndex = 1;
             this.lblCalculating.Tag = "themeable";
-            this.lblCalculating.Text = "Drag and drop files here...";
+            this.lblCalculating.Text = "Drop files here";
             this.lblCalculating.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SumView
@@ -577,7 +531,6 @@
             this.SumView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.SumView.ContextMenuStrip = this.helperMenu;
             this.SumView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SumView.DrawMode = System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll;
             this.SumView.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SumView.ForeColor = System.Drawing.Color.White;
             this.SumView.Location = new System.Drawing.Point(0, 0);
@@ -585,8 +538,8 @@
             this.SumView.Name = "SumView";
             this.SumView.Size = new System.Drawing.Size(835, 555);
             this.SumView.TabIndex = 0;
-            this.SumView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.sumView_NodeMouseClick);
-            this.SumView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SumView_NodeMouseDoubleClick);
+            this.SumView.NodeMouseClick += new System.EventHandler<Hashing.MoonTreeNodeMouseEventArgs>(this.sumView_NodeMouseClick);
+            this.SumView.NodeMouseDoubleClick += new System.EventHandler<Hashing.MoonTreeNodeMouseEventArgs>(this.SumView_NodeMouseDoubleClick);
             // 
             // trayIcon
             // 
@@ -685,33 +638,31 @@
         #endregion
 
         private MoonTree SumView;
-        private System.Windows.Forms.Panel topPanel;
+        private Hashing.Card topPanel;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Panel botPanel;
-        private System.Windows.Forms.Label lblCalculating;
-        private System.Windows.Forms.Button btnSaveJson;
+        private Hashing.Card botPanel;
+        private Hashing.DropHintLabel lblCalculating;
+        private Hashing.ModernButton btnSaveJson;
         private System.Windows.Forms.ContextMenuStrip helperMenu;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
-        private System.Windows.Forms.Button btnFindIdenticals;
-        private System.Windows.Forms.Button btnOptions;
+        private Hashing.ModernButton btnOptions;
         private System.Windows.Forms.NotifyIcon trayIcon;
         private System.Windows.Forms.ContextMenuStrip trayMenu;
         private System.Windows.Forms.ToolStripMenuItem restoreToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.Button btnCompare;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.Button btnBrowse;
-        private System.Windows.Forms.TextBox txtPath;
-        private System.Windows.Forms.Label lblversion;
-        private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Button btnUpdate;
+        private Hashing.ModernButton btnBrowse;
+        private Hashing.FluentTextBox txtPath;
+        private Hashing.FluentLabel lblversion;
+        private Hashing.FluentLabel label24;
+        private Hashing.ModernButton btnUpdate;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.Button btnCancelHashing;
+        private Hashing.ModernButton btnCancelHashing;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
         private System.Windows.Forms.ToolStripMenuItem itemMD5;

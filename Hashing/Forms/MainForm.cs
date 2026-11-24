@@ -16,7 +16,7 @@ using System.Windows.Forms;
 
 namespace Hashing
 {
-    public partial class MainForm : Form
+    public sealed partial class MainForm : Form
     {
         // Always on top syscall... used TopMost property instead
 
@@ -29,11 +29,14 @@ namespace Hashing
         //[return: MarshalAs(UnmanagedType.Bool)]
         //public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
+        InputBox _pathInput;
         List<string> _fileList;
         List<FileSummary> _fileSummaries;
         List<string> _analyzedFiles;
 
         bool _allowExit;
+        bool _closeAfterHashing;
+        bool _settingsSaveWarningShown;
 
         // used when auto-enabling SHA256, for VirusTotal
         int _tempIndex = -1;
@@ -42,15 +45,23 @@ namespace Hashing
         bool _allFilesAreJson = false;
 
         // used for counting total size of calculated sum
-        FileInfo _fileInfo;
         long _totalSize;
         Stopwatch _timer;
         int _fileCounter;
-        string _tempFileName = string.Empty;
-        string _tempFileExtension = string.Empty;
+
+        readonly bool _calculateFilesOnOpen;
+        readonly bool _enableShellRequestServer;
+        readonly Queue<string[]> _pendingShellRequests = new Queue<string[]>();
+        bool _processingInput;
+        ShellRequestServer _shellRequestServer;
 
         // used for filtering sum table
-        TreeNode[] _allSums = null;
+        MoonTreeNode[] _allSums = null;
+        MoonTreeNode[] _identicalSums;
+        MoonTreeNode[] _groupedSums;
+        readonly Dictionary<string, Control> _controlsByName = new Dictionary<string, Control>(StringComparer.Ordinal);
+        readonly int[] _modernButtonWidths = { 82, 100, 94, 100 };
+        Button[] _modernButtons;
 
         // used for cancelling hashing procedure
         CancellationTokenSource tokenSource;
@@ -65,9 +76,33 @@ namespace Hashing
             return Options.TranslationList["newVersion"].ToString().Replace("{LATEST}", latestVersion).Replace("{CURRENT}", Program.GetCurrentVersionToString());
         }
 
-        public MainForm(string[] files)
+        public MainForm(string[] files) : this(files, false, false)
         {
+        }
+
+        internal MainForm(string[] files, bool calculateFilesOnOpen, bool enableShellRequestServer)
+        {
+            _calculateFilesOnOpen = calculateFilesOnOpen;
+            _enableShellRequestServer = enableShellRequestServer;
             InitializeComponent();
+            _btnTools = new ModernButton
+            {
+                Name = "btnTools",
+                Text = ToolText.Get("btnTools", "Tools"),
+                Font = Fluent.Ui(9f),
+                Variant = ButtonVariant.Subtle,
+                Glyph = Fluent.Glyphs.Settings,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right
+            };
+            topPanel.Controls.Add(_btnTools);
+            _btnTools.Click += btnTools_Click;
+            _modernButtons = new[] { _btnTools, btnSaveJson, btnUpdate, btnOptions };
+            InitializeSecurityToolsMenu();
+            BuildModernLayout();
+            lblversion.Tag = "secondary";
+            WrapPathInput();
+            CacheNamedControls();
+            topPanel.Resize += topPanel_Resize;
 
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-US");
             CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
@@ -76,23 +111,25 @@ namespace Hashing
 
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             Options.ApplyTheme(this);
-            CheckForIllegalCrossThreadCalls = false;
 
             _allowExit = !Options.CurrentOptions.TrayIcon;
             _fileList = new List<string>();
 
-            helperMenu.Renderer = new MoonMenuRenderer();
-            trayMenu.Renderer = new MoonMenuRenderer();
+            ConfigureMenuGlyphs();
+            helperMenu.Opening += HelperMenu_Opening;
+            Fluent.StyleMenu(helperMenu);
+            Fluent.StyleMenu(trayMenu);
 
             _timer = new Stopwatch();
 
-            if (Options.CurrentOptions.HighPriority)
+            ProcessPriorityClass requestedPriority = Options.CurrentOptions.HighPriority
+                ? ProcessPriorityClass.High
+                : ProcessPriorityClass.Normal;
+            string priorityError;
+            if (!Utilities.TrySetProcessPriority(requestedPriority, out priorityError))
             {
-                Utilities.EnableHighPriority();
-            }
-            else
-            {
-                Utilities.DisableHighPriority();
+                Options.CurrentOptions.HighPriority = false;
+                Options.StartupWarnings.Add(Options.TranslationList["highPriorityFailed"].ToString().Replace("{ERROR}", priorityError));
             }
 
             // Hash options handling from right-click menu
@@ -109,12 +146,25 @@ namespace Hashing
                 Translate();
             }
 
-            if (files.Count() > 0)
+            Shown += MainForm_Shown;
+
+            if (files != null && files.Length > 0)
             {
-                DetectFiles(files);
+                string[] startupFiles = files.ToArray();
+                Shown += (sender, args) =>
+                {
+                    DetectFiles(startupFiles, _calculateFilesOnOpen);
+                    StartShellRequestServer();
+                };
+            }
+            else
+            {
+                Shown += (sender, args) => StartShellRequestServer();
             }
 
             RestoreWindowState();
+            if (_calculateFilesOnOpen && WindowState == FormWindowState.Minimized)
+                WindowState = FormWindowState.Normal;
 
             if (Options.CurrentOptions.StayOnTop)
             {
@@ -128,6 +178,95 @@ namespace Hashing
 
             lblversion.Text = Options.TranslationList["lblversion"].ToString().Replace("{VN}", Program.GetCurrentVersionToString());
             trayIcon.Visible = false;
+        }
+
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            if (Options.StartupWarnings.Count == 0)
+                return;
+
+            string[] warnings = Options.StartupWarnings.ToArray();
+            Options.StartupWarnings.Clear();
+            foreach (string warning in warnings)
+                FluentMessageBox.Show(this, warning, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void StartShellRequestServer()
+        {
+            if (!_enableShellRequestServer || _shellRequestServer != null || IsDisposed)
+                return;
+
+            _shellRequestServer = new ShellRequestServer(ReceiveShellRequest);
+            FormClosed += MainForm_FormClosed;
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (_shellRequestServer == null)
+                return;
+
+            _shellRequestServer.Dispose();
+            _shellRequestServer = null;
+        }
+
+        private void ReceiveShellRequest(string[] files)
+        {
+            if (files == null || files.Length == 0 || IsDisposed || !IsHandleCreated)
+                return;
+
+            try
+            {
+                BeginInvoke((MethodInvoker)delegate
+                {
+                    if (IsDisposed)
+                        return;
+
+                    if (!Visible)
+                        Show();
+                    if (WindowState == FormWindowState.Minimized)
+                        WindowState = FormWindowState.Normal;
+                    trayIcon.Visible = false;
+                    Activate();
+                    BringToFront();
+
+                    _pendingShellRequests.Enqueue(files);
+                    ProcessPendingShellRequests();
+                });
+            }
+            catch (InvalidOperationException)
+            {
+            }
+        }
+
+        private void ProcessPendingShellRequests()
+        {
+            if (IsDisposed || _processingInput || tokenSource != null || _pendingShellRequests.Count == 0)
+                return;
+
+            string[] files = _pendingShellRequests.Dequeue();
+            DetectFiles(files, true);
+        }
+
+        private void CacheNamedControls()
+        {
+            foreach (Control control in Options.GetSelfAndChildrenRecursive(this))
+            {
+                if (!string.IsNullOrEmpty(control.Name) && !_controlsByName.ContainsKey(control.Name))
+                    _controlsByName.Add(control.Name, control);
+            }
+        }
+
+        private void ConfigureMenuGlyphs()
+        {
+            int dpi = DeviceDpi;
+            Fluent.SetMenuGlyph(copyToolStripMenuItem, Fluent.Glyphs.Copy, dpi);
+            Fluent.SetMenuGlyph(toolStripMenuItem4, Fluent.Glyphs.View, dpi);
+            Fluent.SetMenuGlyph(removeToolStripMenuItem, Fluent.Glyphs.Delete, dpi);
+            Fluent.SetMenuGlyph(toolStripMenuItem1, Fluent.Glyphs.Shield, dpi);
+            Fluent.SetMenuGlyph(toolStripMenuItem2, Fluent.Glyphs.Search, dpi);
+            Fluent.SetMenuGlyph(toolStripMenuItem3, Fluent.Glyphs.Search, dpi);
+            Fluent.SetMenuGlyph(toolStripMenuItem5, Fluent.Glyphs.Tag, dpi);
+            Fluent.SetMenuGlyph(clearToolStripMenuItem, Fluent.Glyphs.Clear, dpi);
         }
 
         private void EnableHashMenuItemsEvent()
@@ -146,67 +285,54 @@ namespace Hashing
 
         private void HashClickFromMenu(object sender, EventArgs e)
         {
-            ToolStripMenuItem x = (ToolStripMenuItem)sender;
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            if (item == null)
+                return;
 
-            if (x.ForeColor == Color.White) x.ForeColor = Options.ForegroundColor;
-            else x.ForeColor = x.ForeColor = Color.White;
+            HashOptions hashes = Options.CurrentOptions.HashOptions;
+            bool enabled;
+            switch (Convert.ToString(item.Tag))
+            {
+                case "md5": enabled = hashes.MD5 = !hashes.MD5; break;
+                case "sha1": enabled = hashes.SHA1 = !hashes.SHA1; break;
+                case "sha256": enabled = hashes.SHA256 = !hashes.SHA256; break;
+                case "sha384": enabled = hashes.SHA384 = !hashes.SHA384; break;
+                case "sha512": enabled = hashes.SHA512 = !hashes.SHA512; break;
+                case "crc32": enabled = hashes.CRC32 = !hashes.CRC32; break;
+                case "ripemd160": enabled = hashes.RIPEMD160 = !hashes.RIPEMD160; break;
+                case "sha32": enabled = hashes.SHA3_256 = !hashes.SHA3_256; break;
+                case "sha33": enabled = hashes.SHA3_384 = !hashes.SHA3_384; break;
+                case "sha35": enabled = hashes.SHA3_512 = !hashes.SHA3_512; break;
+                default: return;
+            }
 
-            if (x.Tag.ToString() == "md5") Options.CurrentOptions.HashOptions.MD5 = (x.ForeColor == Options.ForegroundColor);
-            if (x.Tag.ToString() == "sha1") Options.CurrentOptions.HashOptions.SHA1 = (x.ForeColor == Options.ForegroundColor);
-            if (x.Tag.ToString() == "sha256") Options.CurrentOptions.HashOptions.SHA256 = (x.ForeColor == Options.ForegroundColor);
-            if (x.Tag.ToString() == "sha384") Options.CurrentOptions.HashOptions.SHA384 = (x.ForeColor == Options.ForegroundColor);
-            if (x.Tag.ToString() == "sha512") Options.CurrentOptions.HashOptions.SHA512 = (x.ForeColor == Options.ForegroundColor);
-            if (x.Tag.ToString() == "crc32") Options.CurrentOptions.HashOptions.CRC32 = (x.ForeColor == Options.ForegroundColor);
-            if (x.Tag.ToString() == "ripemd160") Options.CurrentOptions.HashOptions.RIPEMD160 = (x.ForeColor == Options.ForegroundColor);
-            if (x.Tag.ToString() == "sha32") Options.CurrentOptions.HashOptions.SHA3_256 = (x.ForeColor == Options.ForegroundColor);
-            if (x.Tag.ToString() == "sha33") Options.CurrentOptions.HashOptions.SHA3_384 = (x.ForeColor == Options.ForegroundColor);
-            if (x.Tag.ToString() == "sha35") Options.CurrentOptions.HashOptions.SHA3_512 = (x.ForeColor == Options.ForegroundColor);
+            item.ForeColor = enabled ? Fluent.AccentText : Fluent.Text;
+            SaveSettingsSafely();
 
             if (SumResult.Sums.Count > 0)
-            {
                 ReCalculateSums();
-            }
         }
 
         private void CheckMenuItemsByHashes()
         {
-            if (Options.CurrentOptions.HashOptions.MD5) itemMD5.ForeColor = Options.ForegroundColor;
-            else itemMD5.ForeColor = Color.White;
-
-            if (Options.CurrentOptions.HashOptions.SHA1) itemSHA1.ForeColor = Options.ForegroundColor;
-            else itemSHA1.ForeColor = Color.White;
-
-            if (Options.CurrentOptions.HashOptions.SHA256) itemSHA256.ForeColor = Options.ForegroundColor;
-            else itemSHA256.ForeColor = Color.White;
-
-            if (Options.CurrentOptions.HashOptions.SHA384) itemSHA384.ForeColor = Options.ForegroundColor;
-            else itemSHA384.ForeColor = Color.White;
-
-            if (Options.CurrentOptions.HashOptions.SHA512) itemSHA512.ForeColor = Options.ForegroundColor;
-            else itemSHA512.ForeColor = Color.White;
-
-            if (Options.CurrentOptions.HashOptions.CRC32) itemCRC32.ForeColor = Options.ForegroundColor;
-            else itemCRC32.ForeColor = Color.White;
-
-            if (Options.CurrentOptions.HashOptions.RIPEMD160) itemRIPEMD160.ForeColor = Options.ForegroundColor;
-            else itemRIPEMD160.ForeColor = Color.White;
-
-            if (Options.CurrentOptions.HashOptions.SHA3_256) itemSHA32.ForeColor = Options.ForegroundColor;
-            else itemSHA32.ForeColor = Color.White;
-
-            if (Options.CurrentOptions.HashOptions.SHA3_384) itemSHA33.ForeColor = Options.ForegroundColor;
-            else itemSHA33.ForeColor = Color.White;
-
-            if (Options.CurrentOptions.HashOptions.SHA3_512) itemSHA35.ForeColor = Options.ForegroundColor;
-            else itemSHA35.ForeColor = Color.White;
+            HashOptions hashes = Options.CurrentOptions.HashOptions;
+            itemMD5.ForeColor = hashes.MD5 ? Fluent.AccentText : Fluent.Text;
+            itemSHA1.ForeColor = hashes.SHA1 ? Fluent.AccentText : Fluent.Text;
+            itemSHA256.ForeColor = hashes.SHA256 ? Fluent.AccentText : Fluent.Text;
+            itemSHA384.ForeColor = hashes.SHA384 ? Fluent.AccentText : Fluent.Text;
+            itemSHA512.ForeColor = hashes.SHA512 ? Fluent.AccentText : Fluent.Text;
+            itemCRC32.ForeColor = hashes.CRC32 ? Fluent.AccentText : Fluent.Text;
+            itemRIPEMD160.ForeColor = hashes.RIPEMD160 ? Fluent.AccentText : Fluent.Text;
+            itemSHA32.ForeColor = hashes.SHA3_256 ? Fluent.AccentText : Fluent.Text;
+            itemSHA33.ForeColor = hashes.SHA3_384 ? Fluent.AccentText : Fluent.Text;
+            itemSHA35.ForeColor = hashes.SHA3_512 ? Fluent.AccentText : Fluent.Text;
         }
 
         internal void Translate(bool skipFull = false)
         {
-            Dictionary<string, string> translationList = Options.TranslationList.ToObject<Dictionary<string, string>>();
-
             if (!skipFull)
             {
+                Dictionary<string, string> translationList = Options.TranslationList.ToObject<Dictionary<string, string>>();
                 _noNewVersionMessage = Options.TranslationList["noNewVersion"];
                 _betaVersionMessage = Options.TranslationList["betaVersion"];
 
@@ -224,23 +350,23 @@ namespace Hashing
 
                 foreach (var x in translationList)
                 {
-                    if (x.Key == null || x.Key == string.Empty) continue;
-                    element = this.Controls.Find(x.Key, true).FirstOrDefault();
-
-                    if (element == null) continue;
-
-                    element.Text = x.Value;
+                    if (string.IsNullOrEmpty(x.Key)) continue;
+                    if (_controlsByName.TryGetValue(x.Key, out element))
+                        element.Text = x.Value;
                 }
-
             }
 
-            lblversion.Text = lblversion.Text.Replace("{VN}", Program.GetCurrentVersionToString());
+            lblCalculating.HintText = Options.TranslationList["lblCalculating"].ToString();
+            lblCalculating.Subtitle = Options.TranslationList["dropHintSubtitle"].ToString();
+            lblversion.Text = Options.TranslationList["lblversion"].ToString().Replace("{VN}", Program.GetCurrentVersionToString());
+            TranslateSecurityTools();
+            SetSearchWatermark();
         }
 
         private void EnableSHA256()
         {
             Options.CurrentOptions.HashOptions.SHA256 = true;
-            Options.SaveSettings();
+            SaveSettingsSafely();
 
             OptionsForm.HashesChanged = true;
 
@@ -254,26 +380,22 @@ namespace Hashing
 
         private void CheckForUpdate()
         {
-            WebClient client = new WebClient
-            {
-                Encoding = Encoding.UTF8
-            };
-
             string latestVersion = string.Empty;
             try
             {
-                latestVersion = client.DownloadString(_latestVersionLink).Trim();
+                using (WebClient client = new WebClient { Encoding = Encoding.UTF8 })
+                    latestVersion = client.DownloadString(_latestVersionLink).Trim();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                FluentMessageBox.Show(this, ex.Message, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             if (!string.IsNullOrEmpty(latestVersion))
             {
                 if (float.Parse(latestVersion) > Program.GetCurrentVersion())
                 {
-                    if (MessageBox.Show(NewVersionMessage(latestVersion), "Hashing", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    if (FluentMessageBox.Show(this, NewVersionMessage(latestVersion), "Hashing", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         // PATCHING PROCESS
                         try
@@ -294,7 +416,10 @@ namespace Hashing
                             string tempFile = Path.Combine(appFolder, "Hashing_tmp" + appExtension);
 
                             // DOWNLOAD NEW VERSION
-                            client.DownloadFile(NewDownloadLink(latestVersion), tempFile);
+                            using (WebClient downloadClient = new WebClient())
+                            {
+                                downloadClient.DownloadFile(NewDownloadLink(latestVersion), tempFile);
+                            }
 
                             // DELETE PREVIOUS BACK-UP
                             if (File.Exists(archiveFile))
@@ -320,62 +445,78 @@ namespace Hashing
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message);
+                            FluentMessageBox.Show(this, ex.Message);
                         }
                     }
                 }
                 else if (float.Parse(latestVersion) == Program.GetCurrentVersion())
                 {
-                    MessageBox.Show(_noNewVersionMessage, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    FluentMessageBox.Show(this, _noNewVersionMessage, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    MessageBox.Show(_betaVersionMessage, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    FluentMessageBox.Show(this, _betaVersionMessage, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
 
         private void Copy()
         {
-            string s = string.Empty;
-            bool all = false;
+            MoonTreeNode selectedNode = SumView.SelectedNode;
+            if (selectedNode == null)
+                return;
 
-            if (SumView.SelectedNode.Nodes.Count > 0)
+            if (selectedNode.Nodes.Count == 0)
             {
-                s = SumView.SelectedNode.Text + Environment.NewLine + Environment.NewLine;
-
-                foreach (TreeNode node in SumView.SelectedNode.Nodes)
-                {
-                    s += node.Text + Environment.NewLine;
-                }
-
-                all = true;
-            }
-            else
-            {
-                s = SumView.SelectedNode.Text;
-                all = false;
+                Utilities.CopyToClipboard(selectedNode.Text);
+                return;
             }
 
-            Utilities.CopyToClipboard(s, all);
+            StringBuilder text = new StringBuilder(selectedNode.Text.Length + selectedNode.Nodes.Count * 96);
+            text.Append(selectedNode.Text).Append(Environment.NewLine).Append(Environment.NewLine);
+
+            foreach (MoonTreeNode node in selectedNode.Nodes)
+                text.Append(node.Text).Append(Environment.NewLine);
+
+            Utilities.CopyToClipboard(text.ToString(), true);
         }
 
         private void Remove()
         {
-            if (SumView.Nodes.Count > 0)
+            MoonTreeNode selectedNode = SumView.SelectedNode;
+            if (selectedNode == null || selectedNode.Tag is DuplicateGroupInfo || selectedNode.Tag is DuplicateHashMatch)
+                return;
+
+            SumResult selectedResult = GetSelectedSumResult();
+            if (selectedResult == null)
+                return;
+
+            int index = SumResult.Sums.IndexOf(selectedResult);
+            if (index < 0)
+                index = SumResult.Sums.FindIndex(item =>
+                    string.Equals(item.File, selectedResult.File, StringComparison.OrdinalIgnoreCase));
+            if (index >= 0)
+                SumResult.Sums.RemoveAt(index);
+
+            if (_allSums != null)
             {
-                if (SumView.SelectedNode.Nodes.Count > 0)
+                bool removedRoot = false;
+                _allSums = _allSums.Where(node =>
                 {
-                    int i = SumResult.Sums.FindIndex(x => x.File.Equals(SumView.SelectedNode.Text));
-                    SumResult.Sums.RemoveAt(i);
-                    SumView.Nodes.Remove(SumView.SelectedNode);
-                }
-                else
-                {
-                    int i = SumResult.Sums.FindIndex(x => x.File.Equals(SumView.SelectedNode.Parent.Text));
-                    SumResult.Sums.RemoveAt(i);
-                    SumView.Nodes.Remove(SumView.SelectedNode.Parent);
-                }
+                    if (!removedRoot && ReferenceEquals(GetNodeSumResult(node), selectedResult))
+                    {
+                        removedRoot = true;
+                        return false;
+                    }
+                    return true;
+                }).ToArray();
+                _identicalSums = null;
+                _groupedSums = null;
+                FilterTable();
+            }
+            else if (SumView.ContainsNode(selectedNode))
+            {
+                SumView.Nodes.Remove(selectedNode.Parent ?? selectedNode);
             }
 
             if (SumView.Nodes.Count == 0)
@@ -391,6 +532,10 @@ namespace Hashing
             this.Text = "Hashing";
             this.AllowDrop = false;
 
+            _allSums = null;
+            _identicalSums = null;
+            _groupedSums = null;
+            txtPath.Clear();
             SumView.Nodes.Clear();
             SumResult.Sums.Clear();
 
@@ -404,289 +549,489 @@ namespace Hashing
 
         private void SearchVirusTotal()
         {
-            if (SumView.Nodes.Count > 0)
+            SumResult selectedResult = GetSelectedSumResult();
+            int index = selectedResult == null ? -1 : SumResult.Sums.IndexOf(selectedResult);
+            if (index < 0 && selectedResult != null)
+                index = SumResult.Sums.FindIndex(x => string.Equals(x.File, selectedResult.File, StringComparison.OrdinalIgnoreCase));
+
+            if (index < 0)
+                return;
+
+            if (!string.IsNullOrEmpty(SumResult.Sums[index].SHA256))
             {
-                int index = -1;
+                Utilities.SearchVirusTotal(SumResult.Sums[index].SHA256);
+                return;
+            }
 
-                try
-                {
-                    if (SumView.SelectedNode.Nodes.Count > 0)
-                    {
-                        index = SumResult.Sums.FindIndex(x => x.File.Equals(SumView.SelectedNode.Text));
-                    }
-                    else
-                    {
-                        index = SumResult.Sums.FindIndex(x => x.File.Equals(SumView.SelectedNode.Parent.Text));
-                    }
-                }
-                catch { }
-
-                if (index > -1)
-                {
-                    if (!string.IsNullOrEmpty(SumResult.Sums[index].SHA256))
-                    {
-                        Utilities.SearchVirusTotal(SumResult.Sums[index].SHA256);
-                        return;
-                    }
-                    // enableSHA256Message
-                    if (MessageBox.Show(Options.TranslationList["enableSHA256Message"].ToString(), "Hashing", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        EnableSHA256();
-                        _tempIndex = index;
-                    }
-                }
+            if (FluentMessageBox.Show(this, Options.TranslationList["enableSHA256Message"].ToString(), "Hashing", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                EnableSHA256();
+                _tempIndex = index;
             }
         }
 
         private void RefreshSumList()
         {
-            if ((SumResult.Sums != null) && (SumResult.Sums.Count > 0))
+            if (SumResult.Sums.Count == 0)
+                return;
+
+            List<MoonTreeNode> nodes = new List<MoonTreeNode>(SumResult.Sums.Count);
+            foreach (SumResult sum in SumResult.Sums)
+            {
+                MoonTreeNode rootNode = new MoonTreeNode(sum.File)
+                {
+                    ForeColor = Fluent.AccentText,
+                    Tag = new FileNodeInfo(sum, Options.ThemeFlag)
+                };
+
+                if (Options.CurrentOptions.HashOptions.MD5) rootNode.Nodes.Add("MD5: " + sum.MD5);
+                if (Options.CurrentOptions.HashOptions.SHA1) rootNode.Nodes.Add("SHA1: " + sum.SHA1);
+                if (Options.CurrentOptions.HashOptions.SHA256) rootNode.Nodes.Add("SHA256: " + sum.SHA256);
+                if (Options.CurrentOptions.HashOptions.SHA384) rootNode.Nodes.Add("SHA384: " + sum.SHA384);
+                if (Options.CurrentOptions.HashOptions.SHA512) rootNode.Nodes.Add("SHA512: " + sum.SHA512);
+                if (Options.CurrentOptions.HashOptions.CRC32) rootNode.Nodes.Add("CRC32: " + sum.CRC32);
+                if (Options.CurrentOptions.HashOptions.RIPEMD160) rootNode.Nodes.Add("RIPEMD160: " + sum.RIPEMD160);
+                if (Options.CurrentOptions.HashOptions.SHA3_256) rootNode.Nodes.Add("SHA3-256: " + sum.SHA3_256);
+                if (Options.CurrentOptions.HashOptions.SHA3_384) rootNode.Nodes.Add("SHA3-384: " + sum.SHA3_384);
+                if (Options.CurrentOptions.HashOptions.SHA3_512) rootNode.Nodes.Add("SHA3-512: " + sum.SHA3_512);
+
+                nodes.Add(rootNode);
+            }
+
+            SumView.BeginUpdate();
+            try
             {
                 SumView.Nodes.Clear();
-                List<TreeNode> tmpNodes = new List<TreeNode>();
-
-                foreach (SumResult sr in SumResult.Sums)
-                {
-                    TreeNode rootNode = new TreeNode(sr.File);
-
-                    rootNode.ForeColor = Options.ForegroundColor;
-                    rootNode.Tag = Options.ThemeFlag;
-
-                    if (Options.CurrentOptions.HashOptions.MD5) rootNode.Nodes.Add("MD5: " + sr.MD5);
-                    if (Options.CurrentOptions.HashOptions.SHA1) rootNode.Nodes.Add("SHA1: " + sr.SHA1);
-                    if (Options.CurrentOptions.HashOptions.SHA256) rootNode.Nodes.Add("SHA256: " + sr.SHA256);
-                    if (Options.CurrentOptions.HashOptions.SHA384) rootNode.Nodes.Add("SHA384: " + sr.SHA384);
-                    if (Options.CurrentOptions.HashOptions.SHA512) rootNode.Nodes.Add("SHA512: " + sr.SHA512);
-                    if (Options.CurrentOptions.HashOptions.CRC32) rootNode.Nodes.Add("CRC32: " + sr.CRC32);
-                    if (Options.CurrentOptions.HashOptions.RIPEMD160) rootNode.Nodes.Add("RIPEMD160: " + sr.RIPEMD160);
-                    if (Options.CurrentOptions.HashOptions.SHA3_256) rootNode.Nodes.Add("SHA3-256: " + sr.SHA3_256);
-                    if (Options.CurrentOptions.HashOptions.SHA3_384) rootNode.Nodes.Add("SHA3-384: " + sr.SHA3_384);
-                    if (Options.CurrentOptions.HashOptions.SHA3_512) rootNode.Nodes.Add("SHA3-512: " + sr.SHA3_512);
-
-                    tmpNodes.Add(rootNode);
-                }
-
-                SumView.Nodes.AddRange(tmpNodes.ToArray());
+                SumView.Nodes.AddRange(nodes.ToArray());
                 SumView.ExpandAll();
-                _allSums = SumView.Nodes.Cast<TreeNode>().ToArray();
+                _allSums = SumView.Nodes.Cast<MoonTreeNode>().ToArray();
+                _identicalSums = null;
+                _groupedSums = null;
+            }
+            finally
+            {
+                SumView.EndUpdate();
+            }
+
+            FilterTable();
+        }
+
+        private static HashOptions CloneHashOptions(HashOptions source)
+        {
+            return new HashOptions
+            {
+                MD5 = source.MD5,
+                SHA1 = source.SHA1,
+                SHA256 = source.SHA256,
+                SHA384 = source.SHA384,
+                SHA512 = source.SHA512,
+                CRC32 = source.CRC32,
+                RIPEMD160 = source.RIPEMD160,
+                SHA3_256 = source.SHA3_256,
+                SHA3_384 = source.SHA3_384,
+                SHA3_512 = source.SHA3_512
+            };
+        }
+
+        private static string NormalizeVerificationPath(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return string.Empty;
+
+            try
+            {
+                return Path.GetFullPath(path);
+            }
+            catch
+            {
+                return path;
             }
         }
 
-        private void SaveAsJSON()
+        private static Dictionary<string, List<FileSummary>> BuildExpectedSummariesByFile(IEnumerable<FileSummary> summaries)
         {
-            if (SumView.Nodes.Count > 0)
-            {
-                SaveFileDialog dialog = new SaveFileDialog();
-                dialog.Filter = "JSON file|*.json";
+            Dictionary<string, List<FileSummary>> result = new Dictionary<string, List<FileSummary>>(StringComparer.OrdinalIgnoreCase);
+            if (summaries == null)
+                return result;
 
-                if (dialog.ShowDialog() == DialogResult.OK)
+            foreach (FileSummary summary in summaries)
+            {
+                if (summary == null || string.IsNullOrWhiteSpace(summary.File))
+                    continue;
+
+                string key = NormalizeVerificationPath(summary.File);
+                List<FileSummary> fileSummaries;
+                if (!result.TryGetValue(key, out fileSummaries))
                 {
-                    try
+                    fileSummaries = new List<FileSummary>();
+                    result.Add(key, fileSummaries);
+                }
+                fileSummaries.Add(summary);
+            }
+
+            return result;
+        }
+
+        private static Dictionary<string, HashOptions> BuildVerificationHashOptions(
+            Dictionary<string, List<FileSummary>> expectedSummariesByFile, HashOptions activeOptions)
+        {
+            Dictionary<string, HashOptions> result = new Dictionary<string, HashOptions>(StringComparer.OrdinalIgnoreCase);
+            foreach (KeyValuePair<string, List<FileSummary>> pair in expectedSummariesByFile)
+            {
+                HashOptions options = CloneHashOptions(activeOptions);
+                foreach (FileSummary summary in pair.Value)
+                {
+                    options.MD5 |= !string.IsNullOrWhiteSpace(summary.MD5);
+                    options.SHA1 |= !string.IsNullOrWhiteSpace(summary.SHA1);
+                    options.SHA256 |= !string.IsNullOrWhiteSpace(summary.SHA256);
+                    options.SHA384 |= !string.IsNullOrWhiteSpace(summary.SHA384);
+                    options.SHA512 |= !string.IsNullOrWhiteSpace(summary.SHA512);
+                    options.CRC32 |= !string.IsNullOrWhiteSpace(summary.CRC32);
+                    options.RIPEMD160 |= !string.IsNullOrWhiteSpace(summary.RIPEMD160);
+                    options.SHA3_256 |= !string.IsNullOrWhiteSpace(summary.SHA3_256);
+                    options.SHA3_384 |= !string.IsNullOrWhiteSpace(summary.SHA3_384);
+                    options.SHA3_512 |= !string.IsNullOrWhiteSpace(summary.SHA3_512);
+                }
+                result.Add(pair.Key, options);
+            }
+            return result;
+        }
+
+        private static bool VerifyExpectedSummaries(SumResult actual, IEnumerable<FileSummary> expectedSummaries)
+        {
+            bool hasExpectedHashes = false;
+            foreach (FileSummary expected in expectedSummaries)
+            {
+                int compared = 0;
+                bool matches =
+                    CompareExpectedHash(actual.MD5, expected.MD5, ref compared) &&
+                    CompareExpectedHash(actual.SHA1, expected.SHA1, ref compared) &&
+                    CompareExpectedHash(actual.SHA256, expected.SHA256, ref compared) &&
+                    CompareExpectedHash(actual.SHA384, expected.SHA384, ref compared) &&
+                    CompareExpectedHash(actual.SHA512, expected.SHA512, ref compared) &&
+                    CompareExpectedHash(actual.CRC32, expected.CRC32, ref compared) &&
+                    CompareExpectedHash(actual.RIPEMD160, expected.RIPEMD160, ref compared) &&
+                    CompareExpectedHash(actual.SHA3_256, expected.SHA3_256, ref compared) &&
+                    CompareExpectedHash(actual.SHA3_384, expected.SHA3_384, ref compared) &&
+                    CompareExpectedHash(actual.SHA3_512, expected.SHA3_512, ref compared);
+
+                if (compared == 0)
+                    continue;
+
+                hasExpectedHashes = true;
+                if (!matches)
+                    return false;
+            }
+
+            return hasExpectedHashes;
+        }
+
+        private static bool CompareExpectedHash(string actual, string expected, ref int compared)
+        {
+            if (string.IsNullOrWhiteSpace(expected))
+                return true;
+
+            compared++;
+            if (string.IsNullOrWhiteSpace(actual))
+                return false;
+
+            return string.Equals(actual.Trim(), expected.Trim(), StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static void ClearUnselectedHashes(SumResult result, HashOptions activeOptions)
+        {
+            if (!activeOptions.MD5) result.MD5 = null;
+            if (!activeOptions.SHA1) result.SHA1 = null;
+            if (!activeOptions.SHA256) result.SHA256 = null;
+            if (!activeOptions.SHA384) result.SHA384 = null;
+            if (!activeOptions.SHA512) result.SHA512 = null;
+            if (!activeOptions.CRC32) result.CRC32 = null;
+            if (!activeOptions.RIPEMD160) result.RIPEMD160 = null;
+            if (!activeOptions.SHA3_256) result.SHA3_256 = null;
+            if (!activeOptions.SHA3_384) result.SHA3_384 = null;
+            if (!activeOptions.SHA3_512) result.SHA3_512 = null;
+        }
+
+        private MoonTreeNode[] BuildIdenticalNodes()
+        {
+            List<SumResult> fileResults = new List<SumResult>(_allSums == null ? 0 : _allSums.Length);
+            if (_allSums != null)
+            {
+                foreach (MoonTreeNode node in _allSums)
+                {
+                    SumResult item = GetNodeSumResult(node);
+                    if (item != null && !string.IsNullOrWhiteSpace(item.File))
+                        fileResults.Add(item);
+                }
+            }
+
+            return BuildIdenticalNodes(fileResults, CancellationToken.None);
+        }
+
+        private MoonTreeNode[] BuildIdenticalNodes(IEnumerable<SumResult> sourceItems, CancellationToken cancellationToken, List<string> operationErrors = null)
+        {
+            List<SumResult> fileResults = sourceItems == null
+                ? new List<SumResult>()
+                : sourceItems.Where(item => item != null && !string.IsNullOrWhiteSpace(item.File)).ToList();
+
+            if (fileResults.Count < 2)
+                return new MoonTreeNode[0];
+
+            List<HashSelectorInfo> selectors = GetAvailableHashSelectors(fileResults);
+            Dictionary<SumResult, int> itemIndexes = new Dictionary<SumResult, int>();
+            for (int i = 0; i < fileResults.Count; i++)
+                itemIndexes[fileResults[i]] = i;
+
+            Dictionary<long, bool> contentComparisonCache = new Dictionary<long, bool>();
+            List<DuplicateGroupInfo> orderedGroups = new List<DuplicateGroupInfo>();
+
+            foreach (HashSelectorInfo selector in selectors)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                Dictionary<string, List<SumResult>> filesByHash = new Dictionary<string, List<SumResult>>(StringComparer.OrdinalIgnoreCase);
+                List<List<SumResult>> orderedHashGroups = new List<List<SumResult>>();
+
+                foreach (SumResult item in fileResults)
+                {
+                    string hash = selector.Selector(item);
+                    if (string.IsNullOrWhiteSpace(hash))
+                        continue;
+
+                    List<SumResult> group;
+                    if (!filesByHash.TryGetValue(hash, out group))
                     {
-                        File.WriteAllText(dialog.FileName, JsonConvert.SerializeObject(SumResult.Sums, Formatting.Indented, new JsonSerializerSettings
+                        group = new List<SumResult>(2);
+                        filesByHash.Add(hash, group);
+                        orderedHashGroups.Add(group);
+                    }
+                    group.Add(item);
+                }
+
+                foreach (List<SumResult> candidateGroup in orderedHashGroups)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (candidateGroup.Count < 2)
+                        continue;
+
+                    List<List<SumResult>> verifiedGroups = new List<List<SumResult>>();
+                    foreach (SumResult item in candidateGroup)
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        bool assigned = false;
+                        int itemIndex = itemIndexes[item];
+
+                        foreach (List<SumResult> verifiedGroup in verifiedGroups)
                         {
-                            NullValueHandling = NullValueHandling.Ignore
-                        }));
+                            int groupIndex = itemIndexes[verifiedGroup[0]];
+                            int first = Math.Min(itemIndex, groupIndex);
+                            int second = Math.Max(itemIndex, groupIndex);
+                            long comparisonKey = ((long)first << 32) | (uint)second;
+                            bool identical;
+
+                            if (!contentComparisonCache.TryGetValue(comparisonKey, out identical))
+                            {
+                                string comparisonError;
+                                bool comparisonSucceeded = Utilities.TryAreFilesIdentical(verifiedGroup[0], item, cancellationToken, out identical, out comparisonError);
+                                contentComparisonCache.Add(comparisonKey, identical);
+                                if (!comparisonSucceeded && operationErrors != null && !string.IsNullOrWhiteSpace(comparisonError))
+                                {
+                                    string formatted = FormatFileOperationError(Options.TranslationList["operationCompareDuplicates"].ToString(), item.File, new IOException(comparisonError));
+                                    if (!operationErrors.Contains(formatted))
+                                        operationErrors.Add(formatted);
+                                }
+                            }
+
+                            if (identical)
+                            {
+                                verifiedGroup.Add(item);
+                                assigned = true;
+                                break;
+                            }
+                        }
+
+                        if (!assigned)
+                            verifiedGroups.Add(new List<SumResult> { item });
                     }
-                    catch (Exception ex)
+
+                    foreach (List<SumResult> verifiedGroup in verifiedGroups)
                     {
-                        MessageBox.Show(ex.Message, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (verifiedGroup.Count < 2)
+                            continue;
+
+                        string hash = selector.Selector(verifiedGroup[0]);
+                        HashSet<SumResult> verifiedItems = new HashSet<SumResult>(verifiedGroup);
+                        List<DuplicateGroupInfo> overlappingGroups = new List<DuplicateGroupInfo>();
+                        int insertIndex = orderedGroups.Count;
+
+                        for (int groupIndex = 0; groupIndex < orderedGroups.Count; groupIndex++)
+                        {
+                            DuplicateGroupInfo existing = orderedGroups[groupIndex];
+                            bool overlaps = existing.Items.Any(verifiedItems.Contains);
+                            if (!overlaps)
+                                continue;
+
+                            if (overlappingGroups.Count == 0)
+                                insertIndex = groupIndex;
+                            overlappingGroups.Add(existing);
+                        }
+
+                        if (overlappingGroups.Count == 0)
+                        {
+                            orderedGroups.Add(new DuplicateGroupInfo(
+                                selector.Algorithm, selector.Name, hash, verifiedGroup.ToArray()));
+                            continue;
+                        }
+
+                        List<SumResult> mergedItems = new List<SumResult>();
+                        HashSet<SumResult> mergedItemSet = new HashSet<SumResult>();
+                        foreach (DuplicateGroupInfo existing in overlappingGroups)
+                        {
+                            foreach (SumResult item in existing.Items)
+                            {
+                                if (mergedItemSet.Add(item))
+                                    mergedItems.Add(item);
+                            }
+                        }
+
+                        foreach (SumResult item in verifiedGroup)
+                        {
+                            if (mergedItemSet.Add(item))
+                                mergedItems.Add(item);
+                        }
+
+                        DuplicateGroupInfo merged = new DuplicateGroupInfo(
+                            overlappingGroups[0].Algorithm,
+                            overlappingGroups[0].AlgorithmName,
+                            overlappingGroups[0].Hash,
+                            mergedItems.ToArray());
+
+                        foreach (DuplicateGroupInfo existing in overlappingGroups)
+                        {
+                            foreach (DuplicateHashMatch match in existing.HashMatches)
+                                merged.AddHashMatch(match.Algorithm, match.AlgorithmName, match.Hash);
+                            orderedGroups.Remove(existing);
+                        }
+
+                        merged.AddHashMatch(selector.Algorithm, selector.Name, hash);
+                        orderedGroups.Insert(insertIndex, merged);
                     }
                 }
             }
-        }
 
-        private void FindIdenticals()
-        {
-            if (SumView.Nodes.Count == 0) return;
+            List<MoonTreeNode> nodes = new List<MoonTreeNode>(orderedGroups.Count);
+            string filesWord = Convert.ToString(Options.TranslationList["filesWord"]);
+            string groupTitle = Convert.ToString(Options.TranslationList["identicalGroupTitle"]);
 
-            List<SumResult> list = new List<SumResult>();
-
-            if (Options.CurrentOptions.HashOptions.MD5) list = FindIdenticalsByMD5();
-            if (Options.CurrentOptions.HashOptions.SHA1) list = FindIdenticalsBySHA1();
-            if (Options.CurrentOptions.HashOptions.SHA256) list = FindIdenticalsBySHA256();
-            if (Options.CurrentOptions.HashOptions.SHA384) list = FindIdenticalsBySHA384();
-            if (Options.CurrentOptions.HashOptions.SHA512) list = FindIdenticalsBySHA512();
-            if (Options.CurrentOptions.HashOptions.CRC32) list = FindIdenticalsByCRC32();
-            if (Options.CurrentOptions.HashOptions.RIPEMD160) list = FindIdenticalsByRIPEMD160();
-            if (Options.CurrentOptions.HashOptions.SHA3_256) list = FindIdenticalsBySHA3_256();
-            if (Options.CurrentOptions.HashOptions.SHA3_384) list = FindIdenticalsBySHA3_384();
-            if (Options.CurrentOptions.HashOptions.SHA3_512) list = FindIdenticalsBySHA3_512();
-
-            if (SumView.Nodes.Count > 0 && list.Count > 0)
+            foreach (DuplicateGroupInfo info in orderedGroups)
             {
-                IdenticalsForm f = new IdenticalsForm(list);
-                f.ShowDialog();
-            }
-            else if (SumView.Nodes.Count > 0 && list.Count == 0)
-            {
-                MessageBox.Show(Options.TranslationList["noIdenticalsMessage"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        private List<SumResult> FindIdenticalsByMD5()
-        {
-            IEnumerable<string> similars = from p in SumResult.Sums group p by p.MD5 into g where g.Count() > 1 select g.Key;
-            List<SumResult> duplicates = new List<SumResult>();
-
-            foreach (string s in similars)
-            {
-                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.MD5 == s && x.File != s && !string.IsNullOrEmpty(x.MD5) && !string.IsNullOrEmpty(s)))
+                cancellationToken.ThrowIfCancellationRequested();
+                MoonTreeNode groupNode = new MoonTreeNode(string.Format("{0} ({1} {2})",
+                    groupTitle, info.Items.Length, filesWord))
                 {
-                    duplicates.Add(sr);
+                    Tag = info,
+                    ForeColor = Fluent.AccentText
+                };
+
+                foreach (DuplicateHashMatch match in info.HashMatches)
+                {
+                    groupNode.Nodes.Add(new MoonTreeNode(string.Format("{0}: {1}", match.AlgorithmName, match.Hash))
+                    {
+                        Tag = match,
+                        ForeColor = Fluent.TextSecondary
+                    });
                 }
+
+                foreach (SumResult item in info.Items)
+                    groupNode.Nodes.Add(new MoonTreeNode(item.File) { Tag = item });
+
+                groupNode.Expand();
+                nodes.Add(groupNode);
             }
 
-            return duplicates;
+            return nodes.ToArray();
         }
 
-        private List<SumResult> FindIdenticalsBySHA1()
+        private static List<HashSelectorInfo> GetAvailableHashSelectors(IEnumerable<SumResult> items)
         {
-            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA1 into g where g.Count() > 1 select g.Key;
-            List<SumResult> duplicates = new List<SumResult>();
-
-            foreach (string s in similars)
+            List<HashSelectorInfo> candidates = new List<HashSelectorInfo>(10)
             {
-                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA1 == s && x.File != s && !string.IsNullOrEmpty(x.SHA1) && !string.IsNullOrEmpty(s)))
-                {
-                    duplicates.Add(sr);
-                }
-            }
+                new HashSelectorInfo(HashCode.MD5, "MD5", item => item.MD5),
+                new HashSelectorInfo(HashCode.SHA1, "SHA1", item => item.SHA1),
+                new HashSelectorInfo(HashCode.SHA256, "SHA256", item => item.SHA256),
+                new HashSelectorInfo(HashCode.SHA384, "SHA384", item => item.SHA384),
+                new HashSelectorInfo(HashCode.SHA512, "SHA512", item => item.SHA512),
+                new HashSelectorInfo(HashCode.RIPEMD160, "RIPEMD160", item => item.RIPEMD160),
+                new HashSelectorInfo(HashCode.CRC32, "CRC32", item => item.CRC32),
+                new HashSelectorInfo(HashCode.SHA3_256, "SHA3-256", item => item.SHA3_256),
+                new HashSelectorInfo(HashCode.SHA3_384, "SHA3-384", item => item.SHA3_384),
+                new HashSelectorInfo(HashCode.SHA3_512, "SHA3-512", item => item.SHA3_512)
+            };
 
-            return duplicates;
+            List<SumResult> results = items as List<SumResult> ?? new List<SumResult>(items);
+            candidates.RemoveAll(selector => !results.Any(item =>
+                item != null && !string.IsNullOrWhiteSpace(selector.Selector(item))));
+            return candidates;
         }
 
-        private List<SumResult> FindIdenticalsBySHA256()
+        private static SumResult GetNodeSumResult(MoonTreeNode node)
         {
-            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA256 into g where g.Count() > 1 select g.Key;
-            List<SumResult> duplicates = new List<SumResult>();
+            if (node == null)
+                return null;
 
-            foreach (string s in similars)
-            {
-                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA256 == s && x.File != s && !string.IsNullOrEmpty(x.SHA256) && !string.IsNullOrEmpty(s)))
-                {
-                    duplicates.Add(sr);
-                }
-            }
-
-            return duplicates;
+            FileNodeInfo fileInfo = node.Tag as FileNodeInfo;
+            return fileInfo == null ? node.Tag as SumResult : fileInfo.Result;
         }
 
-        private List<SumResult> FindIdenticalsBySHA384()
+        private void HelperMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA384 into g where g.Count() > 1 select g.Key;
-            List<SumResult> duplicates = new List<SumResult>();
-
-            foreach (string s in similars)
-            {
-                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA384 == s && x.File != s && !string.IsNullOrEmpty(x.SHA384) && !string.IsNullOrEmpty(s)))
-                {
-                    duplicates.Add(sr);
-                }
-            }
-
-            return duplicates;
+            MoonTreeNode selectedNode = SumView.SelectedNode;
+            removeToolStripMenuItem.Enabled = selectedNode != null && !(selectedNode.Tag is DuplicateGroupInfo) && !(selectedNode.Tag is DuplicateHashMatch);
         }
 
-        private List<SumResult> FindIdenticalsBySHA512()
+        private sealed class HashSelectorInfo
         {
-            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA512 into g where g.Count() > 1 select g.Key;
-            List<SumResult> duplicates = new List<SumResult>();
+            internal readonly HashCode Algorithm;
+            internal readonly string Name;
+            internal readonly Func<SumResult, string> Selector;
 
-            foreach (string s in similars)
+            internal HashSelectorInfo(HashCode algorithm, string name, Func<SumResult, string> selector)
             {
-                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA512 == s && x.File != s && !string.IsNullOrEmpty(x.SHA512) && !string.IsNullOrEmpty(s)))
-                {
-                    duplicates.Add(sr);
-                }
+                Algorithm = algorithm;
+                Name = name;
+                Selector = selector;
             }
-
-            return duplicates;
         }
 
-        private List<SumResult> FindIdenticalsByCRC32()
+        private sealed class FileNodeInfo
         {
-            IEnumerable<string> similars = from p in SumResult.Sums group p by p.CRC32 into g where g.Count() > 1 select g.Key;
-            List<SumResult> duplicates = new List<SumResult>();
+            internal readonly SumResult Result;
+            internal readonly string ThemeFlag;
 
-            foreach (string s in similars)
+            internal FileNodeInfo(SumResult result, string themeFlag)
             {
-                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.CRC32 == s && x.File != s && !string.IsNullOrEmpty(x.CRC32) && !string.IsNullOrEmpty(s)))
-                {
-                    duplicates.Add(sr);
-                }
+                Result = result;
+                ThemeFlag = themeFlag;
             }
-
-            return duplicates;
         }
 
-        private List<SumResult> FindIdenticalsByRIPEMD160()
+        private sealed class FileEnumerationResult
         {
-            IEnumerable<string> similars = from p in SumResult.Sums group p by p.RIPEMD160 into g where g.Count() > 1 select g.Key;
-            List<SumResult> duplicates = new List<SumResult>();
+            internal readonly List<string> Files = new List<string>();
+            internal readonly List<string> Errors = new List<string>();
+            internal int ErrorCount;
+            internal int SkippedReparseDirectories;
 
-            foreach (string s in similars)
+            internal void AddError(string path, Exception exception)
             {
-                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.RIPEMD160 == s && x.File != s && !string.IsNullOrEmpty(x.RIPEMD160) && !string.IsNullOrEmpty(s)))
-                {
-                    duplicates.Add(sr);
-                }
+                ErrorCount++;
+                if (Errors.Count < 10)
+                    Errors.Add(MainForm.FormatFileOperationError(Options.TranslationList["operationScanAccess"].ToString(), path, exception));
             }
-
-            return duplicates;
-        }
-
-        private List<SumResult> FindIdenticalsBySHA3_256()
-        {
-            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA3_256 into g where g.Count() > 1 select g.Key;
-            List<SumResult> duplicates = new List<SumResult>();
-
-            foreach (string s in similars)
-            {
-                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA3_256 == s && x.File != s && !string.IsNullOrEmpty(x.SHA3_256) && !string.IsNullOrEmpty(s)))
-                {
-                    duplicates.Add(sr);
-                }
-            }
-
-            return duplicates;
-        }
-
-        private List<SumResult> FindIdenticalsBySHA3_384()
-        {
-            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA3_384 into g where g.Count() > 1 select g.Key;
-            List<SumResult> duplicates = new List<SumResult>();
-
-            foreach (string s in similars)
-            {
-                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA3_384 == s && x.File != s && !string.IsNullOrEmpty(x.SHA3_384) && !string.IsNullOrEmpty(s)))
-                {
-                    duplicates.Add(sr);
-                }
-            }
-
-            return duplicates;
-        }
-
-        private List<SumResult> FindIdenticalsBySHA3_512()
-        {
-            IEnumerable<string> similars = from p in SumResult.Sums group p by p.SHA3_512 into g where g.Count() > 1 select g.Key;
-            List<SumResult> duplicates = new List<SumResult>();
-
-            foreach (string s in similars)
-            {
-                foreach (SumResult sr in SumResult.Sums.FindAll(x => x.SHA3_512 == s && x.File != s && !string.IsNullOrEmpty(x.SHA3_512) && !string.IsNullOrEmpty(s)))
-                {
-                    duplicates.Add(sr);
-                }
-            }
-
-            return duplicates;
         }
 
         private void ReCalculateSums()
         {
-            if (!Options.CurrentOptions.HashOptions.MD5 && !Options.CurrentOptions.HashOptions.SHA1 && !Options.CurrentOptions.HashOptions.SHA256 && !Options.CurrentOptions.HashOptions.SHA384 && !Options.CurrentOptions.HashOptions.SHA512 && !Options.CurrentOptions.HashOptions.SHA3_384 && !Options.CurrentOptions.HashOptions.CRC32 && !Options.CurrentOptions.HashOptions.SHA3_256 && !Options.CurrentOptions.HashOptions.SHA3_256 && !Options.CurrentOptions.HashOptions.SHA3_512)
+            if (!Options.HasActiveHash(Options.CurrentOptions.HashOptions))
             {
                 Clear();
                 return;
@@ -704,16 +1049,48 @@ namespace Hashing
             }
         }
 
+        private static string FormatFileOperationError(string operation, string path, Exception exception)
+        {
+            string error = exception == null ? string.Empty : exception.Message;
+            return Options.TranslationList["fileOperationFailed"].ToString()
+                .Replace("{OPERATION}", operation ?? string.Empty)
+                .Replace("{PATH}", path ?? string.Empty)
+                .Replace("{ERROR}", error);
+        }
+
+        private void ShowFileOperationErrors(IList<string> errors)
+        {
+            if (errors == null || errors.Count == 0)
+                return;
+
+            StringBuilder details = new StringBuilder();
+            int count = Math.Min(errors.Count, 10);
+            for (int i = 0; i < count; i++)
+                details.Append(errors[i]).Append(Environment.NewLine).Append(Environment.NewLine);
+            if (errors.Count > count)
+                details.Append(Options.TranslationList["fileOperationErrorsMore"].ToString()
+                    .Replace("{COUNT}", (errors.Count - count).ToString(CultureInfo.InvariantCulture)));
+
+            FluentMessageBox.Show(this, details.ToString().Trim(), Options.TranslationList["fileOperationErrorsTitle"].ToString(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         private string ListIncompatibles(List<string> files)
         {
             StringBuilder result = new StringBuilder();
 
             foreach (string s in files)
             {
-                result.Append(s + Environment.NewLine);
+                result.Append(s).Append(Environment.NewLine);
             }
 
             return result.ToString();
+        }
+
+        private static List<T> DeserializeJsonList<T>(string file)
+        {
+            using (StreamReader textReader = File.OpenText(file))
+            using (JsonTextReader jsonReader = new JsonTextReader(textReader))
+                return JsonSerializer.CreateDefault().Deserialize<List<T>>(jsonReader);
         }
 
         private List<FileSummary> AnalyzeJsonFiles()
@@ -725,151 +1102,381 @@ namespace Hashing
             {
                 try
                 {
-                    fileSummaries.AddRange(JsonConvert.DeserializeObject<List<FileSummary>>(File.ReadAllText(s)));
+                    fileSummaries.AddRange(DeserializeJsonList<FileSummary>(s));
                 }
-                catch //(Exception ex)
+                catch (Exception ex)
                 {
-                    incompatibles.Add(s);
+                    incompatibles.Add(FormatFileOperationError(Options.TranslationList["operationReadJson"].ToString(), s, ex));
                     continue;
                 }
             }
 
-            _fileList.RemoveAll(x => x.EndsWith(".json"));
+            _fileList.RemoveAll(x => string.Equals(Path.GetExtension(x), ".json", StringComparison.OrdinalIgnoreCase));
 
             if (incompatibles.Count > 0)
             {
-                TopMostMessageBox.Show(Options.TranslationList["unsupportedJSON1"].ToString() + ListIncompatibles(incompatibles) + Options.TranslationList["unsupportedJSON2"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                FluentMessageBox.ShowTopMost(this, Options.TranslationList["unsupportedJSON1"].ToString() + ListIncompatibles(incompatibles) + Options.TranslationList["unsupportedJSON2"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             foreach (FileSummary json in fileSummaries)
             {
-                _fileList.Add(json.File);
+                if (json != null && !string.IsNullOrWhiteSpace(json.File))
+                    _fileList.Add(json.File);
             }
 
             return fileSummaries;
         }
 
-        private void DetectFiles(string[] files)
+        private async void DetectFiles(string[] files, bool calculateImmediately = false)
         {
-            //this.AllowDrop = false;
-            _fileList.Clear();
+            if (files == null || files.Length == 0 || tokenSource != null || _processingInput)
+                return;
 
-            foreach (string f in files)
+            _processingInput = true;
+            CancellationTokenSource scanSource = new CancellationTokenSource();
+            tokenSource = scanSource;
+
+            bool sourceReleased = false;
+            try
             {
-                if (Directory.Exists(f))
+                SetEnumerationUi(true);
+                FileEnumerationResult enumeration = await Task.Run(
+                    () => EnumerateInputFiles(files, scanSource.Token), scanSource.Token);
+                scanSource.Token.ThrowIfCancellationRequested();
+
+                _fileList = enumeration.Files;
+                tokenSource = null;
+                scanSource.Dispose();
+                sourceReleased = true;
+                SetEnumerationUi(false);
+
+                if (enumeration.ErrorCount > 0 || enumeration.SkippedReparseDirectories > 0)
                 {
-                    foreach (string x in Directory.GetFiles(f, "*", SearchOption.AllDirectories))
+                    StringBuilder details = new StringBuilder();
+                    details.Append(Options.TranslationList["scanWarnings"].ToString());
+                    foreach (string error in enumeration.Errors)
+                        details.Append(error).Append(Environment.NewLine);
+                    if (enumeration.ErrorCount > enumeration.Errors.Count)
+                        details.Append(Options.TranslationList["fileOperationErrorsMore"].ToString()
+                            .Replace("{COUNT}", (enumeration.ErrorCount - enumeration.Errors.Count).ToString(CultureInfo.InvariantCulture)));
+                    if (enumeration.SkippedReparseDirectories > 0)
                     {
-                        _fileList.Add(x);
+                        if (details.Length > 0 && details[details.Length - 1] != '\n')
+                            details.AppendLine();
+                        details.AppendFormat(Options.TranslationList["scanSkippedReparseDirectories"].ToString(), enumeration.SkippedReparseDirectories);
+                    }
+                    FluentMessageBox.Show(this, details.ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+                if (_fileList.Count == 0)
+                    return;
+
+                _allFilesAreJson = true;
+                foreach (string file in _fileList)
+                {
+                    if (!string.Equals(Path.GetExtension(file), ".json", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _allFilesAreJson = false;
+                        break;
                     }
                 }
-                if (File.Exists(f))
+
+                if (_allFilesAreJson && !calculateImmediately)
                 {
-                    _fileList.Add(f);
+                    using (FeatureBox featureBox = new FeatureBox())
+                        featureBox.ShowDialog(this);
+
+                    if (FeatureBox.SelectedAction == FeatureAction.Calculate)
+                    {
+                        CalculateSums();
+                    }
+                    else if (FeatureBox.SelectedAction == FeatureAction.AnalyzeJSON)
+                    {
+                        Clear();
+                        _fileSummaries = AnalyzeJsonFiles();
+                        _fileSummaries.RemoveAll(item => item == null || string.IsNullOrWhiteSpace(item.File));
+
+                        if (_fileSummaries.Count > 0)
+                            CalculateSums(true);
+                        else
+                            FluentMessageBox.ShowTopMost(this, Options.TranslationList["invalidPath"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else if (FeatureBox.SelectedAction == FeatureAction.ListJSON)
+                    {
+                        List<SumResult> listing = new List<SumResult>();
+                        List<string> listingErrors = new List<string>();
+                        foreach (string file in _fileList)
+                        {
+                            try
+                            {
+                                List<SumResult> loaded = DeserializeJsonList<SumResult>(file);
+                                if (loaded != null)
+                                    listing.AddRange(loaded);
+                            }
+                            catch (Exception ex)
+                            {
+                                listingErrors.Add(FormatFileOperationError(Options.TranslationList["operationReadJsonResults"].ToString(), file, ex));
+                            }
+                        }
+
+                        listing.RemoveAll(item => item == null || string.IsNullOrWhiteSpace(item.File));
+                        if (listing.Count > 0)
+                        {
+                            List<MoonTreeNode> roots = new List<MoonTreeNode>(listing.Count);
+                            for (int i = 0; i < listing.Count; i++)
+                            {
+                                SumResult item = listing[i];
+                                MoonTreeNode rootNode = new MoonTreeNode(item.File)
+                                {
+                                    ForeColor = Fluent.AccentText,
+                                    Tag = new FileNodeInfo(item, Options.ThemeFlag)
+                                };
+
+                                if (!string.IsNullOrEmpty(item.MD5)) rootNode.Nodes.Add("MD5: " + item.MD5);
+                                if (!string.IsNullOrEmpty(item.SHA1)) rootNode.Nodes.Add("SHA1: " + item.SHA1);
+                                if (!string.IsNullOrEmpty(item.SHA256)) rootNode.Nodes.Add("SHA256: " + item.SHA256);
+                                if (!string.IsNullOrEmpty(item.SHA384)) rootNode.Nodes.Add("SHA384: " + item.SHA384);
+                                if (!string.IsNullOrEmpty(item.SHA512)) rootNode.Nodes.Add("SHA512: " + item.SHA512);
+                                if (!string.IsNullOrEmpty(item.CRC32)) rootNode.Nodes.Add("CRC32: " + item.CRC32);
+                                if (!string.IsNullOrEmpty(item.RIPEMD160)) rootNode.Nodes.Add("RIPEMD160: " + item.RIPEMD160);
+                                if (!string.IsNullOrEmpty(item.SHA3_256)) rootNode.Nodes.Add("SHA3-256: " + item.SHA3_256);
+                                if (!string.IsNullOrEmpty(item.SHA3_384)) rootNode.Nodes.Add("SHA3-384: " + item.SHA3_384);
+                                if (!string.IsNullOrEmpty(item.SHA3_512)) rootNode.Nodes.Add("SHA3-512: " + item.SHA3_512);
+                                roots.Add(rootNode);
+                            }
+
+                            List<MoonTreeNode> allNodes = _allSums == null
+                                ? new List<MoonTreeNode>()
+                                : new List<MoonTreeNode>(_allSums);
+                            allNodes.AddRange(roots);
+
+                            CancellationTokenSource duplicateSource = new CancellationTokenSource();
+                            tokenSource = duplicateSource;
+                            try
+                            {
+                                SetEnumerationUi(true);
+                                lblCalculating.Text = Options.TranslationList["lblCalculatingNow"].ToString();
+
+                                MoonTreeNode[] identicalNodes = await Task.Run(
+                                    () => BuildIdenticalNodes(listing, duplicateSource.Token, listingErrors), duplicateSource.Token);
+                                duplicateSource.Token.ThrowIfCancellationRequested();
+
+                                SumResult.Sums.AddRange(listing);
+                                _allSums = allNodes.ToArray();
+                                _identicalSums = identicalNodes;
+                                _groupedSums = null;
+
+                                SumView.BeginUpdate();
+                                try
+                                {
+                                    SumView.Nodes.Clear();
+                                    SumView.Nodes.AddRange(_allSums);
+                                    SumView.ExpandAll();
+                                }
+                                finally
+                                {
+                                    SumView.EndUpdate();
+                                }
+
+                                FilterTable();
+                            }
+                            finally
+                            {
+                                if (ReferenceEquals(tokenSource, duplicateSource))
+                                    tokenSource = null;
+                                duplicateSource.Dispose();
+                                SetEnumerationUi(false);
+                            }
+                        }
+                        ShowFileOperationErrors(listingErrors);
+                    }
                 }
-            }
-
-            if (_fileList.Count == 0) return;
-
-            // check if all files are JSON files
-            _allFilesAreJson = true;
-
-            foreach (string y in _fileList)
-            {
-                if (!y.EndsWith(".json"))
-                {
-                    _allFilesAreJson = false;
-                    break;
-                }
-            }
-
-            if (_allFilesAreJson)
-            {
-                FeatureBox ab = new FeatureBox();
-                ab.ShowDialog(this);
-
-                if (FeatureBox.SelectedAction == FeatureAction.Calculate)
+                else
                 {
                     CalculateSums();
                 }
-                else if (FeatureBox.SelectedAction == FeatureAction.AnalyzeJSON)
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch (Exception ex)
+            {
+                FluentMessageBox.Show(this, ex.Message, "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            finally
+            {
+                if (!sourceReleased)
                 {
-                    Clear();
-                    _fileSummaries = AnalyzeJsonFiles();
-                    _fileSummaries.RemoveAll(x => !File.Exists(x.File));
-
-                    if (_fileSummaries != null)
-                    {
-                        if (_fileSummaries.Count > 0)
-                        {
-                            CalculateSums(true);
-                        }
-                        else
-                        {
-                            TopMostMessageBox.Show(Options.TranslationList["invalidPath"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
+                    if (ReferenceEquals(tokenSource, scanSource))
+                        tokenSource = null;
+                    scanSource.Dispose();
+                    SetEnumerationUi(false);
                 }
-                else if (FeatureBox.SelectedAction == FeatureAction.ListJSON)
+
+                _processingInput = false;
+                if (_closeAfterHashing && tokenSource == null)
                 {
-                    List<SumResult> listing = new List<SumResult>();
-
-                    foreach (string s in _fileList)
-                    {
-                        try
-                        {
-                            listing.AddRange(JsonConvert.DeserializeObject<List<SumResult>>(File.ReadAllText(s)));
-                        }
-                        catch { continue; }
-                    }
-
-                    if (listing.Count > 0)
-                    {
-                        SumResult.Sums.AddRange(listing);
-                        lblCalculating.Visible = false;
-                        List<TreeNode> roots = new List<TreeNode>();
-
-                        for (int i = 0; i < listing.Count; i++)
-                        {
-                            TreeNode rootNode = new TreeNode(listing[i].File);
-
-                            rootNode.ForeColor = Options.ForegroundColor;
-                            rootNode.Tag = Options.ThemeFlag;
-
-                            if (!string.IsNullOrEmpty(listing[i].MD5)) rootNode.Nodes.Add("MD5: " + listing[i].MD5);
-                            if (!string.IsNullOrEmpty(listing[i].SHA1)) rootNode.Nodes.Add("SHA1: " + listing[i].SHA1);
-                            if (!string.IsNullOrEmpty(listing[i].SHA256)) rootNode.Nodes.Add("SHA256: " + listing[i].SHA256);
-                            if (!string.IsNullOrEmpty(listing[i].SHA384)) rootNode.Nodes.Add("SHA384: " + listing[i].SHA384);
-                            if (!string.IsNullOrEmpty(listing[i].SHA512)) rootNode.Nodes.Add("SHA512: " + listing[i].SHA512);
-                            if (!string.IsNullOrEmpty(listing[i].CRC32)) rootNode.Nodes.Add("CRC32: " + listing[i].CRC32);
-                            if (!string.IsNullOrEmpty(listing[i].RIPEMD160)) rootNode.Nodes.Add("RIPEMD160: " + listing[i].RIPEMD160);
-                            if (!string.IsNullOrEmpty(listing[i].SHA3_256)) rootNode.Nodes.Add("SHA3-256: " + listing[i].SHA3_256);
-                            if (!string.IsNullOrEmpty(listing[i].SHA3_384)) rootNode.Nodes.Add("SHA3-384: " + listing[i].SHA3_384);
-                            if (!string.IsNullOrEmpty(listing[i].SHA3_512)) rootNode.Nodes.Add("SHA3-512: " + listing[i].SHA3_512);
-
-                            roots.Add(rootNode);
-                        }
-
-                        SumView.Nodes.AddRange(roots.ToArray());
-                        SumView.ExpandAll();
-                        _allSums = SumView.Nodes.Cast<TreeNode>().ToArray();
-                    }
+                    _closeAfterHashing = false;
+                    Close();
                 }
+                else if (tokenSource == null)
+                {
+                    ProcessPendingShellRequests();
+                }
+            }
+        }
+
+        private void SetEnumerationUi(bool scanning)
+        {
+            btnUpdate.Enabled = !scanning;
+            btnOptions.Enabled = !scanning;
+            btnSaveJson.Enabled = !scanning;
+            btnBrowse.Enabled = !scanning;
+            txtPath.Enabled = !scanning;
+            SumView.Enabled = !scanning;
+            AllowDrop = !scanning;
+            btnCancelHashing.Visible = scanning;
+            btnCancelHashing.Enabled = true;
+            btnCancelHashing.Text = Options.TranslationList["btnCancelHashing"].ToString();
+
+            if (scanning)
+            {
+                lblCalculating.Text = Options.TranslationList["lblScanningFiles"].ToString();
+                lblCalculating.Visible = true;
             }
             else
             {
-                CalculateSums();
+                lblCalculating.Text = Options.TranslationList["lblCalculating"].ToString();
+                lblCalculating.Visible = SumView.Nodes.Count == 0;
+            }
+        }
+
+        private static FileEnumerationResult EnumerateInputFiles(string[] inputs, CancellationToken cancellationToken)
+        {
+            FileEnumerationResult result = new FileEnumerationResult();
+            Stack<string> pendingDirectories = new Stack<string>();
+            HashSet<string> visitedDirectories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (string input in inputs)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (string.IsNullOrWhiteSpace(input))
+                    continue;
+
+                try
+                {
+                    FileAttributes attributes = File.GetAttributes(input);
+                    if ((attributes & FileAttributes.Directory) == 0)
+                    {
+                        result.Files.Add(input);
+                        continue;
+                    }
+
+                    if ((attributes & FileAttributes.ReparsePoint) != 0)
+                    {
+                        result.SkippedReparseDirectories++;
+                        continue;
+                    }
+
+                    string fullPath = Path.GetFullPath(input);
+                    if (visitedDirectories.Add(fullPath))
+                        pendingDirectories.Push(fullPath);
+                }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    result.AddError(input, ex);
+                }
             }
 
-            this.AllowDrop = true;
+            while (pendingDirectories.Count > 0)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                string directory = pendingDirectories.Pop();
+
+                try
+                {
+                    foreach (string file in Directory.EnumerateFiles(directory, "*", SearchOption.TopDirectoryOnly))
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        result.Files.Add(file);
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    result.AddError(directory, ex);
+                }
+
+                try
+                {
+                    foreach (string subDirectory in Directory.EnumerateDirectories(directory, "*", SearchOption.TopDirectoryOnly))
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        try
+                        {
+                            FileAttributes attributes = File.GetAttributes(subDirectory);
+                            if ((attributes & FileAttributes.ReparsePoint) != 0)
+                            {
+                                result.SkippedReparseDirectories++;
+                                continue;
+                            }
+
+                            string fullPath = Path.GetFullPath(subDirectory);
+                            if (visitedDirectories.Add(fullPath))
+                                pendingDirectories.Push(fullPath);
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            throw;
+                        }
+                        catch (Exception ex)
+                        {
+                            result.AddError(subDirectory, ex);
+                        }
+                    }
+                }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    result.AddError(directory, ex);
+                }
+            }
+
+            return result;
         }
 
         private void CalculateSums(bool analyzeJson = false)
         {
-            this.Text = "Hashing";
+            if (!analyzeJson && !Options.HasActiveHash(Options.CurrentOptions.HashOptions))
+            {
+                FluentMessageBox.Show(this, Options.TranslationList["noActiveHash"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            Text = "Hashing";
 
             tokenSource = new CancellationTokenSource();
-            CancellationToken ct = tokenSource.Token;
+            CancellationToken cancellationToken = tokenSource.Token;
+            List<string> hashErrors = new List<string>();
+            HashOptions activeHashOptions = CloneHashOptions(Options.CurrentOptions.HashOptions);
+            Dictionary<string, List<FileSummary>> expectedSummariesByFile = analyzeJson
+                ? BuildExpectedSummariesByFile(_fileSummaries)
+                : new Dictionary<string, List<FileSummary>>(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, HashOptions> hashOptionsByFile = analyzeJson
+                ? BuildVerificationHashOptions(expectedSummariesByFile, activeHashOptions)
+                : new Dictionary<string, HashOptions>(StringComparer.OrdinalIgnoreCase);
+            HashSet<string> verifiedFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            MoonTreeNode[] computedIdenticalNodes = new MoonTreeNode[0];
 
             Task.Factory.StartNew(() =>
             {
@@ -878,259 +1485,364 @@ namespace Hashing
                     btnUpdate.Enabled = false;
                     btnOptions.Enabled = false;
                     btnSaveJson.Enabled = false;
-                    btnFindIdenticals.Enabled = false;
-                    btnCompare.Enabled = false;
                     btnBrowse.Enabled = false;
                     txtPath.Enabled = false;
+                    SumView.Enabled = false;
+                    AllowDrop = false;
                     lblCalculating.Text = Options.TranslationList["lblCalculatingNow"].ToString();
                     lblCalculating.Visible = true;
                     btnCancelHashing.Visible = true;
-                }
-                );
+                });
 
                 _fileCounter = 0;
                 _timer.Reset();
                 _timer.Start();
                 _totalSize = 0;
+                Stopwatch progressTimer = Stopwatch.StartNew();
 
-                foreach (string f in _fileList)
+                for (int fileIndex = 0; fileIndex < _fileList.Count; fileIndex++)
                 {
-                    ct.ThrowIfCancellationRequested();
-
-                    if (File.Exists(f))
+                    cancellationToken.ThrowIfCancellationRequested();
+                    string file = _fileList[fileIndex];
+                    _fileCounter++;
+                    if (progressTimer.ElapsedMilliseconds >= 100 || fileIndex == 0)
                     {
-                        _fileCounter++;
+                        string fileName = Path.GetFileName(file);
+                        string fileExtension = Path.GetExtension(file);
+                        if (fileName.Length > 28)
+                            fileName = fileName.Substring(0, 27) + " ... " + fileExtension;
 
-                        _tempFileName = Path.GetFileName(f);
-                        _tempFileExtension = Path.GetExtension(f);
-                        if (_tempFileName.Length > 28) _tempFileName = _tempFileName.Substring(0, 27) + " ... " + _tempFileExtension;
-
+                        int currentFile = _fileCounter;
+                        string progressText = string.Format("{0}/{1} - '{2}'", currentFile, _fileList.Count, fileName);
                         lblCalculating.Invoke((MethodInvoker)delegate
                         {
-                            lblCalculating.Text = string.Format("{0}/{1} - '{2}'", _fileCounter, _fileList.Count, _tempFileName);
+                            lblCalculating.Text = progressText;
                             lblCalculating.Visible = true;
                             btnCancelHashing.Visible = true;
                         });
-
-                        _fileInfo = new FileInfo(f);
-                        _totalSize += _fileInfo.Length;
-
-                        SumResult.Sums.Add(Utilities.CalculateSums(f));
+                        progressTimer.Restart();
                     }
-                    else { continue; }
+
+                    try
+                    {
+                        _totalSize += new FileInfo(file).Length;
+
+                        HashOptions fileHashOptions;
+                        string normalizedFile = analyzeJson ? NormalizeVerificationPath(file) : file;
+                        if (!analyzeJson || !hashOptionsByFile.TryGetValue(normalizedFile, out fileHashOptions))
+                            fileHashOptions = activeHashOptions;
+
+                        SumResult result = Utilities.CalculateSums(file, cancellationToken, fileHashOptions);
+                        if (result != null)
+                        {
+                            if (analyzeJson)
+                            {
+                                List<FileSummary> expectedSummaries;
+                                if (expectedSummariesByFile.TryGetValue(normalizedFile, out expectedSummaries) &&
+                                    VerifyExpectedSummaries(result, expectedSummaries))
+                                    verifiedFiles.Add(result.File);
+
+                                ClearUnselectedHashes(result, activeHashOptions);
+                            }
+
+                            SumResult.Sums.Add(result);
+                        }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        hashErrors.Add(FormatFileOperationError(Options.TranslationList["operationReadHash"].ToString(), file, ex));
+                    }
                 }
 
                 _timer.Stop();
-
-            }, tokenSource.Token
-            )
-            .ContinueWith((prevTask) =>
+                cancellationToken.ThrowIfCancellationRequested();
+                computedIdenticalNodes = BuildIdenticalNodes(SumResult.Sums.ToArray(), cancellationToken, hashErrors);
+            }, cancellationToken).ContinueWith(previousTask =>
             {
-                // if cancelled: reset UI
-                if (tokenSource.IsCancellationRequested)
-                {
-                    lblCalculating.Invoke((MethodInvoker)delegate
-                    {
-                        _timer.Stop();
-                        btnCancelHashing.Visible = false;
-                        btnCancelHashing.Enabled = true;
-                        btnCancelHashing.Text = Options.TranslationList["btnCancelHashing"].ToString();
-                    });
-                }
+                _timer.Stop();
 
-                if ((SumResult.Sums != null) && (SumResult.Sums.Count > 0))
+                if (previousTask.IsFaulted && previousTask.Exception != null)
+                    hashErrors.Add(previousTask.Exception.GetBaseException().Message);
+
+                bool wasCancelled = tokenSource != null && tokenSource.IsCancellationRequested;
+                _analyzedFiles = analyzeJson ? verifiedFiles.ToList() : null;
+
+                SumView.BeginUpdate();
+                try
                 {
                     SumView.Nodes.Clear();
+                    _allSums = null;
 
-                    TreeNode rootNode = null;
-                    _analyzedFiles = new List<string>();
-                    List<TreeNode> tmpNodes = new List<TreeNode>();
-
-                    if (analyzeJson)
+                    if (SumResult.Sums != null && SumResult.Sums.Count > 0)
                     {
-                        for (int i = 0; i < SumResult.Sums.Count; i++)
+                        List<MoonTreeNode> nodes = new List<MoonTreeNode>(SumResult.Sums.Count);
+                        if (analyzeJson)
                         {
-                            rootNode = new TreeNode(SumResult.Sums[i].File);
-
-                            rootNode.ForeColor = Options.ForegroundColor;
-                            rootNode.Tag = Options.ThemeFlag;
-
-                            if (Options.CurrentOptions.HashOptions.MD5)
+                            for (int i = 0; i < SumResult.Sums.Count; i++)
                             {
-                                rootNode.Nodes.Add("MD5: " + SumResult.Sums[i].MD5);
-                                if (SumResult.Sums[i].MD5 == _fileSummaries[i].MD5) _analyzedFiles.Add(_fileSummaries[i].File);
+                                SumResult sum = SumResult.Sums[i];
+                                MoonTreeNode rootNode = new MoonTreeNode(sum.File)
+                                {
+                                    ForeColor = Fluent.AccentText,
+                                    Tag = new FileNodeInfo(sum, Options.ThemeFlag)
+                                };
+
+                                if (Options.CurrentOptions.HashOptions.MD5)
+                                {
+                                    rootNode.Nodes.Add("MD5: " + sum.MD5);
+                                }
+
+                                if (Options.CurrentOptions.HashOptions.SHA1)
+                                {
+                                    rootNode.Nodes.Add("SHA1: " + sum.SHA1);
+                                }
+
+                                if (Options.CurrentOptions.HashOptions.SHA256)
+                                {
+                                    rootNode.Nodes.Add("SHA256: " + sum.SHA256);
+                                }
+
+                                if (Options.CurrentOptions.HashOptions.SHA384)
+                                {
+                                    rootNode.Nodes.Add("SHA384: " + sum.SHA384);
+                                }
+
+                                if (Options.CurrentOptions.HashOptions.SHA512)
+                                {
+                                    rootNode.Nodes.Add("SHA512: " + sum.SHA512);
+                                }
+
+                                if (Options.CurrentOptions.HashOptions.CRC32)
+                                {
+                                    rootNode.Nodes.Add("CRC32: " + sum.CRC32);
+                                }
+
+                                if (Options.CurrentOptions.HashOptions.RIPEMD160)
+                                {
+                                    rootNode.Nodes.Add("RIPEMD160: " + sum.RIPEMD160);
+                                }
+
+                                if (Options.CurrentOptions.HashOptions.SHA3_256)
+                                {
+                                    rootNode.Nodes.Add("SHA3-256: " + sum.SHA3_256);
+                                }
+
+                                if (Options.CurrentOptions.HashOptions.SHA3_384)
+                                {
+                                    rootNode.Nodes.Add("SHA3-384: " + sum.SHA3_384);
+                                }
+
+                                if (Options.CurrentOptions.HashOptions.SHA3_512)
+                                {
+                                    rootNode.Nodes.Add("SHA3-512: " + sum.SHA3_512);
+                                }
+
+                                nodes.Add(rootNode);
                             }
-
-                            if (Options.CurrentOptions.HashOptions.SHA1)
-                            {
-                                rootNode.Nodes.Add("SHA1: " + SumResult.Sums[i].SHA1);
-                                if (SumResult.Sums[i].SHA1 == _fileSummaries[i].SHA1) _analyzedFiles.Add(_fileSummaries[i].File);
-                            }
-
-                            if (Options.CurrentOptions.HashOptions.SHA256)
-                            {
-
-                                rootNode.Nodes.Add("SHA256: " + SumResult.Sums[i].SHA256);
-                                if (SumResult.Sums[i].SHA256 == _fileSummaries[i].SHA256) _analyzedFiles.Add(_fileSummaries[i].File);
-                            }
-
-                            if (Options.CurrentOptions.HashOptions.SHA384)
-                            {
-                                rootNode.Nodes.Add("SHA384: " + SumResult.Sums[i].SHA384);
-                                if (SumResult.Sums[i].SHA384 == _fileSummaries[i].SHA384) _analyzedFiles.Add(_fileSummaries[i].File);
-                            }
-
-                            if (Options.CurrentOptions.HashOptions.SHA512)
-                            {
-                                rootNode.Nodes.Add("SHA512: " + SumResult.Sums[i].SHA512);
-                                if (SumResult.Sums[i].SHA512 == _fileSummaries[i].SHA512) _analyzedFiles.Add(_fileSummaries[i].File);
-                            }
-
-                            if (Options.CurrentOptions.HashOptions.CRC32)
-                            {
-                                rootNode.Nodes.Add("CRC32: " + SumResult.Sums[i].CRC32);
-                                if (SumResult.Sums[i].CRC32 == _fileSummaries[i].CRC32) _analyzedFiles.Add(_fileSummaries[i].File);
-                            }
-
-                            if (Options.CurrentOptions.HashOptions.RIPEMD160)
-                            {
-                                rootNode.Nodes.Add("RIPEMD160: " + SumResult.Sums[i].RIPEMD160);
-                                if (SumResult.Sums[i].RIPEMD160 == _fileSummaries[i].RIPEMD160) _analyzedFiles.Add(_fileSummaries[i].File);
-                            }
-
-                            if (Options.CurrentOptions.HashOptions.SHA3_256)
-                            {
-                                rootNode.Nodes.Add("SHA3-256: " + SumResult.Sums[i].SHA3_256);
-                                if (SumResult.Sums[i].SHA3_256 == _fileSummaries[i].SHA3_256) _analyzedFiles.Add(_fileSummaries[i].File);
-                            }
-
-                            if (Options.CurrentOptions.HashOptions.SHA3_384)
-                            {
-                                rootNode.Nodes.Add("SHA3-384: " + SumResult.Sums[i].SHA3_384);
-                                if (SumResult.Sums[i].SHA3_384 == _fileSummaries[i].SHA3_384) _analyzedFiles.Add(_fileSummaries[i].File);
-                            }
-
-                            if (Options.CurrentOptions.HashOptions.SHA3_512)
-                            {
-                                rootNode.Nodes.Add("SHA3-512: " + SumResult.Sums[i].SHA3_512);
-                                if (SumResult.Sums[i].SHA3_512 == _fileSummaries[i].SHA3_512) _analyzedFiles.Add(_fileSummaries[i].File);
-                            }
-
-                            tmpNodes.Add(rootNode);
                         }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < SumResult.Sums.Count; i++)
+                        else
                         {
-                            rootNode = new TreeNode(SumResult.Sums[i].File);
+                            foreach (SumResult sum in SumResult.Sums)
+                            {
+                                MoonTreeNode rootNode = new MoonTreeNode(sum.File)
+                                {
+                                    ForeColor = Fluent.AccentText,
+                                    Tag = new FileNodeInfo(sum, Options.ThemeFlag)
+                                };
 
-                            rootNode.ForeColor = Options.ForegroundColor;
-                            rootNode.Tag = Options.ThemeFlag;
+                                if (Options.CurrentOptions.HashOptions.MD5) rootNode.Nodes.Add("MD5: " + sum.MD5);
+                                if (Options.CurrentOptions.HashOptions.SHA1) rootNode.Nodes.Add("SHA1: " + sum.SHA1);
+                                if (Options.CurrentOptions.HashOptions.SHA256) rootNode.Nodes.Add("SHA256: " + sum.SHA256);
+                                if (Options.CurrentOptions.HashOptions.SHA384) rootNode.Nodes.Add("SHA384: " + sum.SHA384);
+                                if (Options.CurrentOptions.HashOptions.SHA512) rootNode.Nodes.Add("SHA512: " + sum.SHA512);
+                                if (Options.CurrentOptions.HashOptions.CRC32) rootNode.Nodes.Add("CRC32: " + sum.CRC32);
+                                if (Options.CurrentOptions.HashOptions.RIPEMD160) rootNode.Nodes.Add("RIPEMD160: " + sum.RIPEMD160);
+                                if (Options.CurrentOptions.HashOptions.SHA3_256) rootNode.Nodes.Add("SHA3-256: " + sum.SHA3_256);
+                                if (Options.CurrentOptions.HashOptions.SHA3_384) rootNode.Nodes.Add("SHA3-384: " + sum.SHA3_384);
+                                if (Options.CurrentOptions.HashOptions.SHA3_512) rootNode.Nodes.Add("SHA3-512: " + sum.SHA3_512);
 
-                            if (Options.CurrentOptions.HashOptions.MD5) rootNode.Nodes.Add("MD5: " + SumResult.Sums[i].MD5);
-                            if (Options.CurrentOptions.HashOptions.SHA1) rootNode.Nodes.Add("SHA1: " + SumResult.Sums[i].SHA1);
-                            if (Options.CurrentOptions.HashOptions.SHA256) rootNode.Nodes.Add("SHA256: " + SumResult.Sums[i].SHA256);
-                            if (Options.CurrentOptions.HashOptions.SHA384) rootNode.Nodes.Add("SHA384: " + SumResult.Sums[i].SHA384);
-                            if (Options.CurrentOptions.HashOptions.SHA512) rootNode.Nodes.Add("SHA512: " + SumResult.Sums[i].SHA512);
-                            if (Options.CurrentOptions.HashOptions.CRC32) rootNode.Nodes.Add("CRC32: " + SumResult.Sums[i].CRC32);
-                            if (Options.CurrentOptions.HashOptions.RIPEMD160) rootNode.Nodes.Add("RIPEMD160: " + SumResult.Sums[i].RIPEMD160);
-                            if (Options.CurrentOptions.HashOptions.SHA3_256) rootNode.Nodes.Add("SHA3-256: " + SumResult.Sums[i].SHA3_256);
-                            if (Options.CurrentOptions.HashOptions.SHA3_384) rootNode.Nodes.Add("SHA3-384: " + SumResult.Sums[i].SHA3_384);
-                            if (Options.CurrentOptions.HashOptions.SHA3_512) rootNode.Nodes.Add("SHA3-512: " + SumResult.Sums[i].SHA3_512);
-
-                            tmpNodes.Add(rootNode);
+                                nodes.Add(rootNode);
+                            }
                         }
-                    }
 
-                    SumView.Invoke((MethodInvoker)delegate
-                    {
-                        SumView.Nodes.AddRange(tmpNodes.ToArray());
+                        SumView.Nodes.AddRange(nodes.ToArray());
                         SumView.ExpandAll();
-
-                    });
-                    _allSums = SumView.Nodes.Cast<TreeNode>().ToArray();
-
-                    lblCalculating.Invoke((MethodInvoker)delegate
-                    {
-                        lblCalculating.Text = Options.TranslationList["lblCalculatingNow"].ToString();
-                        lblCalculating.Visible = false;
-                        btnCancelHashing.Visible = false;
-                        btnOptions.Enabled = true;
-                        btnUpdate.Enabled = true;
-                        btnSaveJson.Enabled = true;
-                        btnFindIdenticals.Enabled = true;
-                        btnCompare.Enabled = true;
-                        btnBrowse.Enabled = true;
-                        txtPath.Enabled = true;
-
-                        this.Text = string.Format("Hashing - {0}m : {1}s / {2} {3} ({4})", _timer.Elapsed.Minutes, _timer.Elapsed.Seconds, _fileCounter, Options.TranslationList["filesWord"].ToString(), ByteSize.FromBytes(_totalSize));
-                    });
-
-                    if (SumView.Nodes.Count > 0) SumView.Nodes[0].EnsureVisible();
-
-                    // opening VirusTotal, after enabling SHA256 hash
-                    if (_tempIndex > -1)
-                    {
-                        Utilities.SearchVirusTotal(SumResult.Sums[_tempIndex].SHA256);
-                        _tempIndex = -1;
+                        _allSums = SumView.Nodes.Cast<MoonTreeNode>().ToArray();
                     }
+                    _identicalSums = wasCancelled ? new MoonTreeNode[0] : computedIdenticalNodes;
+                    _groupedSums = null;
                 }
-
-
-                // if JSON analyzation is enabled, show results
-                if (analyzeJson)
+                finally
                 {
-                    if (_analyzedFiles.Distinct().Count() > 0)
+                    SumView.EndUpdate();
+                }
+
+                FilterTable();
+
+                lblCalculating.Text = Options.TranslationList["lblCalculatingNow"].ToString();
+                lblCalculating.Visible = false;
+                btnCancelHashing.Visible = false;
+                btnCancelHashing.Enabled = true;
+                btnCancelHashing.Text = Options.TranslationList["btnCancelHashing"].ToString();
+                btnOptions.Enabled = true;
+                btnUpdate.Enabled = true;
+                btnSaveJson.Enabled = true;
+                btnBrowse.Enabled = true;
+                txtPath.Enabled = true;
+                SumView.Enabled = true;
+                AllowDrop = true;
+
+                if (SumView.Nodes.Count > 0)
+                {
+                    SumView.Nodes[0].EnsureVisible();
+                    Text = string.Format("Hashing - {0}m : {1}s / {2} {3} ({4})", _timer.Elapsed.Minutes, _timer.Elapsed.Seconds, _fileCounter, Options.TranslationList["filesWord"].ToString(), ByteSize.FromBytes(_totalSize));
+                }
+                else
+                {
+                    Text = "Hashing";
+                }
+
+                if (!wasCancelled && _tempIndex > -1 && _tempIndex < SumResult.Sums.Count)
+                {
+                    Utilities.SearchVirusTotal(SumResult.Sums[_tempIndex].SHA256);
+                    _tempIndex = -1;
+                }
+
+                if (analyzeJson && !wasCancelled && !_closeAfterHashing)
+                {
+                    if (_analyzedFiles != null && _analyzedFiles.Count > 0)
                     {
-                        AnalyzedForm f = new AnalyzedForm(_analyzedFiles.Distinct());
-                        f.ShowDialog();
+                        using (AnalyzedForm form = new AnalyzedForm(_analyzedFiles.Distinct()))
+                            form.ShowDialog(this);
                     }
-                    else
+                    else if (hashErrors.Count == 0)
                     {
-                        TopMostMessageBox.Show(Options.TranslationList["corruptedJSON"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        FluentMessageBox.ShowTopMost(this, Options.TranslationList["corruptedJSON"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
-            }
-            );
+
+                if (hashErrors.Count > 0 && !_closeAfterHashing)
+                {
+                    string details = string.Join(Environment.NewLine, hashErrors.Take(10));
+                    if (hashErrors.Count > 10)
+                        details += Environment.NewLine + Options.TranslationList["fileOperationErrorsMore"].ToString()
+                            .Replace("{COUNT}", (hashErrors.Count - 10).ToString(CultureInfo.InvariantCulture));
+
+                    FluentMessageBox.Show(this, details, Options.TranslationList["fileOperationErrorsTitle"].ToString(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+
+                CancellationTokenSource completedSource = tokenSource;
+                tokenSource = null;
+                if (completedSource != null)
+                    completedSource.Dispose();
+
+                if (_closeAfterHashing)
+                {
+                    _closeAfterHashing = false;
+                    Close();
+                }
+                else
+                {
+                    ProcessPendingShellRequests();
+                }
+            }, CancellationToken.None, TaskContinuationOptions.None, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         internal void FixColor()
         {
-            foreach (TreeNode node in SumView.Nodes)
+            foreach (MoonTreeNode node in SumView.Nodes)
             {
-                if ((string)node.Tag == Options.ThemeFlag)
-                {
-                    node.ForeColor = Options.ForegroundColor;
-                }
+                FileNodeInfo fileInfo = node.Tag as FileNodeInfo;
+                if (fileInfo != null && string.Equals(fileInfo.ThemeFlag, Options.ThemeFlag, StringComparison.Ordinal))
+                    node.ForeColor = Fluent.AccentText;
             }
+
+            CheckMenuItemsByHashes();
+            Fluent.StyleMenu(helperMenu);
+            Fluent.StyleMenu(trayMenu);
+            Fluent.StyleMenu(_toolsMenu);
         }
 
         private void MainForm_DragDrop(object sender, DragEventArgs e)
         {
-            if (!Options.CurrentOptions.HashOptions.MD5 && !Options.CurrentOptions.HashOptions.SHA1 && !Options.CurrentOptions.HashOptions.SHA256 && !Options.CurrentOptions.HashOptions.SHA384 && !Options.CurrentOptions.HashOptions.SHA512 && !Options.CurrentOptions.HashOptions.SHA3_512 && !Options.CurrentOptions.HashOptions.CRC32 && !Options.CurrentOptions.HashOptions.SHA3_256 && !Options.CurrentOptions.HashOptions.SHA3_384 && !Options.CurrentOptions.HashOptions.SHA3_512)
-            {
-                MessageBox.Show(Options.TranslationList["noActiveHash"].ToString(), "Hashing", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                DetectFiles((string[])e.Data.GetData(DataFormats.FileDrop, false));
-            }
+            if (!AllowDrop)
+                return;
+
+            DetectFiles((string[])e.Data.GetData(DataFormats.FileDrop, false));
         }
 
         private void RestoreWindowState()
         {
-            this.WindowState = Options.CurrentOptions.WindowState;
-            this.Size = Options.CurrentOptions.WindowSize;
+            Screen[] screens = Screen.AllScreens;
+            Screen primary = Screen.PrimaryScreen ?? screens[0];
+            Rectangle primaryArea = primary.WorkingArea;
 
-            if (Options.CurrentOptions.WindowLocation != null)
+            Size requestedSize = Options.CurrentOptions.WindowSize;
+            if (requestedSize.Width < 320 || requestedSize.Height < 240)
+                requestedSize = new Size(960, 700);
+            Rectangle requestedBounds;
+            if (Options.CurrentOptions.WindowLocation.HasValue)
+                requestedBounds = new Rectangle(Options.CurrentOptions.WindowLocation.Value, requestedSize);
+            else
+                requestedBounds = CenterBounds(primaryArea, requestedSize);
+
+            Screen target = null;
+            foreach (Screen screen in screens)
             {
-                this.Location = (Point)Options.CurrentOptions.WindowLocation;
+                if (IsWindowVisibleOnScreen(requestedBounds, screen.WorkingArea))
+                {
+                    target = screen;
+                    break;
+                }
+            }
+
+            if (target == null)
+            {
+                target = primary;
+                requestedBounds = CenterBounds(target.WorkingArea, requestedSize);
             }
             else
             {
-                this.CenterToScreen();
+                requestedBounds = FitBounds(requestedBounds, target.WorkingArea);
             }
+
+            StartPosition = FormStartPosition.Manual;
+            Bounds = requestedBounds;
+            WindowState = Options.CurrentOptions.WindowState == FormWindowState.Maximized
+                ? FormWindowState.Maximized
+                : FormWindowState.Normal;
+        }
+
+        private static bool IsWindowVisibleOnScreen(Rectangle bounds, Rectangle workingArea)
+        {
+            Rectangle intersection = Rectangle.Intersect(bounds, workingArea);
+            int minimumWidth = Math.Min(160, bounds.Width);
+            int minimumHeight = Math.Min(72, bounds.Height);
+            return intersection.Width >= minimumWidth && intersection.Height >= minimumHeight;
+        }
+
+        private static Rectangle CenterBounds(Rectangle workingArea, Size size)
+        {
+            size.Width = Math.Min(size.Width, workingArea.Width);
+            size.Height = Math.Min(size.Height, workingArea.Height);
+            return new Rectangle(
+                workingArea.Left + Math.Max(0, (workingArea.Width - size.Width) / 2),
+                workingArea.Top + Math.Max(0, (workingArea.Height - size.Height) / 2),
+                size.Width,
+                size.Height);
+        }
+
+        private static Rectangle FitBounds(Rectangle bounds, Rectangle workingArea)
+        {
+            int width = Math.Min(bounds.Width, workingArea.Width);
+            int height = Math.Min(bounds.Height, workingArea.Height);
+            int left = Math.Min(Math.Max(bounds.Left, workingArea.Left), workingArea.Right - width);
+            int top = Math.Min(Math.Max(bounds.Top, workingArea.Top), workingArea.Bottom - height);
+            return new Rectangle(left, top, width, height);
         }
 
         private void SaveWindowState()
@@ -1149,9 +1861,177 @@ namespace Hashing
             }
         }
 
+        protected override void WndProc(ref Message message)
+        {
+            base.WndProc(ref message);
+
+            if (message.Msg == 0x001A && Options.CurrentOptions.Appearance == AppearanceMode.System)
+            {
+                Options.InitializePalette();
+                Options.ApplyTheme(this);
+                FixColor();
+            }
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
+            LayoutModernShell();
+            SetSearchWatermark();
+        }
 
+        private void topPanel_Resize(object sender, EventArgs e)
+        {
+            LayoutModernShell();
+        }
+
+        private void BuildModernLayout()
+        {
+            topPanel.BorderStyle = BorderStyle.None;
+            topPanel.Height = Fluent.Scale(topPanel, 68);
+            topPanel.Padding = Padding.Empty;
+            botPanel.BorderStyle = BorderStyle.None;
+            botPanel.Padding = new Padding(16, 10, 16, 16);
+
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            label24.Font = Fluent.UiSemibold(16f);
+            lblversion.Font = Fluent.Ui(9f);
+            lblCalculating.Font = Fluent.Ui(12f);
+            lblCalculating.TextAlign = ContentAlignment.MiddleCenter;
+            lblCalculating.BackColor = Fluent.Surface;
+            lblCalculating.HintText = Options.TranslationList["lblCalculating"].ToString();
+            lblCalculating.Subtitle = Options.TranslationList["dropHintSubtitle"].ToString();
+
+            txtPath.Font = Fluent.Ui(10f);
+            txtPath.BorderStyle = BorderStyle.None;
+            txtPath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+
+            btnBrowse.Tag = "primary";
+            btnBrowse.Text = Options.TranslationList["btnBrowse"].ToString();
+            btnBrowse.Glyph = Fluent.Glyphs.Add;
+            btnCancelHashing.Tag = "primary";
+            btnCancelHashing.Glyph = Fluent.Glyphs.Cancel;
+
+            _btnTools.Font = Fluent.Ui(9f);
+            btnSaveJson.Font = Fluent.Ui(9f);
+            btnSaveJson.Text = Options.TranslationList["btnSaveJson"].ToString();
+            btnSaveJson.Glyph = Fluent.Glyphs.Download;
+            btnSaveJson.Variant = ButtonVariant.Primary;
+            btnSaveJson.DialogResult = DialogResult.None;
+            btnUpdate.Font = Fluent.Ui(9f);
+            btnUpdate.Glyph = Fluent.Glyphs.Refresh;
+            btnOptions.Font = Fluent.Ui(9f);
+            btnOptions.Glyph = Fluent.Glyphs.Settings;
+            btnBrowse.Font = Fluent.UiSemibold(9f);
+
+            SumView.BorderStyle = BorderStyle.None;
+            SumView.Dock = DockStyle.Fill;
+            lblCalculating.Dock = DockStyle.Fill;
+            SumView.SendToBack();
+            lblCalculating.BringToFront();
+            btnCancelHashing.BringToFront();
+
+            LayoutModernShell();
+        }
+
+        private void WrapPathInput()
+        {
+            Control parent = txtPath.Parent;
+            if (parent == null) return;
+
+            Rectangle bounds = txtPath.Bounds;
+            AnchorStyles anchor = txtPath.Anchor;
+            parent.Controls.Remove(txtPath);
+
+            _pathInput = new InputBox
+            {
+                Name = "pathInput",
+                Location = bounds.Location,
+                Size = bounds.Size,
+                Anchor = anchor
+            };
+            _pathInput.SetLeading(new IconLabel
+            {
+                Glyph = Fluent.Glyphs.Search,
+                Fallback = "⌕",
+                IconSize = 12f,
+                GlyphColor = Fluent.TextSecondary
+            });
+            _pathInput.SetEditor(txtPath);
+
+            parent.Controls.Remove(btnBrowse);
+            btnBrowse.Anchor = AnchorStyles.None;
+            btnBrowse.Margin = Padding.Empty;
+            _pathInput.AddTrailing(btnBrowse);
+
+            txtPath.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            parent.Controls.Add(_pathInput);
+            _pathInput.BringToFront();
+            LayoutModernShell();
+            pictureBox2.Visible = false;
+        }
+
+        private void LayoutModernShell()
+        {
+            if (topPanel == null || topPanel.IsDisposed)
+                return;
+
+            int width = topPanel.ClientSize.Width;
+            int rightMargin = Fluent.Scale(this, 18);
+            int gap = Fluent.Scale(this, 6);
+            int y = Fluent.Scale(this, 16);
+            int height = Fluent.Scale(this, 36);
+
+            int totalWidth = gap * (_modernButtons.Length - 1);
+            for (int i = 0; i < _modernButtonWidths.Length; i++)
+                totalWidth += Fluent.Scale(this, _modernButtonWidths[i]);
+
+            int actionX = Math.Max(0, width - rightMargin - totalWidth);
+            int x = actionX;
+            for (int i = 0; i < _modernButtons.Length; i++)
+            {
+                int buttonWidth = Fluent.Scale(this, _modernButtonWidths[i]);
+                _modernButtons[i].SetBounds(x, y, buttonWidth, height);
+                _modernButtons[i].Anchor = AnchorStyles.Top | AnchorStyles.Right;
+                x += buttonWidth + gap;
+            }
+
+            pictureBox1.SetBounds(Fluent.Scale(this, 18), Fluent.Scale(this, 12),
+                Fluent.Scale(this, 42), Fluent.Scale(this, 42));
+            label24.SetBounds(Fluent.Scale(this, 72), Fluent.Scale(this, 8),
+                Fluent.Scale(this, 135), Fluent.Scale(this, 26));
+            lblversion.SetBounds(Fluent.Scale(this, 74), Fluent.Scale(this, 36),
+                Fluent.Scale(this, 140), Fluent.Scale(this, 18));
+
+            pictureBox2.Visible = false;
+
+            int searchLeft = Fluent.Scale(this, 220);
+            int searchRight = actionX - gap;
+            int searchWidth = Math.Max(Fluent.Scale(this, 150), searchRight - searchLeft);
+            if (_pathInput != null)
+            {
+                btnBrowse.Width = Fluent.Scale(_pathInput, 112);
+                _pathInput.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                _pathInput.SetBounds(searchLeft, y, searchWidth, height);
+            }
+            else
+            {
+                int browseWidth = Fluent.Scale(this, 112);
+                int browseX = searchLeft + searchWidth - browseWidth;
+                btnBrowse.SetBounds(browseX, y, browseWidth, height);
+                btnBrowse.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+                txtPath.SetBounds(searchLeft, y + Fluent.Scale(this, 2),
+                    Math.Max(Fluent.Scale(this, 40), searchWidth - browseWidth - gap), Fluent.Scale(this, 32));
+                txtPath.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            }
+        }
+
+        private void SetSearchWatermark()
+        {
+            string watermark = Options.TranslationList == null
+                ? "Filter files by name, path or hash"
+                : Options.TranslationList["filterResults"].ToString();
+
+            Fluent.SetPlaceholder(txtPath, watermark);
         }
 
         private void MainForm_DragEnter(object sender, DragEventArgs e)
@@ -1168,16 +2048,16 @@ namespace Hashing
 
         private void btnSaveJson_Click(object sender, EventArgs e)
         {
-            SaveAsJSON();
+            ShowExportMenu();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            AboutForm f = new AboutForm();
-            f.ShowDialog();
+            using (AboutForm form = new AboutForm())
+                form.ShowDialog(this);
         }
 
-        private void sumView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void sumView_NodeMouseClick(object sender, MoonTreeNodeMouseEventArgs e)
         {
             if (e.Button.Equals(MouseButtons.Right))
             {
@@ -1200,17 +2080,40 @@ namespace Hashing
             Clear();
         }
 
-        private void btnFindIdenticals_Click(object sender, EventArgs e)
+
+        private void SaveSettingsSafely()
         {
-            FindIdenticals();
+            string error;
+            if (Options.TrySaveSettings(out error))
+            {
+                _settingsSaveWarningShown = false;
+                return;
+            }
+
+            if (_settingsSaveWarningShown)
+                return;
+
+            _settingsSaveWarningShown = true;
+            FluentMessageBox.Show(this,
+                Options.TranslationList["settingsSaveFailed"].ToString().Replace("{ERROR}", error),
+                Options.TranslationList["fileOperationErrorsTitle"].ToString(),
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (tokenSource != null)
+            {
+                _closeAfterHashing = true;
+                tokenSource.Cancel();
+                e.Cancel = true;
+                return;
+            }
+
             if (_allowExit)
             {
                 SaveWindowState();
-                Options.SaveSettings();
+                SaveSettingsSafely();
             }
             else
             {
@@ -1222,8 +2125,8 @@ namespace Hashing
 
         private void btnOptions_Click(object sender, EventArgs e)
         {
-            OptionsForm f = new OptionsForm(this);
-            f.ShowDialog();
+            using (OptionsForm f = new OptionsForm(this))
+                f.ShowDialog(this);
 
             if (Options.CurrentOptions.StayOnTop)
             {
@@ -1283,7 +2186,16 @@ namespace Hashing
             // re-calculate everything
             if (OptionsForm.HashesChanged && SumResult.Sums.Count > 0)
             {
+                _identicalSums = null;
+                _groupedSums = null;
                 ReCalculateSums();
+            }
+            else
+            {
+                _identicalSums = null;
+                _groupedSums = null;
+                if (_allSums != null)
+                    FilterTable();
             }
         }
 
@@ -1315,14 +2227,6 @@ namespace Hashing
             Application.Exit();
         }
 
-        private void btnCompare_Click(object sender, EventArgs e)
-        {
-            if (SumView.Nodes.Count > 0)
-            {
-                CompareForm f = new CompareForm();
-                f.ShowDialog();
-            }
-        }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -1331,15 +2235,15 @@ namespace Hashing
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "All files|*.*";
-            dialog.Multiselect = true;
-            dialog.CheckFileExists = true;
-            dialog.CheckPathExists = true;
-
-            if (dialog.ShowDialog() == DialogResult.OK)
+            using (OpenFileDialog dialog = new OpenFileDialog())
             {
-                DetectFiles(dialog.FileNames);
+                dialog.Filter = "All files|*.*";
+                dialog.Multiselect = true;
+                dialog.CheckFileExists = true;
+                dialog.CheckPathExists = true;
+
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                    DetectFiles(dialog.FileNames);
             }
         }
 
@@ -1355,28 +2259,82 @@ namespace Hashing
 
         private void SearchByHash(bool ddg)
         {
-            if (SumView.Nodes.Count > 0)
+            MoonTreeNode selectedNode = SumView.SelectedNode;
+            if (selectedNode == null || SumView.Nodes.Count == 0)
+                return;
+
+            DuplicateHashMatch match = selectedNode.Tag as DuplicateHashMatch;
+            if (match != null && !string.IsNullOrEmpty(match.Hash))
             {
-                if (SumView.SelectedNode.Nodes.Count == 0)
-                {
-                    Utilities.SearchHash(SumView.SelectedNode.Text, ddg);
-                }
+                Utilities.SearchHash(match.Hash, ddg);
+                return;
             }
+
+            DuplicateGroupInfo group = selectedNode.Tag as DuplicateGroupInfo;
+            if (group == null && selectedNode.Parent != null)
+                group = selectedNode.Parent.Tag as DuplicateGroupInfo;
+            if (group != null && !string.IsNullOrEmpty(group.Hash))
+            {
+                Utilities.SearchHash(group.Hash, ddg);
+                return;
+            }
+
+            if (selectedNode.Nodes.Count == 0)
+                Utilities.SearchHash(selectedNode.Text, ddg);
+        }
+
+        private SumResult GetSelectedSumResult()
+        {
+            MoonTreeNode selectedNode = SumView.SelectedNode;
+            if (selectedNode == null)
+                return null;
+
+            SumResult taggedResult = selectedNode.Tag as SumResult;
+            if (taggedResult != null)
+                return taggedResult;
+
+            FileNodeInfo fileInfo = selectedNode.Tag as FileNodeInfo;
+            if (fileInfo != null)
+                return fileInfo.Result;
+
+            DuplicateGroupInfo group = selectedNode.Tag as DuplicateGroupInfo;
+            if (group == null && selectedNode.Parent != null)
+                group = selectedNode.Parent.Tag as DuplicateGroupInfo;
+            if (group != null)
+                return group.Items.Length == 0 ? null : group.Items[0];
+
+            MoonTreeNode fileNode = selectedNode.Nodes.Count > 0
+                ? selectedNode
+                : selectedNode.Parent ?? selectedNode;
+            int index = SumResult.Sums.FindIndex(item => string.Equals(item.File, fileNode.Text, StringComparison.OrdinalIgnoreCase));
+            return index < 0 ? null : SumResult.Sums[index];
         }
 
         private void FindFile()
         {
-            if (SumView.Nodes.Count > 0)
+            SumResult selectedResult = GetSelectedSumResult();
+            if (selectedResult != null)
             {
-                if (SumView.SelectedNode.Nodes.Count > 0)
-                {
-                    Utilities.FindFile(SumView.SelectedNode.Text);
-                }
-                else
-                {
-                    Utilities.FindFile(SumView.SelectedNode.Parent.Text);
-                }
+                ShowFindFileError(selectedResult.File);
+                return;
             }
+
+            MoonTreeNode selectedNode = SumView.SelectedNode;
+            if (selectedNode == null)
+                return;
+
+            MoonTreeNode fileNode = selectedNode.Nodes.Count > 0
+                ? selectedNode
+                : selectedNode.Parent ?? selectedNode;
+            ShowFindFileError(fileNode.Text);
+        }
+
+        private void ShowFindFileError(string file)
+        {
+            Exception error;
+            if (!Utilities.TryFindFile(file, out error))
+                FluentMessageBox.Show(this, FormatFileOperationError(Options.TranslationList["operationShowFileExplorer"].ToString(), file, error),
+                    Options.TranslationList["fileOperationErrorsTitle"].ToString(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
@@ -1386,14 +2344,16 @@ namespace Hashing
 
         private void botPanel_Resize(object sender, EventArgs e)
         {
-            btnCancelHashing.Left = (botPanel.Width - btnCancelHashing.Width) / 2;
-            btnCancelHashing.Top = (botPanel.Height - btnCancelHashing.Height + 74) / 2;
+            btnCancelHashing.Left = (botPanel.ClientSize.Width - btnCancelHashing.Width) / 2;
+            btnCancelHashing.Top = (botPanel.ClientSize.Height - btnCancelHashing.Height) / 2;
         }
 
         private void btnCancelHashing_Click(object sender, EventArgs e)
         {
-            tokenSource.Cancel();
+            if (tokenSource == null || tokenSource.IsCancellationRequested)
+                return;
 
+            tokenSource.Cancel();
             btnCancelHashing.Enabled = false;
             btnCancelHashing.Text = Options.TranslationList["btnCancelHashingPressed"].ToString();
         }
@@ -1410,28 +2370,181 @@ namespace Hashing
 
         private void FilterTable()
         {
-            if (SumView.Nodes.Count == 0 && _allSums == null) return;
+            if (_allSums == null)
+                return;
 
-            List<TreeNode> filteredNodes = new List<TreeNode>();
-
-            if (string.IsNullOrEmpty(txtPath.Text) && _allSums != null)
+            string term = txtPath.Text.Trim();
+            MoonTreeNode[] source = BuildGroupedDisplayNodes();
+            SumView.BeginUpdate();
+            try
             {
                 SumView.Nodes.Clear();
-                SumView.Nodes.AddRange(_allSums);
-            }
-            else
-            {
-                SumView.Nodes.Clear();
-                string term = txtPath.Text.Trim().ToLowerInvariant();
-                foreach (TreeNode x in _allSums)
+                if (term.Length == 0)
                 {
-                    if (x.Text.ToLowerInvariant().Contains(term)) filteredNodes.Add(x);
+                    SumView.Nodes.AddRange(source);
+                    SumView.ExpandAll();
+                    return;
                 }
+
+                List<MoonTreeNode> filteredNodes = new List<MoonTreeNode>(source.Length);
+                foreach (MoonTreeNode node in source)
+                {
+                    if (NodeMatchesSearch(node, term))
+                        filteredNodes.Add(node);
+                }
+
                 SumView.Nodes.AddRange(filteredNodes.ToArray());
+                SumView.ExpandAll();
+            }
+            finally
+            {
+                SumView.EndUpdate();
             }
         }
 
-        private void SumView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private MoonTreeNode[] BuildGroupedDisplayNodes()
+        {
+            if (_groupedSums != null)
+                return _groupedSums;
+
+            if (_allSums == null || _allSums.Length == 0)
+                return new MoonTreeNode[0];
+
+            if (_identicalSums == null)
+                _identicalSums = BuildIdenticalNodes();
+
+            Dictionary<SumResult, int> originalIndexes = new Dictionary<SumResult, int>();
+            for (int i = 0; i < _allSums.Length; i++)
+            {
+                SumResult item = GetNodeSumResult(_allSums[i]);
+                if (item != null && !originalIndexes.ContainsKey(item))
+                    originalIndexes.Add(item, i);
+            }
+
+            HashSet<SumResult> groupedItems = new HashSet<SumResult>();
+            List<DisplayNodeEntry> entries = new List<DisplayNodeEntry>(_allSums.Length + _identicalSums.Length);
+            int sequence = 0;
+
+            foreach (MoonTreeNode groupNode in _identicalSums)
+            {
+                DuplicateGroupInfo group = groupNode.Tag as DuplicateGroupInfo;
+                if (group == null || group.Items.Length < 2)
+                    continue;
+
+                int firstIndex = int.MaxValue;
+                foreach (SumResult item in group.Items)
+                {
+                    int index;
+                    if (originalIndexes.TryGetValue(item, out index) && index < firstIndex)
+                        firstIndex = index;
+                }
+
+                if (firstIndex == int.MaxValue)
+                    continue;
+
+                foreach (SumResult item in group.Items)
+                    groupedItems.Add(item);
+                entries.Add(new DisplayNodeEntry(firstIndex, sequence++, groupNode));
+            }
+
+            for (int i = 0; i < _allSums.Length; i++)
+            {
+                MoonTreeNode node = _allSums[i];
+                SumResult item = GetNodeSumResult(node);
+                if (item == null || !groupedItems.Contains(item))
+                    entries.Add(new DisplayNodeEntry(i, sequence++, node));
+            }
+
+            entries.Sort((left, right) =>
+            {
+                int indexComparison = left.Index.CompareTo(right.Index);
+                return indexComparison != 0 ? indexComparison : left.Sequence.CompareTo(right.Sequence);
+            });
+
+            MoonTreeNode[] result = new MoonTreeNode[entries.Count];
+            for (int i = 0; i < entries.Count; i++)
+                result[i] = entries[i].Node;
+            _groupedSums = result;
+            return _groupedSums;
+        }
+
+        private sealed class DisplayNodeEntry
+        {
+            internal readonly int Index;
+            internal readonly int Sequence;
+            internal readonly MoonTreeNode Node;
+
+            internal DisplayNodeEntry(int index, int sequence, MoonTreeNode node)
+            {
+                Index = index;
+                Sequence = sequence;
+                Node = node;
+            }
+        }
+
+        private static bool NodeMatchesSearch(MoonTreeNode node, string term)
+        {
+            if (ContainsSearchTerm(node.Text, term))
+                return true;
+
+            SumResult taggedResult = node.Tag as SumResult;
+            if (taggedResult != null)
+                return SumResultMatchesSearch(taggedResult, term);
+
+            FileNodeInfo fileInfo = node.Tag as FileNodeInfo;
+            if (fileInfo != null && SumResultMatchesSearch(fileInfo.Result, term))
+                return true;
+
+            DuplicateHashMatch hashMatch = node.Tag as DuplicateHashMatch;
+            if (hashMatch != null)
+                return ContainsSearchTerm(hashMatch.AlgorithmName, term) || ContainsSearchTerm(hashMatch.Hash, term);
+
+            DuplicateGroupInfo group = node.Tag as DuplicateGroupInfo;
+            if (group != null)
+            {
+                foreach (DuplicateHashMatch match in group.HashMatches)
+                {
+                    if (ContainsSearchTerm(match.AlgorithmName, term) || ContainsSearchTerm(match.Hash, term))
+                        return true;
+                }
+                foreach (SumResult item in group.Items)
+                {
+                    if (SumResultMatchesSearch(item, term))
+                        return true;
+                }
+                return false;
+            }
+
+            foreach (MoonTreeNode child in node.Nodes)
+            {
+                if (ContainsSearchTerm(child.Text, term))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static bool SumResultMatchesSearch(SumResult item, string term)
+        {
+            return ContainsSearchTerm(item.File, term) ||
+                   ContainsSearchTerm(item.MD5, term) ||
+                   ContainsSearchTerm(item.SHA1, term) ||
+                   ContainsSearchTerm(item.SHA256, term) ||
+                   ContainsSearchTerm(item.SHA384, term) ||
+                   ContainsSearchTerm(item.SHA512, term) ||
+                   ContainsSearchTerm(item.RIPEMD160, term) ||
+                   ContainsSearchTerm(item.CRC32, term) ||
+                   ContainsSearchTerm(item.SHA3_256, term) ||
+                   ContainsSearchTerm(item.SHA3_384, term) ||
+                   ContainsSearchTerm(item.SHA3_512, term);
+        }
+
+        private static bool ContainsSearchTerm(string value, string term)
+        {
+            return !string.IsNullOrEmpty(value) && value.IndexOf(term, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        private void SumView_NodeMouseDoubleClick(object sender, MoonTreeNodeMouseEventArgs e)
         {
 
         }

@@ -4,13 +4,12 @@ using System.Windows.Forms;
 
 namespace Hashing
 {
-    public partial class AboutForm : Form
+    public sealed partial class AboutForm : Form
     {
         public AboutForm()
         {
             InitializeComponent();
             Options.ApplyTheme(this);
-            CheckForIllegalCrossThreadCalls = false;
 
             button7.Text = Options.TranslationList["button7"].ToString();
         }
