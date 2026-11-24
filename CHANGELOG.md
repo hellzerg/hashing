@@ -3,6 +3,7 @@
 - New: Certificate inspector
 - New: Certificate generator
 - New: Authenticode signature check
+- New: Add Hashing to context-menu
 - Improved: Checksum export results
 - Improved: Boost performance when calculating in parallel
 
